@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 .sidebar {
-  width: 4vw; /* 60px * 0.052084 */
-  height: 88vh; /* 88vh is unaffected */
+  width: 4.5vw; /* 60px * 0.052084 */
+  height: 100vh; /* 88vh is unaffected */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -17,8 +19,8 @@
 }
 
 .logo {
-  width: 2.34378vw;
-  height: 2.34378vw;
+  width: 3.34378vw;
+  height: 3.34378vw;
 }
 
 .sidebar-top, .sidebar-bottom {
@@ -32,26 +34,26 @@
   align-items: center;
   padding: 0.5208vw;
   cursor: pointer;
-  margin-bottom: 1.2vw;
+  margin-bottom: 2vw;
 }
 
 .sidebar-icon img {
-  width: 1.5vw; 
-  height: 1.5vw; 
+  width: 1.7vw; 
+  height: 1.7vw; 
 }
 
 .sidebar-icon.active {
   background: var(--Color, #A63E71);
   border-radius: 0.5vw;
-  width: 1.5vw;
+  width: 2.8vw;
   margin: auto;
-  margin-bottom: 1.2vw;
+  margin-bottom: 2vw;
 }
 
 .sidebar-icon:hover {
   background-color:var(--Color, #A63E71);
   border-radius: 0.5vw;
-  width: 1.5vw;
+  width: 2.8vw;
   margin: auto;
-  margin-bottom: 1.2vw;
+  margin-bottom: 2vw;
 }
