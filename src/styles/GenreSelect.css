@@ -1,0 +1,161 @@
+
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .main-content{
+    display: flex;
+    width: 100%;
+}
+
+.header_container{
+    width: 100%;
+}
+
+  .sidebar_container{
+    width: 4.5%;
+    background-color: white;
+}
+  
+  .genre-selection-container {
+    display: flex;
+    width:95.5%;
+    flex: 1;
+    flex-direction: column;
+    position: relative;
+  }
+  
+  .genre-content {
+    width: 100%;
+    display: flex;
+    display: flex;
+    margin-left: 200px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: self-start;
+    flex-grow: 1;
+    padding: 80px 20px 20px; /* Add top padding to make space for the fixed header */
+  }
+  
+  .genre-content h1 {
+    color: var(--Black-60, #45464E);
+    text-align: center;
+    font-family: Poppins;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
+  .genre-content p {
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .genre-card-container {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .genre-card {
+    width: 140px;
+    height: 220px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+    color: #333;
+    border-radius: 18px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  
+  .genre-card.genre-selected {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px);
+  }
+  
+  .genre-checkbox {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+  }
+
+  .genre-checkbox img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .genre-icon {
+    font-size: 48px;
+    position: absolute;
+    bottom: -25px;
+    right: -20px;
+  }
+  
+  .genre-icon img {
+    width: 180px; /* Adjust the size of the icon */
+    height: 180px;
+    object-fit: contain;
+  }
+  
+  .genre-card p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  
+  .genre-signUpButton {
+    align-self: center;
+    /* margin-left: 80px; */
+    flex: 1;
+    border-radius: 18px;
+    background-color: #a63e71;
+    min-width: 100px;
+  
+    color: #fff;
+    text-align: center;
+    height: 20px;
+    width:180px;
+    padding: 10px 23px;
+    font: 400 22px Inter, sans-serif;
+    border: none;
+    cursor: pointer;
+    margin-top:40px;
+    margin-left: -20px;
+    margin-bottom: 185px;
+}

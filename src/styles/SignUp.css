@@ -3,6 +3,7 @@
 
 
 .signup-page {
+    height:800px;
     display: flex;
     flex-direction: column;
    padding:0px;
@@ -232,10 +233,10 @@
 }
 
 .loginLink {
-    color: #a63e71;
+    color: black;
     text-align: center;
     font-size: 15px;
-    margin-top: 30px;
+    margin-top: 0px;
 }
 
 @media (max-width: 991px) {
@@ -254,9 +255,9 @@
     gap: 15px;
     color: #fff;
     text-align: center;
-    height: 60px;
+    height: 70px;
     width:180px;
-    padding: 18px 23px;
+    padding: 10px 23px;
     font: 400 22px Inter, sans-serif;
     border: none;
     cursor: pointer;
