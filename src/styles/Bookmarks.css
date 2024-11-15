@@ -1,0 +1,28 @@
+.main-content{
+    display: flex;
+    width: 100%;
+}
+.sidebar_container{
+    width: 4.5%;
+    background-color: white;
+}
+.bookmarks_container{
+    width: 95.5%;
+}
+.header_container{
+    width: 100%;
+}
+.bookmarks_body{
+    width: 100%;
+    display: flex;
+    background: #FAFAFA;
+}
+.bookmarks_body .bookGrids_container{
+    width: 100%;
+}
+.bookmarks_body .bookGrids_container .bookGrids{
+    width: 100%;
+    padding-right: 3vw;
+    padding-left: 5vw;
+    margin-top: 3vw;
+}

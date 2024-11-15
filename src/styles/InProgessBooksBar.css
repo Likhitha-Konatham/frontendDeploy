@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+.progressbar_container {
+    width: 20vw;
+    height: 30vw;
+    background-color: white;
+    padding: 1vw;
+    border-radius: 1.5vw;
+    margin-top: 11.5vw;
+  }
+  
+  .progressbook_title {
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-size: 1.2vw;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  .progessbar-book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vw;
+  }
+  
+  /* Base styling for the container and bar */
+  .progress-container {
+    margin-top: 0.7vw;
+    height: 6.2vw;
+    border-radius: 1vw;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Light background for remaining part */
+  .green-bg {
+    background-color: #E0ECC8;;
+  }
+  
+  .yellow-bg {
+    background-color: #ECE5C8;
+  }
+  
+  .orange-bg {
+    background-color: #ECDDC8;
+  }
+  
+  /* Darker color for completed portion */
+  .progress-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius:0vw 1.2vw 1.2vw 0vw;
+    padding-left: 0.7vw;
+    padding-top: 2.7vw;
+    color: white;
+  }
+  
+  .green {
+    background: var(--Color-3, #89BB34);
+}
+  
+  .yellow {
+    background: var(--Color-4, #DFC826);
+  }
+  
+  .orange {
+    background: #E29336;
+}
+  
+  /* Text styling */
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-weight: 500;
+  }
+  
+  .percentage-text {
+    font-size: 1.2vw;
+  }
+  
+  .book-name {
+    font-size: 0.9vw;
+  }
+  
