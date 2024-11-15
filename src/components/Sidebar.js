@@ -19,7 +19,7 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
   // Define menuItems with the inactive and active icons
   const menuItems = [
     { icon: dashboard_icon, activeIcon: dashboard_active, label: "Dashboard", key: "dashboard" },
-    { icon: bookmark_icon, activeIcon: bookmark_active, label: "Bookmark", key: "bookmark" },
+    { icon: bookmark_icon, activeIcon: bookmark_active, label: "Bookmark", key: "bookmarks" },
     { icon: library_icon, activeIcon: library_active, label: "Library", key: "library" },
     { icon: settings_icon, activeIcon: settings_active, label: "Settings", key: "settings" },
   ];
@@ -44,7 +44,7 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
       <div className="sidebar-top">
       <div className="logo-container">
         <a href="/">
-          <img src={audiobook_logo} alt="Anavu Logo" className="logo" />
+          <img src={audiobook_logo} alt="Audio book Logo" className="logo" />
         </a>
       </div>
         {menuItems.map((item) => (

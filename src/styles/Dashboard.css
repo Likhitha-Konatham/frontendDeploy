@@ -15,13 +15,18 @@
 .dashboard_body{
     width: 100%;
     display: flex;
+    background: #FAFAFA;
 }
-.carousels_container{
-    width: 70%;
+.dashboard_body .carousels_container{
+    width: 72%;
 }
-.new_releases_carousel{
+.dashboard_body .carousels_container .new_releases_carousel{
     width: 100%;
 }
-.genre_carousel{
+.dashboard_body .carousels_container .genre_carousel{
     width: 100%;
+    padding: 0vw 3vw 0vw;
+}
+.inprogress_booksbar{
+    width: 28%;
 }

@@ -11,7 +11,7 @@
   background-color: #fff;
   display: flex;
   align-items: center;
-  padding: 0.3vw 1vw 2vw;
+  padding: 0.3vw 0.8vw 2vw;
 }
 .logo-container a{
   text-decoration: none;
@@ -45,7 +45,7 @@
 .sidebar-icon.active {
   background: var(--Color, #A63E71);
   border-radius: 0.5vw;
-  width: 2.8vw;
+  width: 1.8vw;
   margin: auto;
   margin-bottom: 2vw;
 }
@@ -53,7 +53,7 @@
 .sidebar-icon:hover {
   background-color:var(--Color, #A63E71);
   border-radius: 0.5vw;
-  width: 2.8vw;
+  width: 2vw;
   margin: auto;
   margin-bottom: 2vw;
 }

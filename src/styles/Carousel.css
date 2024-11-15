@@ -34,8 +34,8 @@
   
   /* Centered Slide Effect */
   .swiper-slide-active img {
-    width: 10.5vw; /* Make the active slide larger */
-    height: 13.6vw; /* Adjust active slide height */
+    width: 10.2vw; /* Make the active slide larger */
+    height: 13.3vw; /* Adjust active slide height */
   }
   
   .swiper-pagination {
