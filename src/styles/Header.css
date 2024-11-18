@@ -43,6 +43,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 .search-bar {
     display: flex;
@@ -74,6 +75,92 @@
     height: 1.19801vw;
     pointer-events: none;
 }
+
+/* Search dropdown styling */
+.search-dropdown {
+    width: 100%;
+    background-color: #fff;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 0 0.5vw rgba(0, 0, 0, 0.1); /* 0.5vw converted */
+  }
+  /* Search container */
+  .search-container {
+    padding: 1.042vw; /* 20px converted */
+    width: 100%;
+    font-family: Inter;
+    margin-left: 1vw;
+  }
+    
+  .searchbyplaceholder{
+    color: #ABAFB1;
+    font-size: 1vw;
+    font-weight: 400;
+  }
+  /* Tags container */
+  .tags-container {
+    margin: 0.781vw 0; /* 15px converted */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.521vw; /* 10px converted */
+  }
+  
+  /* Tag styling */
+  .tag {
+    background: var(--Color, #A63E71);
+    color: white;
+    padding: 0.417vw 0.781vw; /* 8px 15px converted */
+    border-radius: 0.5vw; /* 25px converted */
+    font-size: 0.729vw; /* 14px converted */
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  
+  /* Recent container */
+  .recent-container {
+    margin-top: 1.042vw; /* 20px converted */
+  }
+  
+  /* Recent heading */
+  .recent-heading {
+    color: #545454;
+    font-family: Inter;
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 2vw 0.5vw 1vw; /* 10px converted */
+  }
+  
+  /* Recent list */
+  .recent-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  /* Recent list items */
+  .recent-list li {
+    padding: 0.417vw 0.5vw;
+    display: flex;
+    width: 88%;
+    align-items: center;
+    color: #ABAFB1;
+    font-size: 0.9vw;
+    font-weight: 400;
+    border-bottom: 0.1vw solid var(--Black-1, #CFD3D4);
+  }
+  
+  /* History icon */
+  .history-icon {
+    margin-right: 0.521vw; /* 10px converted */
+    width: 1.5vw; /* 16px converted */
+    height: 1.5vw; /* 16px converted */
+    background: no-repeat center center;
+    background-size: contain;
+  }
+
 
 /* User profile styling */
 .header-user-profile {
@@ -108,3 +195,4 @@
     border-radius: 0.5vw;
     cursor: pointer;
 }
+

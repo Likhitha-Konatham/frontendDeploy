@@ -8,6 +8,7 @@
 }
 .bookmarks_container{
     width: 95.5%;
+    overflow: hidden;
 }
 .header_container{
     width: 100%;

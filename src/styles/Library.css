@@ -8,6 +8,7 @@
 }
 .library_container{
     width: 95.5%;
+    overflow: hidden;
 }
 .header_container{
     width: 100%;
@@ -20,7 +21,7 @@
 .library_body .carousels_container{
     width: 100%;
 }
-.library_body .carousels_container .genre_carousel{
+.library_body .carousels_container .readlater_carousel, .library_body .carousels_container .inprogress_carousel, .library_body .carousels_container .history_carousel{
     width: 100%;
     padding-right: 3vw;
     padding-left: 1vw;

@@ -16,6 +16,7 @@
     width: 100%;
     display: flex;
     background: #FAFAFA;
+    overflow: hidden;
 }
 .dashboard_body .carousels_container{
     width: 72%;

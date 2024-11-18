@@ -9,6 +9,7 @@
 .settings_container{
     width: 95.5%;
     background: #FAFAFA;
+    overflow: hidden;
 }
 .header_container{
     width: 100%;
@@ -28,10 +29,9 @@
 .settings_body .carousels_container{
     width: 100%;
 }
-.settings_body .carousels_container .genre_carousel{
+.settings_body .carousels_container .readlater_carousel, .settings_body .carousels_container .inprogress_carousel, .settings_body .carousels_container .history_carousel{
     width: 100%;
     padding-right: 3vw;
     padding-left: 1vw;
     margin-top: 3vw;
 }
-

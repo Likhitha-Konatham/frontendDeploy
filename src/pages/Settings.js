@@ -6,8 +6,10 @@ import Sidebar from "../components/Sidebar.js";
 import Header from "../components/Header.js";
 import AccountSection from '../components/AccountSection.js';
 import SettingsSection from '../components/SettingsSection.js';
-import GenreCarousel from "../components/Genre_carousel.js";
-import SettingsNavbar from "../components/SettingsNavbar.js";  // Import the new Navbar component
+import ReadlaterCarousel from "../components/Readlater_carousel.js";
+import InprogressCarousel from "../components/Inprogress_carousel.js";
+import HistoryCarousel from "../components/History_carousel.js";
+import SettingsNavbar from "../components/SettingsNavbar.js";
 
 // Import local book cover images
 import bookcover1 from "../images/bookcover1.png";
@@ -21,7 +23,9 @@ const Settings = () => {
   const [selectedSection, setSelectedSection] = useState("account");
   const [searchQuery, setSearchQuery] = useState(''); 
   const navigate = useNavigate();
-  const genreCarousels = [
+
+
+  const readlaterCarousel = [
     {
       heading: "Read Later",
       images: [
@@ -35,8 +39,11 @@ const Settings = () => {
         { image: bookcover3 },
         { image: bookcover4 },
         { image: bookcover5 },
+        // Add more images as needed
       ]
-    },
+    }
+  ];
+  const inprogressCarousel = [
     {
       heading: "In Progress",
       images: [
@@ -50,8 +57,11 @@ const Settings = () => {
         { image: bookcover3 },
         { image: bookcover4 },
         { image: bookcover5 },
+        // Add more images as needed
       ]
-    },
+    }
+  ];
+  const historyCarousel = [
     {
         heading: "My History",
         images: [
@@ -65,6 +75,7 @@ const Settings = () => {
             { image: bookcover3 },
             { image: bookcover4 },
             { image: bookcover5 },
+            // Add more images as needed
           ]
       },
   ];
@@ -114,16 +125,32 @@ const Settings = () => {
         return <AccountSection />;
       case "books":
         return (
-            <div className="carousels_container">
-              {genreCarousels.map((carousel, index) => (
-                <div className="genre_carousel" key={index}>
-                  <GenreCarousel 
-                    heading={carousel.heading} 
-                    genre_carousel_images={carousel.images}
-                  />
-                </div>
-              ))}
-            </div>
+          <div className="carousels_container">
+            {readlaterCarousel.map((carousel, index) => (
+              <div className="readlater_carousel" key={index}>
+                <ReadlaterCarousel 
+                  heading={carousel.heading} 
+                  readlater_carousel_images={carousel.images}
+                />
+              </div>
+            ))}
+            {inprogressCarousel.map((carousel, index) => (
+              <div className="inprogress_carousel" key={index}>
+                <InprogressCarousel 
+                  heading={carousel.heading} 
+                  inprogress_carousel_images={carousel.images}
+                />
+              </div>
+            ))}
+            {historyCarousel.map((carousel, index) => (
+              <div className="history_carousel" key={index}>
+                <HistoryCarousel 
+                  heading={carousel.heading} 
+                  history_carousel_images={carousel.images}
+                />
+              </div>
+            ))}
+          </div>
         );
       case "settings":
         return <SettingsSection />;

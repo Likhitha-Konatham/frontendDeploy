@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import '../styles/Library.css';
 import Sidebar from "../components/Sidebar.js";
 import Header from "../components/Header.js";
-import GenreCarousel from '../components/Genre_carousel.js';
+import ReadlaterCarousel from "../components/Readlater_carousel.js";
+import InprogressCarousel from "../components/Inprogress_carousel.js";
+import HistoryCarousel from "../components/History_carousel.js";
 
 // Import local book cover images
 import bookcover1 from "../images/bookcover1.png";
@@ -17,7 +19,7 @@ const Library = () => {
   const [searchQuery, setSearchQuery] = useState(''); 
   const navigate = useNavigate();
 
-  const genreCarousels = [
+  const readlaterCarousel = [
     {
       heading: "Read Later",
       images: [
@@ -33,7 +35,9 @@ const Library = () => {
         { image: bookcover5 },
         // Add more images as needed
       ]
-    },
+    }
+  ];
+  const inprogressCarousel = [
     {
       heading: "In Progress",
       images: [
@@ -49,7 +53,9 @@ const Library = () => {
         { image: bookcover5 },
         // Add more images as needed
       ]
-    },
+    }
+  ];
+  const historyCarousel = [
     {
         heading: "My History",
         images: [
@@ -126,11 +132,27 @@ const Library = () => {
         </div>
         <div className="library_body">
           <div className="carousels_container">
-            {genreCarousels.map((carousel, index) => (
-              <div className="genre_carousel" key={index}>
-                <GenreCarousel 
+            {readlaterCarousel.map((carousel, index) => (
+              <div className="readlater_carousel" key={index}>
+                <ReadlaterCarousel 
                   heading={carousel.heading} 
-                  genre_carousel_images={carousel.images}
+                  readlater_carousel_images={carousel.images}
+                />
+              </div>
+            ))}
+             {inprogressCarousel.map((carousel, index) => (
+              <div className="inprogress_carousel" key={index}>
+                <InprogressCarousel 
+                  heading={carousel.heading} 
+                  inprogress_carousel_images={carousel.images}
+                />
+              </div>
+            ))}
+             {historyCarousel.map((carousel, index) => (
+              <div className="history_carousel" key={index}>
+                <HistoryCarousel 
+                  heading={carousel.heading} 
+                  history_carousel_images={carousel.images}
                 />
               </div>
             ))}
