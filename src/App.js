@@ -5,6 +5,7 @@ import Bookmarks from "./pages/Bookmarks";
 import Library from "./pages/Library";
 import Settings from "./pages/Settings";
 import BookInfo from "./pages/BookInfoPage";
+import AudioBookPlayer from "./pages/AudioBookPlayer";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -23,6 +24,7 @@ function App() {
           <Route path="settings" element ={<Settings />} />
           <Route path="/genre" element={<GenreSelection />} />
           <Route path="/book-info" element={<BookInfo />} />
+          <Route path="/audiobook-player" element={<AudioBookPlayer />} />
         </Routes>
       </div>
     </Router>

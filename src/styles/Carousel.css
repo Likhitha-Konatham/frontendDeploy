@@ -26,9 +26,9 @@
   
   .swiper-slide img {
     width: 10vw; /* Increase the width here as needed */
-    height: 11.2vw; /* Adjust height as well if desired */
-    max-width: 100%; /* Prevent overflow */
-    object-fit: fill;
+    height: 11.2vw;
+    object-fit: cover;
+    object-position: top;
     transition: width 0.3s ease, height 0.3s ease; /* Smooth transitions */
   }
   

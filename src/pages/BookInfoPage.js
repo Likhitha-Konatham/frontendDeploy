@@ -12,8 +12,6 @@ import saveIcon from '../images/saveIcon.png'
 import bookcover1 from "../images/bookcover1.png";
 import bookcover2 from "../images/bookcover2.png";
 import bookcover3 from "../images/bookcover3.png";
-import bookcover4 from "../images/bookcover4.png";
-import bookcover5 from "../images/bookcover5.png";
 
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -126,7 +124,7 @@ const BookInfo = () => {
                     <div className="book_info">
                     <div className="bookinfo_title_play">
                         <div className="bookinfo_title">{currentBook.title}</div>
-                        <div className="bookinfo_play"><img src={playIcon} alt="play icon" /></div>
+                        <a href="/audiobook-player" className="bookinfo_play"><img src={playIcon} alt="play icon" /></a>
                     </div>
                     <div className="bookinfo_author_save">
                         <div className="bookinfo_author">{currentBook.author}</div>
