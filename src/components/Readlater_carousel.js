@@ -30,9 +30,9 @@ const ReadlaterCarousel = ({ heading, readlater_carousel_images }) => {
             <div className="genre_heading">{heading}</div>
               <div className="carousel__slide-list" style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}>
                 {readlater_carousel_images.map((item, index) => (
-                  <div key={index} className="carousel__slide-item">
+                  <a href="/book-info" key={index} className="carousel__slide-item">
                     <img src={item.image} alt={`carousel-item-${index}`} />
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
