@@ -37,49 +37,50 @@
     width: 100%;
     display: flex;
     display: flex;
-    margin-left: 200px;
+    margin-left: 14.41vw;
+    margin-top:4.51vw;
     flex-direction: column;
     justify-content: flex-start;
     align-items: self-start;
     flex-grow: 1;
-    padding: 80px 20px 20px; /* Add top padding to make space for the fixed header */
+    padding: 4.16vw 1.0416vw 1.0416vw; /* Add top padding to make space for the fixed header */
   }
   
   .genre-content h1 {
     color: var(--Black-60, #45464E);
     text-align: center;
     font-family: Poppins;
-    font-size: 50px;
-    font-style: normal;
+    font-size: 3.104vw;
+    font-style: 2.60vw;
     font-weight: 500;
     line-height: normal;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin-bottom: 1.04vw;
+    margin-top: 1.0416vw;
   }
   
   .genre-content p {
     color: var(--Black-60, #45464E);
     font-family: Inter;
-    font-size: 25px;
+    font-size: 1.3vw;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    margin: 0px;
-    padding: 0px;
+    margin: 0vw;
+    padding: 0vw;
   }
   
   .genre-card-container {
     display: flex;
-    gap: 16px;
-    margin-top: 16px;
+    gap: 0.83vw;
+    margin-top: 0.83vw;
     flex-wrap: wrap;
     justify-content: center;
   }
   
   .genre-card {
-    width: 140px;
-    height: 220px;
-    border-radius: 12px;
+    width: 9.29vw;
+    height: 14.45vw;
+    border-radius: 0.62vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -88,21 +89,21 @@
     transition: transform 0.2s;
     position: relative;
     color: #333;
-    border-radius: 18px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 0.93vw;
+    box-shadow: 0vw 0.2vw 0.2vw 0vw rgba(0, 0, 0, 0.25);
   }
   
   .genre-card.genre-selected {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    transform: translateY(-4px);
+    box-shadow: 0 0.312vw 0.625vw rgba(0, 0, 0, 0.3);
+    transform: translateY(-0.2px);
   }
   
   .genre-checkbox {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 24px;
-    height: 24px;
+    top: 0.83vw;
+    left: 0.83vw;
+    width: 1.3vw;
+    height: 1.3vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,20 +111,20 @@
   }
 
   .genre-checkbox img {
-    width: 40px;
-    height: 40px;
+    width: 2.08vw;
+    height: 2.08vw;
   }
   
   .genre-icon {
-    font-size: 48px;
+    font-size: 2.6vw;
     position: absolute;
-    bottom: -25px;
-    right: -20px;
+    bottom: -1.3vw;
+    right: -1.04vw;
   }
   
   .genre-icon img {
-    width: 180px; /* Adjust the size of the icon */
-    height: 180px;
+    width: 9.37vw; /* Adjust the size of the icon */
+    height: 9.37vw;
     object-fit: contain;
   }
   
@@ -135,29 +136,31 @@
     margin: 0;
     color: var(--Black-60, #45464E);
     font-family: Inter;
-    font-size: 20px;
+    font-size: 1.04vw;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
   }
-  
   .genre-signUpButton {
     align-self: center;
-    /* margin-left: 80px; */
-    flex: 1;
-    border-radius: 18px;
+   
+    border-radius: 0.93vw;
     background-color: #a63e71;
-    min-width: 100px;
-  
+    min-width: 10vw; /* Set a smaller min-width */
+
     color: #fff;
+    margin-top: 2vw;
+    margin-left:-7.5vw;
     text-align: center;
-    height: 20px;
-    width:180px;
-    padding: 10px 23px;
-    font: 400 22px Inter, sans-serif;
+    height: 4vw; /* Adjust height to fit better */
+    min-height: 4vw;
+    width: 12vw; /* Reduced width for better fit */
+    padding: 0.5vw 1.5vw; /* Adjust padding */
+    font: 400 1vw Inter, sans-serif; /* Reduce font size */
     border: none;
     cursor: pointer;
-    margin-top:40px;
-    margin-left: -20px;
-    margin-bottom: 185px;
+
+
+    /* Ensure padding is included in total width/height calculation */
+    box-sizing: border-box;
 }

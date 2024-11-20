@@ -11,6 +11,19 @@
     background-color: #f5f5f5;
 }
 
+.left-arrow-icon,
+.right-arrow-icon {
+    width: 1.5vw;
+    height: 1.5vw;
+    margin: 0 0.5vw; /* Space between the arrows and the label */
+}
+
+.book-logo-icon {
+    width: 2.5vw;
+    height: 2.5vw;
+    margin: 0 0.5vw;
+}
+
 /* Centering and styling the signup container */
 .signup-container {
    margin-top: 50px;

@@ -6,6 +6,7 @@ import {
   CityField,
   SelectField,
 } from "./AccountComponents.js";
+import account_pfp from "../images/account_pfp.png";
 
 // Main AccountSection component
 const AccountSection = () => {
@@ -60,7 +61,7 @@ const AccountSection = () => {
         </form>
       </div>
       <div className="settings-imageSection">
-        <img src="https://via.placeholder.com/300" alt="Profile" />
+        <img src={account_pfp} alt="Profile" />
       </div>
     </div>
   );

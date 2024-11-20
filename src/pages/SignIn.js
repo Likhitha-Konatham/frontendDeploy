@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import "../styles/SignIn.css";
 // import Sidebar from "../components/Sidebar.js";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import book_logo from "../images/vector_booklogo.svg";
 import fullname_logo from "../images/fullname_logo.svg";
 // import message_logo from "../images/message_logo.png";
 import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
 import { loginUser } from "../services/AllServices";
+import leftArrow from "../images/left_arrow.png";
+import rightArrow from "../images/right_arrow.png";
 
 const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
   <div className="inputfield-wrapper">
@@ -76,11 +78,19 @@ const SignUp = () => {
   };
   return (
     <main className="signup-page">
-      <Header
-        showSearch={false}
-        showUserProfile={false}
-        showArrows={true} // Pass showArrows to Header
-      />
+      <header className="header">
+        {
+          <div className="header-left-section">
+            <img src={book_logo} alt="book logo" className="book-logo-icon" />
+            <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
+            <img
+              src={rightArrow}
+              alt="Right Arrow"
+              className="right-arrow-icon"
+            />
+          </div>
+        }
+      </header>
       <div className="signup-container">
         <div className="signup-form">
           <div className="booklogo-heading">

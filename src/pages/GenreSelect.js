@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { registerUser } from "../services/AllServices";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import logo1 from "../images/genre_logo1.png";
 import logo2 from "../images/genre_logo2.png";
@@ -24,8 +25,17 @@ const options = [
 
 const GenreSelection = () => {
   const location = useLocation();
-  const { formData } = location.state;
+  // const { formData } = location.state;
   const navigate = useNavigate();
+
+  const { formData } = location.state || {};
+
+  useEffect(() => {
+    if (!location.state) {
+      console.error("No data passed to GenreSelection.");
+      navigate("/genre"); // Redirect to the home page or a fallback route
+    }
+  }, [location.state, navigate]);
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 
@@ -37,7 +47,48 @@ const GenreSelection = () => {
     );
   };
 
+  // const handleNext = async () => {
+  //   if (!formData.email || !formData.password || !formData.firstname) {
+  //     console.warn("Required form data is missing. Redirecting to home page.");
+  //     navigate("/"); // Redirect to the home page or another fallback route
+  //     return;
+  //   }
+
+  //   const selectedOptionsLabel = selectedOptions
+  //     .map((id) => {
+  //       const option = options.find((opt) => opt.id === id);
+  //       return option ? option.label : null;
+  //     })
+  //     .filter((label) => label !== null); // Filter out any null values for safety
+
+  //   const updatedFormData = { ...formData, genre: selectedOptionsLabel };
+
+  //   try {
+  //     const result = await registerUser(updatedFormData);
+
+  //     // Check if the result exists and has the expected structure
+  //     if (!result || typeof result !== "object" || !result.status) {
+  //       console.error("Unexpected response from registerUser:", result);
+  //       return;
+  //     }
+
+  //     // Handle success case
+  //     if (result.status === "success") {
+  //       console.log("Registration successful:", result.message);
+  //       console.log("User Data:", result.data);
+  //       navigate("/"); // Navigate to the desired route
+  //     } else {
+  //       // Handle failure case
+  //       console.error(result.message || "Error during registration.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error occurred:", error);
+  //   }
+  // };
+
   const handleNext = async () => {
+    // Ensure formData exists before accessing its properties
+
     const selectedOptionsLabel = selectedOptions
       .map((id) => {
         const option = options.find((opt) => opt.id === id);
@@ -67,6 +118,19 @@ const GenreSelection = () => {
       }
     } catch (error) {
       console.error("Error occurred:", error);
+    }
+
+    if (
+      !formData ||
+      !formData.email ||
+      !formData.password ||
+      !formData.firstname
+    ) {
+      console.warn(
+        "Required form data is missing or incomplete. Redirecting to home page."
+      );
+      navigate("/"); // Redirect to the home page or another fallback route
+      return;
     }
   };
 
