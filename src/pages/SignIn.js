@@ -7,8 +7,9 @@ import fullname_logo from "../images/fullname_logo.svg";
 // import message_logo from "../images/message_logo.png";
 import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
+import { loginUser } from "../services/AllServices";
 
-const InputField = ({ icon, placeholder, type, id }) => (
+const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
   <div className="inputfield-wrapper">
     <div className="inputfield-container">
       <div className="inputfield-content">
@@ -18,6 +19,9 @@ const InputField = ({ icon, placeholder, type, id }) => (
           id={id}
           placeholder={placeholder}
           className="inputfield-inside"
+          value={value}
+          onChange={onChange}
+          required
           aria-label={placeholder}
         />
       </div>
@@ -26,10 +30,49 @@ const InputField = ({ icon, placeholder, type, id }) => (
 );
 
 const SignUp = () => {
+  const [formData, setFormData] = useState({
+    fullname: "",
+    password: "",
+  });
+
+  const handleNext = async () => {
+    const loginData = {
+      fullname: formData.fullname, // Ensure `formData` matches your input field names
+      password: formData.password,
+    };
+
+    try {
+      const response = await loginUser(loginData, (data) => {
+        console.log("Callback Data:", data);
+      });
+      console.log("response login:", loginData);
+      if (response && response.status === "success") {
+        console.log("Login Successful:", response);
+        // alert(response.message); // Notify user of success
+
+        // Save token to localStorage for authentication in future API calls
+        localStorage.setItem("access_token", response.data.access_token);
+
+        // Redirect user to the dashboard or home page
+        window.location.href = "/";
+      } else {
+        console.error("Login Failed:", response.message);
+        alert(response.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("An error occurred while logging in. Please try again later.");
+    }
+  };
+
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
   };
   return (
     <main className="signup-page">
@@ -59,14 +102,11 @@ const SignUp = () => {
                   icon={fullname_logo}
                   placeholder="Your Full Name"
                   type="text"
-                  id="fullName"
+                  id="fullname"
+                  value={formData.fullname}
+                  onChange={handleInputChange}
                 />
-                {/* <InputField
-                  icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/bd9391c90aa9a53d902ac81f4f7a2b10b6609c951df26073dc7fc09172d8b726?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-                  placeholder="Your Email Address"
-                  type="email"
-                  id="email"
-                /> */}
+
                 <div className="passwordInputWrapper">
                   <div className="passwordInputContainer">
                     <div className="passwordInputContent">
@@ -83,6 +123,8 @@ const SignUp = () => {
                         placeholder="Create a Strong Password"
                         className="passwordField"
                         aria-label="Create a Strong Password"
+                        value={formData.password}
+                        onChange={handleInputChange}
                       />
                       <img
                         loading="lazy"
@@ -109,13 +151,17 @@ const SignUp = () => {
           <div className="signin-loginLink">
             <p>
               Don't have an Account?{" "}
-              <a href="#login" style={{ color: "#a63e71" }}>
+              <a href="/signup" style={{ color: "#a63e71" }}>
                 Sign Up
               </a>
             </p>
           </div>
         </div>
-        <button type="submit" className="signin-signUpButton">
+        <button
+          type="submit"
+          onClick={handleNext}
+          className="signin-signUpButton"
+        >
           Login
         </button>
       </div>

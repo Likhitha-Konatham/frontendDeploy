@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import "../styles/GenreSelect.css";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+import { registerUser } from "../services/AllServices";
+import { useNavigate } from "react-router-dom";
 
-import Header from "../components/Header.js";
-import logo1 from "../images/genre_logo1.png"; // Replace with your actual image paths
+import logo1 from "../images/genre_logo1.png";
 import logo2 from "../images/genre_logo2.png";
 import logo3 from "../images/genre_logo3.png";
 import logo4 from "../images/genre_logo4.png";
 import logo5 from "../images/genre_logo5.png";
-import checkboxEmpty from "../images/checkbox_empty.svg"; // Path to empty checkbox SVG
-import checkboxFilled from "../images/checkbox_fill.svg"; // Path to filled checkbox SVG
-import Sidebar from "../components/Sidebar.js";
+import checkboxEmpty from "../images/checkbox_empty.svg";
+import checkboxFilled from "../images/checkbox_fill.svg";
 
 const options = [
   { id: 1, label: "BTech", color: "#E29336", icon: logo1 },
@@ -19,9 +22,11 @@ const options = [
   { id: 5, label: "MSc", color: "#DFC826", icon: logo5 },
 ];
 
-function GenreSelection() {
-  const [activeItem, setActiveItem] = useState("dashboard");
-  const [searchQuery, setSearchQuery] = useState("");
+const GenreSelection = () => {
+  const location = useLocation();
+  const { formData } = location.state;
+  const navigate = useNavigate();
+
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const handleSelect = (id) => {
@@ -31,26 +36,51 @@ function GenreSelection() {
         : [...prevSelected, id]
     );
   };
-  const resetSearch = () => {
-    setSearchQuery(""); // Reset the search query
-    console.log(searchQuery);
+
+  const handleNext = async () => {
+    const selectedOptionsLabel = selectedOptions
+      .map((id) => {
+        const option = options.find((opt) => opt.id === id);
+        return option ? option.label : null;
+      })
+      .filter((label) => label !== null); // Filter out any null values for safety
+
+    const updatedFormData = { ...formData, genre: selectedOptionsLabel };
+
+    try {
+      const result = await registerUser(updatedFormData);
+
+      // Check if the result exists and has the expected structure
+      if (!result || typeof result !== "object" || !result.status) {
+        console.error("Unexpected response from registerUser:", result);
+        return;
+      }
+
+      // Handle success case
+      if (result.status === "success") {
+        console.log("Registration successful:", result.message);
+        console.log("User Data:", result.data);
+        navigate("/"); // Navigate to the desired route
+      } else {
+        // Handle failure case
+        console.error(result.message || "Error during registration.");
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
   };
 
   return (
     <div className="main-content">
       <div className="sidebar_container">
-        <Sidebar
-          activeItem={activeItem}
-          setActiveItem={setActiveItem}
-          resetSearch={resetSearch}
-        />
+        <Sidebar />
       </div>
       <div className="genre-selection-container">
         <div className="header_container">
           <Header
             showSearch={false}
             showUserProfile={false}
-            showArrows={true} // Pass showArrows to Header
+            showArrows={true}
           />
         </div>
         <div className="genre-content">
@@ -83,13 +113,17 @@ function GenreSelection() {
               </div>
             ))}
           </div>
-          <button type="submit" className="genre-signUpButton">
+          <button
+            type="button"
+            onClick={handleNext}
+            className="genre-signUpButton"
+          >
             Next
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default GenreSelection;
