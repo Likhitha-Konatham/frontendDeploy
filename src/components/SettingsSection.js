@@ -88,19 +88,6 @@ const VolumeSlider = ({ value, onChange }) => {
   );
 };
 
-// const notificationSettings = [
-//   {
-//     id: "newsUpdates",
-//     label: "News and Updates",
-//     ariaLabel: "Toggle news and updates notifications",
-//   },
-//   {
-//     id: "newBooks",
-//     label: "New Book Release",
-//     ariaLabel: "Toggle new book release notifications",
-//   },
-// ];
-
 const SettingsSection = () => {
   const [volume, setVolume] = useState(50); // Initial volume state
   // const [isActive, setIsActive] = useState(false); //notifs
@@ -152,30 +139,7 @@ const SettingsSection = () => {
 
         <AudioSettings />
       </section>
-      {/* <section className="notif-container">
-        <h1 className="notif-heading">Notification Settings</h1>
 
-        <div className="notif-settingsGroup">
-          {notificationSettings.map((setting) => (
-            <div key={setting.id} className="notif-settingItem">
-              <label className="notif-settingLabel" htmlFor={setting.id}>
-                {setting.label}
-              </label>
-             
-
-              <div className="audio-settings-toggle">
-                <label className="audio-settings-label">Sleep Timer</label>
-                <div
-                  className={`audio-toggle ${isActive ? "active" : ""}`}
-                  onClick={handleToggle}
-                >
-                  <div className="audio-toggle-knob"></div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section> */}
       <section className="notif-container">
         <h1 className="notif-heading">Notification Settings</h1>
 
