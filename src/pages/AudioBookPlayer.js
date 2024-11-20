@@ -84,7 +84,7 @@ const AudioBookPlayer = () => {
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "Dashboard" };
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {
@@ -161,7 +161,7 @@ const AudioBookPlayer = () => {
                 {chapters[currentChapter].context}
                 <span className="highlight"> Duis non erat in urna cursus malesuada sed sed mauris.</span>
               </p>
-              <div className="fullscreen"><img src={fullScreen} alt="full screen" /></div>
+              <div className="fullscreen" ><img src={fullScreen} alt="full screen" /></div>
             </div>
 
             {/* Playback Controls */}
@@ -227,14 +227,14 @@ const AudioBookPlayer = () => {
 
         {/* Brightness and Zoom Controls */}
         <div className="book-player-settings">
-          <div className="slider-container">
+          <div className="book-player-slider-container">
             <div className="small-img">
                 <img src={brightnessImg} alt="brightness decrease" />
             </div>
             <ReactSlider
-              className="custom-slider"
-              thumbClassName="custom-slider-thumb"
-              trackClassName="custom-slider-track"
+              className="book-player-custom-slider"
+              thumbClassName="book-player-custom-slider-thumb"
+              trackClassName="book-player-custom-slider-track"
               value={brightness}
               onChange={handleBrightnessChange}
               min={50}
@@ -245,14 +245,14 @@ const AudioBookPlayer = () => {
             </div>
           </div>
           
-          <div className="slider-container">
+          <div className="book-player-slider-container">
             <div className="small-img">
                 <img src={zoomOut} alt="Zoom Icon" />
             </div>
                 <ReactSlider
-                className="custom-slider"
-                thumbClassName="custom-slider-thumb"
-                trackClassName="custom-slider-track"
+                className="book-player-custom-slider"
+                thumbClassName="book-player-custom-slider-thumb"
+                trackClassName="book-player-custom-slider-track"
                 value={zoomLevel}
                 min={80}
                 max={120}

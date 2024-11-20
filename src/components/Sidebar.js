@@ -24,8 +24,8 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
     { icon: settings_icon, activeIcon: settings_active, label: "Settings", key: "settings" },
   ];
   const bottomMenuItems = [
-    { icon: help_icon, label: "Help", key: "help" },
-    { icon: logout_icon, label: "Logout", key: "logout" },
+    { icon: help_icon, label: "Help", key: "help" , disabled:true},
+    { icon: logout_icon, label: "Logout", key: "logout",disabled:true },
   ];
 
   const handleItemClick = (item) => {

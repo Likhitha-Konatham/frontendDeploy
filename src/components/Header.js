@@ -84,12 +84,12 @@ const Header = ({
           {showUserProfile && (
             <>
               <div className="header-user-name">{"Meghana Tatavolu" || "Loading..."}</div>
-              <img
+              <a href="/settings"><img
                 src={userIcon}
                 alt="User Icon"
                 className="header-user-icon"
                 style={{ cursor: "pointer" }}
-              />
+              /></a>
             </>
           )}
         </div>
