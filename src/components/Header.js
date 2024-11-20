@@ -64,13 +64,13 @@ const Header = ({
                     <h3 className="recent-heading">Recent</h3>
                     <ul className="recent-list">
                       <li>
-                        <img src={historyIcon} className="history-icon" /> Statistics for Dummies
+                        <img src={historyIcon} className="history-icon" alt="history icon"/> Statistics for Dummies
                       </li>
                       <li>
-                       <img src={historyIcon} className="history-icon" /> Data Science for Beginners
+                       <img src={historyIcon} className="history-icon" alt="history icon"/> Data Science for Beginners
                       </li>
                       <li>
-                        <img src={historyIcon} className="history-icon" /> The Data Science Handbook
+                        <img src={historyIcon} className="history-icon" alt="history icon"/> The Data Science Handbook
                       </li>
                     </ul>
                   </div>

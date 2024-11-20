@@ -59,12 +59,6 @@ const AudioBookPlayer = () => {
 
   const handlePlayPause = () => setIsPlaying(!isPlaying);
 
-  const handleZoom = (type) => {
-    setZoomLevel((prev) =>
-      type === "in" ? Math.min(prev + 10, 200) : Math.max(prev - 10, 50)
-    );
-  };
-
   const handleBrightnessChange = (value) => setBrightness(value);
 
   const resetSearch = () => {
