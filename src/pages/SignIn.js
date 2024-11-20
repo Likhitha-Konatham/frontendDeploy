@@ -33,13 +33,13 @@ const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    fullname: "",
+    email: "",
     password: "",
   });
 
   const handleNext = async () => {
     const loginData = {
-      fullname: formData.fullname, // Ensure `formData` matches your input field names
+      email: formData.email, // Ensure `formData` matches your input field names
       password: formData.password,
     };
 
@@ -110,10 +110,10 @@ const SignUp = () => {
                 <InputField
                   // icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/fc2202c9d9a2d7ad5a197e302dfe1f2cf9eda0d0a72baa90f26e14a44fa3e5b2?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
                   icon={fullname_logo}
-                  placeholder="Your Full Name"
+                  placeholder="Your Email"
                   type="text"
-                  id="fullname"
-                  value={formData.fullname}
+                  id="email"
+                  value={formData.email}
                   onChange={handleInputChange}
                 />
 

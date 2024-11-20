@@ -34,7 +34,7 @@ export const registerUser = async (formData, callback) => {
 export const loginUser = async (loginData, callback) => {
   const urlEndPoint = `login`;
   const payload = {
-    fullname: loginData.fullname,
+    email: loginData.email,
     password: loginData.password,
   };
 
