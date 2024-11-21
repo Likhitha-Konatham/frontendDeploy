@@ -30,9 +30,9 @@ const InProgressCarousel = ({ heading, inprogress_carousel_images }) => {
             <div className="genre_heading">{heading}</div>
               <div className="carousel__slide-list" style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}>
                 {inprogress_carousel_images.map((item, index) => (
-                  <div key={index} className="carousel__slide-item">
+                  <a href="/audiobook-player" key={index} className="carousel__slide-item">
                     <img src={item.image} alt={`carousel-item-${index}`} />
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>

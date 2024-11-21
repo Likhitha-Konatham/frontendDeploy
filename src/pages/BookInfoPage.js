@@ -6,7 +6,7 @@ import Header from "../components/Header.js";
 import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import playIcon from '../images/playIcon.png'
-import saveIcon from '../images/saveIcon.png'
+import readlaterIcon from '../images/readlater_icon.png'
 
 // Import local book cover images
 import bookcover1 from "../images/bookcover1.png";
@@ -81,7 +81,7 @@ const BookInfo = () => {
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "Dashboard" };
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {
@@ -128,7 +128,7 @@ const BookInfo = () => {
                     </div>
                     <div className="bookinfo_author_save">
                         <div className="bookinfo_author">{currentBook.author}</div>
-                        <div className="bookinfo_save"><img src={saveIcon} alt="save icon" /></div>
+                        <div className="bookinfo_save"><img src={readlaterIcon} alt="save icon" /></div>
                     </div>
                     <p className="bookinfo_description">{currentBook.description}</p>
                     </div>
