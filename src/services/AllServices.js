@@ -70,3 +70,60 @@ export const loginUser = async (loginData, callback) => {
     throw error; // Re-throw the error for caller functions to handle
   }
 };
+
+export const sendOTP = async (formData, callback) => {
+  const urlEndPoint = `send-otp`;
+
+  // Create the payload
+  const payload = {
+    email: formData.email,
+  };
+
+  console.log("Payload being sent to API:", payload);
+
+  try {
+    // Make the API call using requestPostApiCall
+    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+
+    // Log and return the response
+    if (!response) {
+      console.error("Unexpected response from requestPostApiCall:", response);
+      return undefined;
+    }
+
+    console.log("API Response:", response);
+    return response; // Ensure this returns the API's response for further handling
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error; // Re-throw the error for caller functions to handle
+  }
+};
+
+export const validateOTP = async (formData, callback) => {
+  const urlEndPoint = `validate-otp`;
+
+  // Create the payload
+  const payload = {
+    email: formData.email,
+    enteredOTP: formData.enteredOTP, // Ensure genre is an array as expected
+  };
+
+  console.log("Payload being sent to API:", payload);
+
+  try {
+    // Make the API call using requestPostApiCall
+    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+
+    // Log and return the response
+    if (!response) {
+      console.error("Unexpected response from requestPostApiCall:", response);
+      return undefined;
+    }
+
+    console.log("API Response:", response);
+    return response; // Ensure this returns the API's response for further handling
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error; // Re-throw the error for caller functions to handle
+  }
+};

@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/SignUp.css";
-// import Header from "../components/Header";
-// import { registerUser } from "../services/AllServices";
-
 import book_logo from "../images/vector_booklogo.svg";
 import fullname_logo from "../images/fullname_logo.svg";
 import message_logo from "../images/message_logo.svg";
@@ -11,6 +8,7 @@ import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
 import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
+import { sendOTP, validateOTP } from "../services/AllServices";
 
 const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
   <div className="inputfield-wrapper">
@@ -39,9 +37,12 @@ const SignUp = () => {
     password: "",
     genre: [],
   });
-  // const [errorMessage, setErrorMessage] = useState("");
-  // const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [enteredOTP, setOtp] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -54,20 +55,75 @@ const SignUp = () => {
     setFormData({ ...formData, [id]: value });
   };
 
+  const handleOtpChange = (e) => {
+    setOtp(e.target.value);
+  };
+
+  const handleSignUpClick = async () => {
+    setLoading(true);
+    setEmailError("");
+    try {
+      const response = await sendOTP(formData);
+      if (
+        response.detail ===
+        "Email already registered. Please use a different email address."
+      ) {
+        setEmailError(response.detail);
+      } else if (response.status === "success") {
+        setIsPopupOpen(true);
+        setErrorMessage("");
+      } else {
+        setErrorMessage(response.message || "Failed to send OTP.");
+      }
+    } catch (error) {
+      if (
+        error.response?.data?.detail ===
+        "Email already registered. Please use a different email address."
+      ) {
+        setEmailError(
+          "Email already registered. Please use a different email address or log in."
+        );
+      } else {
+        setErrorMessage("An error occurred while sending the OTP.");
+      }
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOtpSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await validateOTP({
+        email: formData.email,
+        enteredOTP,
+      });
+      if (response.status === "success") {
+        navigate("/genre", { state: { formData } });
+      } else {
+        setErrorMessage(response.message || "Invalid OTP. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage("An error occurred during OTP validation.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="signup-page">
       <header className="header">
-        {
-          <div className="header-left-section">
-            <img src={book_logo} alt="book logo" className="book-logo-icon" />
-            <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
-            <img
-              src={rightArrow}
-              alt="Right Arrow"
-              className="right-arrow-icon"
-            />
-          </div>
-        }
+        <div className="header-left-section">
+          <img src={book_logo} alt="book logo" className="book-logo-icon" />
+          <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
+          <img
+            src={rightArrow}
+            alt="Right Arrow"
+            className="right-arrow-icon"
+          />
+        </div>
       </header>
       <div className="signup-container">
         <div className="signup-form">
@@ -133,6 +189,12 @@ const SignUp = () => {
               </div>
             </div>
 
+            {emailError && (
+              <p className="error-message" style={{ color: "red" }}>
+                {emailError}
+              </p>
+            )}
+
             <div className="loginLink">
               <p>
                 Already have an account?{" "}
@@ -146,12 +208,43 @@ const SignUp = () => {
 
         <button
           type="button"
-          onClick={() => navigate("/genre", { state: { formData } })}
+          onClick={handleSignUpClick}
           className="signUpButton"
+          disabled={loading}
         >
-          Sign up
+          {loading ? "Sending..." : "Sign up"}
         </button>
       </div>
+
+      {isPopupOpen && (
+        <>
+          <div className="popup-overlay"></div>
+          <div className="otp-popup">
+            <div className="otp-popup-content">
+              <h2>Email Verification</h2>
+              <p>
+                An email has been sent to <strong>{formData.email}</strong>.
+                Please enter the OTP below to verify your account.
+              </p>
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                className="otp-input"
+                value={enteredOTP}
+                onChange={handleOtpChange}
+              />
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
+              <button
+                onClick={handleOtpSubmit}
+                className="otp-submit-button"
+                disabled={loading}
+              >
+                {loading ? "Verifying..." : "Verify OTP"}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
