@@ -16,12 +16,12 @@
 
 .header_container {
     width: 100%;
+    height: auto;
 }
 
 .audio-book-player {
     width: 100%;
     display: flex;
-    font-family: Inter;
     overflow: hidden;
 }
 
