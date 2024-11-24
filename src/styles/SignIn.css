@@ -1,14 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-
-
 .signup-page {
     display: flex;
     flex-direction: column;
-   padding:0px;
+    padding: 0vw;
     align-items: center;
     background-color: #f5f5f5;
-    
 }
 
 .left-arrow-icon,
@@ -26,16 +23,16 @@
 
 /* Centering and styling the signup container */
 .signup-container {
-   margin-top: 50px;
+    margin-top: 2.605vw;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
-    width: 400px;
-    height: 550px;
-    padding: 50px 40px;
+    gap: 0.7815vw;
+    width: 20.84vw;
+    height: 28.7555vw;
+    padding: 2.605vw 2.084vw;
     background-color: #ffffff;
-    border-radius: 18px;
+    border-radius: 0.938vw;
 }
 
 /* Styling for the form and logo text */
@@ -43,34 +40,33 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 
 .booklogo-heading {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 34px;
-    margin-bottom: 50px;
+    gap: 1.772vw;
+    margin-bottom: 2.605vw;
 }
 
 .booklogo-img {
-    width: 70px;
-    height: 70px;
+    width: 3.65vw;
+    height: 3.65vw;
 }
 
 .booklogo-heading-text .heading-text-wrapper {
     color: #000;
     text-align: center;
     font-family: 'Poppins', sans-serif;
-    font-size: 22px;
+    font-size: 1.146vw;
     font-weight: 500;
 }
 
 .signup-form {
     display: flex;
     max-width: 100%;
-    width: 548px;
+    width: 28.5568vw;
     flex-direction: column;
     align-items: center;
     font-family: Inter, sans-serif;
@@ -80,16 +76,16 @@
 
 @media (max-width: 991px) {
     .signup-form {
-      margin-top: 40px;
+        margin-top: 2.084vw;
     }
-  }
+}
 
 .signup-form-group {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: flex-end;
-    font-size: 23px;
+    font-size: 1.1983vw;
     color: #abafb1;
     justify-content: flex-start;
 }
@@ -104,100 +100,99 @@
 .inputfield-wrapper {
     display: flex;
     width: 100%;
-    /* margin-top: 10px; */
     flex-direction: column;
     justify-content: flex-start;
 }
 
 .inputfield-container {
-    border-radius: 11.686px;
+    border-radius: 0.609vw;
     background-color: rgba(239, 241, 249, 0.6);
     display: flex;
-    min-height: 35px;
+    min-height: 1.8235vw;
     width: 85%;
     flex-direction: column;
     justify-content: center;
-    padding: 12px 23px;
-    margin: 10px;
+    padding: 0.625vw 1.1983vw;
+    margin: 0.521vw;
 }
 
 @media (max-width: 991px) {
     .inputfield-container {
-      max-width: 100%;
-      padding: 0 20px;
+        max-width: 100%;
+        padding: 0 1.042vw;
     }
-  }
+}
 
 .inputfield-content {
     display: flex;
     width: 100%;
-    gap: 15px;
+    gap: 0.7815vw;
     justify-content: flex-start;
     flex: 1;
     flex-wrap: wrap;
     height: 100%;
 }
+
 @media (max-width: 991px) {
     .inputfield-content {
-      max-width: 100%;
+        max-width: 100%;
     }
-  }
+}
 
 .inputfield-icon {
     aspect-ratio: 1;
     object-fit: contain;
     object-position: center;
-    width: 35px;
+    width: 1.8235vw;
     margin: 0 0;
 }
 
 .inputfield-inside {
-    min-width: 240px;
+    min-width: 12.5vw;
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 16px;
+    font-size: 0.833vw;
     color: black;
 }
 
 /* Modification for input highlight color */
 .inputfield-inside:focus {
-    outline: 2px solid #abafb1;
-    border-radius: 8.686px;
-
+    outline: 0.104vw solid #abafb1;
+    border-radius: 0.452vw;
 }
 
 @media (max-width: 991px) {
     .inputfield-inside {
-      max-width: 100%;
+        max-width: 100%;
     }
-  }
+}
 
 .passwordInputContainer {
-    border-radius: 11.686px;
+    border-radius: 0.609vw;
     background-color: rgba(239, 241, 249, 0.6);
     display: flex;
-    min-height: 35px;
+    min-height: 1.8235vw;
     width: 85%;
-    margin:10px;
-    max-width: 548px;
+    margin: 0.521vw;
+    max-width: 28.5568vw;
     flex-direction: column;
     justify-content: center;
-    padding: 12px 23px;
+    padding: 0.625vw 1.1983vw;
 }
-  
+
 @media (max-width: 991px) {
     .passwordInputContainer {
-      max-width: 100%;
-      padding: 0 20px;
+        max-width: 100%;
+        padding: 0 1.042vw;
     }
-  }
-  
+}
+
 .passwordInputContent {
     display: flex;
     width: 100%;
     align-items: center;
-    gap: 15px;
+    gap: 0.7815vw;
     justify-content: flex-start;
     flex: 1;
     flex-wrap: wrap;
@@ -206,7 +201,7 @@
 
 @media (max-width: 991px) {
     .passwordInputContent {
-      max-width: 100%;
+        max-width: 100%;
     }
 }
 
@@ -214,80 +209,90 @@
     aspect-ratio: 1;
     object-fit: contain;
     object-position: center;
-    width: 35px;
+    width: 1.8235vw;
     align-self: stretch;
     margin: auto 0;
 }
 
 .passwordField {
     align-self: stretch;
-    min-width: 240px;
+    min-width: 12.5vw;
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 16px;
+    font-size: 0.833vw;
     color: black;
 }
 
 /* Modification for password field highlight color */
 .passwordField:focus {
-    outline: 2px solid #abafb1;
-    border-radius: 8.686px;
+    outline: 0.104vw solid #abafb1;
+    border-radius: 0.452vw;
 }
 
 .visibilityIcon {
     aspect-ratio: 0.96;
     object-fit: contain;
     object-position: center;
-    width: 23px;
+    width: 1.1983vw;
     align-self: stretch;
     margin: auto 0;
     cursor: pointer;
 }
 
-.singin-loginLink {
-    color: #a63e71;
+.signin-loginLink {
+    color: black;
     text-align: center;
-    font-size: 15px;
-    /* margin-top:100px;
-    padding-top:100px; */
-
-
+    font-size: 0.9815vw;
+    
 }
 
 .signin-signUpButton {
     align-self: center;
-    border-radius: 18px;
+    border-radius: 0.938vw;
     background-color: #a63e71;
     color: #fff;
     text-align: center;
-    width: 180px;
-    height: 70px; /* Fixed height */
-    padding: 10px 23px;
-    font: 400 22px Inter, sans-serif;
+    width: 9.375vw;
+    height: 3.646vw;
+    padding: 0.521vw 1.1983vw;
+    font: 400 1.146vw Inter, sans-serif;
     border: none;
     cursor: pointer;
-    /* margin-top: 60px; */
 }
 
 @media (max-width: 991px) {
     .signin-loginLink {
-        margin-top: 40px;
+        margin-top: 2.084vw;
     }
     .signin-signUpButton {
-        padding: 10px;
+        padding: 0.521vw;
     }
 }
 
 .visually-hidden {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 0.052vw;
+    height: 0.052vw;
     padding: 0;
-    margin: -1px;
+    margin: -0.052vw;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
 }
 
+.signin-error-message {
+    color: #ff0000;
+    font-size: 1.04vw;
+    margin-top: 1.08vw;
+    margin-bottom: 1.08vw;
+    text-align: center;
+    width: 100%;
+    text-transform: uppercase;
+  }
+  
+  .signup-loginLink {
+    margin-top: 1.08vw;
+  }
+  

@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GenreSelection from "./pages/GenreSelect";
+import ViewBookmarks from "./pages/ViewBookmarks";
 
 function App() {
   return (
@@ -19,12 +20,13 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/" element={<Dashboard />} />
-          <Route path="bookmarks" element ={<Bookmarks />} />
-          <Route path="library" element ={<Library />} />
-          <Route path="settings" element ={<Settings />} />
+          <Route path="bookmarks" element={<Bookmarks />} />
+          <Route path="library" element={<Library />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="/genre" element={<GenreSelection />} />
           <Route path="/book-info" element={<BookInfo />} />
           <Route path="/audiobook-player" element={<AudioBookPlayer />} />
+          <Route path="/view-bookmarks" element={<ViewBookmarks />} />
         </Routes>
       </div>
     </Router>

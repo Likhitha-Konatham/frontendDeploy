@@ -190,12 +190,12 @@ const SignUp = () => {
             </div>
 
             {emailError && (
-              <p className="error-message" style={{ color: "red" }}>
+              <p className="signup-error-email" style={{ color: "red" }}>
                 {emailError}
               </p>
             )}
 
-            <div className="loginLink">
+            <div className="signup-loginLink">
               <p>
                 Already have an account?{" "}
                 <a href="/signin" style={{ color: "#a63e71" }}>
@@ -221,6 +221,13 @@ const SignUp = () => {
           <div className="popup-overlay"></div>
           <div className="otp-popup">
             <div className="otp-popup-content">
+              <button
+                className="close-popup-button"
+                onClick={() => setIsPopupOpen(false)}
+                aria-label="Close Popup"
+              >
+                &times;
+              </button>
               <h2>Email Verification</h2>
               <p>
                 An email has been sent to <strong>{formData.email}</strong>.

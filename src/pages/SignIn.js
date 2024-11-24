@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import "../styles/SignIn.css";
-// import Sidebar from "../components/Sidebar.js";
-// import Header from "../components/Header";
 import book_logo from "../images/vector_booklogo.svg";
 import fullname_logo from "../images/fullname_logo.svg";
-// import message_logo from "../images/message_logo.png";
 import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
 import { loginUser } from "../services/AllServices";
@@ -31,15 +28,27 @@ const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
   </div>
 );
 
-const SignUp = () => {
+const SignIn = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
   const handleNext = async () => {
     const loginData = {
-      email: formData.email, // Ensure `formData` matches your input field names
+      email: formData.email,
       password: formData.password,
     };
 
@@ -47,49 +56,31 @@ const SignUp = () => {
       const response = await loginUser(loginData, (data) => {
         console.log("Callback Data:", data);
       });
-      console.log("response login:", loginData);
       if (response && response.status === "success") {
-        console.log("Login Successful:", response);
-        // alert(response.message); // Notify user of success
-
-        // Save token to localStorage for authentication in future API calls
         localStorage.setItem("access_token", response.data.access_token);
-
-        // Redirect user to the dashboard or home page
         window.location.href = "/";
       } else {
-        console.error("Login Failed:", response.message);
-        alert(response.message || "Login failed. Please try again.");
+        setErrorMessage(response.message || "Login failed. Please try again.");
       }
     } catch (error) {
-      console.error("Login Error:", error);
-      alert("An error occurred while logging in. Please try again later.");
+      setErrorMessage(
+        "An error occurred while logging in. Please try again later."
+      );
     }
   };
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
-  };
   return (
     <main className="signup-page">
       <header className="header">
-        {
-          <div className="header-left-section">
-            <img src={book_logo} alt="book logo" className="book-logo-icon" />
-            <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
-            <img
-              src={rightArrow}
-              alt="Right Arrow"
-              className="right-arrow-icon"
-            />
-          </div>
-        }
+        <div className="header-left-section">
+          <img src={book_logo} alt="book logo" className="book-logo-icon" />
+          <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
+          <img
+            src={rightArrow}
+            alt="Right Arrow"
+            className="right-arrow-icon"
+          />
+        </div>
       </header>
       <div className="signup-container">
         <div className="signup-form">
@@ -108,9 +99,8 @@ const SignUp = () => {
             <div className="signup-form-group">
               <div className="signup-input-fields">
                 <InputField
-                  // icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/fc2202c9d9a2d7ad5a197e302dfe1f2cf9eda0d0a72baa90f26e14a44fa3e5b2?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
                   icon={fullname_logo}
-                  placeholder="Your Email"
+                  placeholder="Enter Your Email"
                   type="text"
                   id="email"
                   value={formData.email}
@@ -122,7 +112,6 @@ const SignUp = () => {
                     <div className="passwordInputContent">
                       <img
                         loading="lazy"
-                        // src="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/ede8020e672a2299ea3fabf45ccd38c9d1cfe12a49405db7bb34420b1a707bc9?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
                         src={lock_logo}
                         alt=""
                         className="passwordIcon"
@@ -130,15 +119,14 @@ const SignUp = () => {
                       <input
                         type={showPassword ? "text" : "password"}
                         id="password"
-                        placeholder="Create a Strong Password"
+                        placeholder="Enter Your Password"
                         className="passwordField"
-                        aria-label="Create a Strong Password"
+                        aria-label="Enter Your Password"
                         value={formData.password}
                         onChange={handleInputChange}
                       />
                       <img
                         loading="lazy"
-                        // src="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d57736c3399a9f83672f928638bbd8483288335c39bb724d356308d362e5f519?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
                         src={password_eye}
                         alt={showPassword ? "Hide password" : "Show password"}
                         className="visibilityIcon"
@@ -158,6 +146,9 @@ const SignUp = () => {
               </div>
             </div>
           </form>
+          {errorMessage && (
+            <div className="signin-error-message">{errorMessage}</div>
+          )}
           <div className="signin-loginLink">
             <p>
               Don't have an Account?{" "}
@@ -179,4 +170,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
