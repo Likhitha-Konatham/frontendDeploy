@@ -52,8 +52,7 @@ export const requestPostApiCall = async (urlEndPoint, payload, callback) => {
 export const requestGetApiCall = async (urlEndPoint, params = {}, callback) => {
   try {
     const token = await getToken();
-    // const user_id = await getUserID();
-
+    console.log('token', token);
     const response = await axios({
       url: `${baseUrl}${urlEndPoint}`,
       method: "GET",
@@ -63,19 +62,26 @@ export const requestGetApiCall = async (urlEndPoint, params = {}, callback) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    // console.log("Token:", token);
-    // console.log("UserID:", user_id);
 
-    callback(response.data);
-  } catch (error) {
-    if (error.response && error.response.data) {
-      callback(error.response.data);
-    } else {
-      callback({
-        status: "error",
-        message: "Unknown error occurred.",
-        code: error.response ? error.response.code : 500,
-      });
+    // Ensure callback is invoked if it's a function
+    if (callback && typeof callback === "function") {
+      callback(response.data);
     }
+
+    return response.data;
+  } catch (error) {
+    const errorData = error.response
+      ? error.response.data
+      : {
+          status: "error",
+          message: "Unknown error occurred.",
+          code: 500,
+        };
+
+    if (callback && typeof callback === "function") {
+      callback(errorData);
+    }
+
+    return errorData;
   }
 };

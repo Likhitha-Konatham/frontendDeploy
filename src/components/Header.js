@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../styles/Header.css";
+import { fetchProfile } from "../services/AllServices";
 import searchIcon from "../images/search_icon.png";
 import userIcon from "../images/user_icon.png";
 import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
 import historyIcon from "../images/history_icon.png"
 
-const Header = ({
-  showSearch,
-  showUserProfile,
-  onSearch,
-  searchQuery,
-  showArrows,
-  pageName,
-}) => {
+const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,pageName,}) => {
+  const [profile, setProfile] = useState({ firstname: "", lastname: "" });
   const [showSearchBar, setShowSearchBar] = useState(false); // State to toggle the search bar visibility
+
+  // Fetch profile details on component mount
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const response = await fetchProfile();
+          const { firstname, lastname } = response.data;
+          setProfile({ firstname, lastname });
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    getProfile();
+  }, []);
 
   const handleSearchClick = () => {
     setShowSearchBar((prevState) => !prevState); // Toggle visibility of search bar
@@ -83,13 +93,17 @@ const Header = ({
         <div className="header-user-profile">
           {showUserProfile && (
             <>
-              <div className="header-user-name">{"Meghana Tatavolu" || "Loading..."}</div>
-              <a href="/settings"><img
-                src={userIcon}
-                alt="User Icon"
-                className="header-user-icon"
-                style={{ cursor: "pointer" }}
-              /></a>
+              <div className="header-user-name">
+                {profile.firstname || "Guest"} {profile.lastname}
+              </div>
+              <a href="/settings">
+                <img
+                  src={userIcon}
+                  alt="User Icon"
+                  className="header-user-icon"
+                  style={{ cursor: "pointer" }}
+                />
+              </a>
             </>
           )}
         </div>

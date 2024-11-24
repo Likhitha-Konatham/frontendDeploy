@@ -1,97 +1,89 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import '../styles/BookInfo.css';
 import Sidebar from "../components/Sidebar.js";
 import Header from "../components/Header.js";
 import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
-import playIcon from '../images/playIcon.png'
-import readlaterIcon from '../images/readlater_icon.png'
-
-// Import local book cover images
-import bookcover1 from "../images/bookcover1.png";
-import bookcover2 from "../images/bookcover2.png";
-import bookcover3 from "../images/bookcover3.png";
+import playIcon from '../images/playIcon.png';
+import readlaterIcon from '../images/readlater_icon.png';
+import { fetchAllGenreBooks } from "../services/AllServices.js"; // Assume this API utility is available for fetching books
 
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
-  const [searchQuery, setSearchQuery] = useState(''); 
-  const navigate = useNavigate();
-  const books = [
-    {
-      id: 1,
-      title: "Data Science",
-      author: "Nir Kaldero",
-      description:
-        "Data science is an interdisciplinary field that combines statistics, computer science, and domain expertise to extract meaningful insights from data. It involves processes such as data collection.",
-      cover: bookcover1, // Replace with actual image URL
-    },
-    {
-      id: 2,
-      title: "Machine Learning",
-      author: "Andrew Ng",
-      description:
-        "Machine learning is a branch of AI that focuses on building systems that can learn from and adapt to data without explicit programming.",
-      cover: bookcover2, // Replace with actual image URL
-    },
-    {
-      id: 3,
-      title: "Artificial Intelligence",
-      author: "Stuart Russell",
-      description:
-        "AI involves the simulation of human intelligence in machines programmed to think and act like humans.",
-      cover: bookcover3, // Replace with actual image URL
-    },
-  ];
-
+  const [searchQuery, setSearchQuery] = useState('');
+  const [genreBooks, setGenreBooks] = useState({});
+  const [sortedBooks, setSortedBooks] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { bookId, genre } = useParams();
+  const navigate = useNavigate();
 
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % books.length);
-  };
+  useEffect(() => {
+    const fetchGenreBooks = async () => {
+      try {
+        const response = await fetchAllGenreBooks();
+        setGenreBooks(response.data);
+      } catch (error) {
+        console.error("Failed to fetch genre books:", error);
+      }
+    };
+    fetchGenreBooks();
+  }, []);
 
-  const handlePrev = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + books.length) % books.length
-    );
-  };
+  useEffect(() => {
+    if (genre && genreBooks[genre]) {
+      const booksInGenre = genreBooks[genre];
+      setSortedBooks(booksInGenre);
+      const selectedIndex = booksInGenre.findIndex((book) => book._id === bookId);
+      setCurrentIndex(selectedIndex !== -1 ? selectedIndex : 0);
+    }
+  }, [genre, bookId, genreBooks]);
 
-  const currentBook = books[currentIndex];
+// Handle carousel navigation
+const handleNext = () => {
+  setCurrentIndex((prevIndex) => {
+    const nextIndex = (prevIndex + 1) % sortedBooks.length;
+    const nextBook = sortedBooks[nextIndex];
+    navigate(`/book-info/${genre}/${nextBook._id}`);
+    return nextIndex;
+  });
+};
 
-  const resetSearch = () => {
-    setSearchQuery(""); // Reset the search query
-  };
+const handlePrev = () => {
+  setCurrentIndex((prevIndex) => {
+    const prevIndexCalc = (prevIndex - 1 + sortedBooks.length) % sortedBooks.length;
+    const prevBook = sortedBooks[prevIndexCalc];
+    navigate(`/book-info/${genre}/${prevBook._id}`);
+    return prevIndexCalc;
+  });
+};
+
+const currentBook = sortedBooks[currentIndex] || {};
+  // Header and sidebar utility functions
+  const resetSearch = () => setSearchQuery("");
 
   const handleActiveItemChange = (item) => {
-    setActiveItem(item); // Update active item
-    if (item === "dashboard") {
-      navigate("/"); // Navigate to feedback page
-    } else if (item === "bookmarks") {
-      navigate("/bookmarks"); // Navigate to home page
-    }
-    else if (item === "library") {
-      navigate("/library"); // Navigate to home page
-    }
-    else if (item === "settings") {
-      navigate("/settings"); // Navigate to home page
-    }
-
-    resetSearch(); // Reset search whenever a new section is selected
+    setActiveItem(item);
+    if (item === "dashboard") navigate("/");
+    else if (item === "bookmarks") navigate("/bookmarks");
+    else if (item === "library") navigate("/library");
+    else if (item === "settings") navigate("/settings");
+    resetSearch();
   };
 
   const getHeaderVisibility = () => {
-    if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
-    } else if (activeItem === "bookmarks") {
+    if (["dashboard", ""].includes(activeItem)) {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {
       return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Library" };
     } else if (activeItem === "settings") {
       return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Account" };
     }
+    return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
   };
 
   const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
+
 
   return (
     <main className="main-content">
@@ -102,43 +94,46 @@ const BookInfo = () => {
           resetSearch={resetSearch}
         />
       </div>
-    
+
       <div className="bookInfo_container">
         <div className="header_container">
           <Header
             showSearch={showSearch}
             showUserProfile={showUserProfile}
-            showArrows={showArrows} 
-            pageName={pageName} 
+            showArrows={showArrows}
+            pageName={pageName}
             searchQuery={searchQuery}
             onSearch={(query) => setSearchQuery(query)}
           />
         </div>
+
         <div className="bookInfo_body">
-            <div className="carousel-container">
-                <div className="carousel-arrow" onClick={handlePrev}>
-                    <div className="left-arrow"><img src={bigLeftArrow} alt= "left arrow" /></div>
+          <div className="carousel-container">
+            <div className="carousel-arrow" onClick={handlePrev}>
+              <div className="left-arrow"><img src={bigLeftArrow} alt="left arrow" /></div>
+            </div>
+
+            <div className="carousel-content">
+              <img className="bookinfo_cover" src={currentBook.thumbnail} alt="Book Cover" />
+              <div className="book_info">
+                <div className="bookinfo_title_play">
+                  <div className="bookinfo_title">{currentBook.title}</div>
+                  <a href="/audiobook-player" className="bookinfo_play"><img src={playIcon} alt="play icon" /></a>
                 </div>
-                <div className="carousel-content">
-                    <img className="bookinfo_cover" src={currentBook.cover} alt="Book Cover" />
-                    <div className="book_info">
-                    <div className="bookinfo_title_play">
-                        <div className="bookinfo_title">{currentBook.title}</div>
-                        <a href="/audiobook-player" className="bookinfo_play"><img src={playIcon} alt="play icon" /></a>
-                    </div>
-                    <div className="bookinfo_author_save">
-                        <div className="bookinfo_author">{currentBook.author}</div>
-                        <div className="bookinfo_save"><img src={readlaterIcon} alt="save icon" /></div>
-                    </div>
-                    <p className="bookinfo_description">{currentBook.description}</p>
-                    </div>
+                <div className="bookinfo_author_save">
+                  <div className="bookinfo_author">{currentBook.author_list?.join(", ")}</div>
+                  <div className="bookinfo_save"><img src={readlaterIcon} alt="save icon" /></div>
                 </div>
-                <div className="carousel-arrow" onClick={handleNext}>
-                    <div className="right-arrow"><img src={bigRightArrow} alt= "right arrow" /></div>
-                </div>
+                <p className="bookinfo_description">{currentBook.description}</p>
+              </div>
+            </div>
+
+            <div className="carousel-arrow" onClick={handleNext}>
+              <div className="right-arrow"><img src={bigRightArrow} alt="right arrow" /></div>
             </div>
           </div>
         </div>
+      </div>
     </main>
   );
 };

@@ -9,6 +9,7 @@
 .bookmarks_container{
     width: 95.5%;
     overflow: hidden;
+    background: #FAFAFA;
 }
 .header_container{
     width: 100%;
@@ -16,7 +17,6 @@
 .bookmarks_body{
     width: 100%;
     display: flex;
-    background: #FAFAFA;
 }
 .bookmarks_body .bookGrids_container{
     width: 100%;

@@ -1,4 +1,4 @@
-import { requestPostApiCall } from "./ApiServices";
+import { requestPostApiCall, requestGetApiCall } from "./ApiServices";
 
 export const registerUser = async (formData, callback) => {
   const urlEndPoint = `register`;
@@ -71,6 +71,16 @@ export const loginUser = async (loginData, callback) => {
   }
 };
 
+export const fetchProfile = async () => {
+  const urlEndPoint = `profile`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response; // Return the response
+  } catch (error) {
+    throw error; // Let the caller handle the error
+  }
+};
+
 export const sendOTP = async (formData, callback) => {
   const urlEndPoint = `send-otp`;
 
@@ -125,5 +135,25 @@ export const validateOTP = async (formData, callback) => {
   } catch (error) {
     console.error("Error during API call:", error);
     throw error; // Re-throw the error for caller functions to handle
+  }
+};
+
+export const fetchAllGenreBooks = async (callback) => {
+  const urlEndPoint = `ALLGenreBooks`; // API endpoint for all genres
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response; // Return the response
+  } catch (error) {
+    throw error; // Let the caller handle the error
+  }
+};
+
+export const fetchUserBookmarks = async () => {
+  const urlEndPoint = `UserBookMarks`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response; // Return the response
+  } catch (error) {
+    throw error; // Let the caller handle the error
   }
 };
