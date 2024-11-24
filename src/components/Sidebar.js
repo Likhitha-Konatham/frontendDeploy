@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "../styles/Sidebar.css";
 import audiobook_logo from "../images/audiobook_logo.png";
 import bookmark_icon from "../images/bookmark_icon.png";
@@ -11,10 +12,24 @@ import bookmark_active from "../images/bookmark_active.png";
 import dashboard_active from "../images/dashboard_active.png";
 import library_active from "../images/library_active.png";
 import settings_active from "../images/settings_active.png";
-
+import { setToken } from "../storage/Storage"; // Import your storage functions
 
 const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
+  const navigate = useNavigate(); // Initialize navigate
+
+  // Logout function
+  const handleLogout = async () => {
+    try {
+      await setToken("");
+      console.log("User logged out");
+
+      // Navigate to the landing page after logout
+      navigate("/signin");
+    } catch (error) {
+      console.error("Error logging out", error);
+    }
+  };
 
   // Define menuItems with the inactive and active icons
   const menuItems = [
@@ -24,12 +39,14 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
     { icon: settings_icon, activeIcon: settings_active, label: "Settings", key: "settings" },
   ];
   const bottomMenuItems = [
-    { icon: help_icon, label: "Help", key: "help" , disabled:true},
-    { icon: logout_icon, label: "Logout", key: "logout",disabled:true },
+    { icon: help_icon, label: "Help", key: "help", disabled: true },
+    { icon: logout_icon, label: "Logout", key: "logout", disabled: false }, // Enable logout
   ];
 
   const handleItemClick = (item) => {
-    if (!item.disabled) {
+    if (item.key === "logout") {
+      handleLogout(); // Call logout function when "Logout" is clicked
+    } else if (!item.disabled) {
       setActiveItem(item.key);
       if (item.key === "home") {
         resetSearch();
@@ -40,13 +57,12 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
   return (
     <div className="sidebar">
       {/* Top section with icons */}
-      
       <div className="sidebar-top">
-      <div className="logo-container">
-        <a href="/">
-          <img src={audiobook_logo} alt="Audio book Logo" className="logo" />
-        </a>
-      </div>
+        <div className="logo-container">
+          <a href="/">
+            <img src={audiobook_logo} alt="Audio book Logo" className="logo" />
+          </a>
+        </div>
         {menuItems.map((item) => (
           <div
             key={item.key}
@@ -66,7 +82,6 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
           </div>
         ))}
       </div>
-
 
       {/* Bottom section with icons */}
       <div className="sidebar-bottom">

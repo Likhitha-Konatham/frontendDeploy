@@ -52,7 +52,6 @@ export const requestPostApiCall = async (urlEndPoint, payload, callback) => {
 export const requestGetApiCall = async (urlEndPoint, params = {}, callback) => {
   try {
     const token = await getToken();
-    console.log('token', token);
     const response = await axios({
       url: `${baseUrl}${urlEndPoint}`,
       method: "GET",

@@ -1,5 +1,10 @@
-import React from "react";
+
+
+
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
+import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import Bookmarks from "./pages/Bookmarks";
 import Library from "./pages/Library";
@@ -10,27 +15,38 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import GenreSelection from "./pages/GenreSelect";
 import ViewBookmarks from "./pages/ViewBookmarks";
-import ProtectedRoute from "./Routing/PrivateRouting"; // Import ProtectedRoute
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./Routing/PrivateRouting";
+import { getToken } from "./storage/Storage"; // Adjust path based on your project structure
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!getToken()); // Set initial state based on token
+
+  const handleLogout = () => {
+    setIsAuthenticated(false); // Set authentication status to false on logout
+  };
+
   return (
     <Router>
       <div className="pagesall">
         <Routes>
-          {/* Public Routes */}
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
 
           {/* Protected Routes */}
-          <Route path="/" element={<ProtectedRoute element={Dashboard} />} />
-          <Route path="/bookmarks" element={<ProtectedRoute element={Bookmarks} />} />
-          <Route path="/library" element={<ProtectedRoute element={Library} />} />
-          <Route path="/settings" element={<ProtectedRoute element={Settings} />} />
-          <Route path="/genre" element={<ProtectedRoute element={GenreSelection} />} />
-          <Route path="/book-info/:genre/:bookId" element={<ProtectedRoute element={BookInfo} />} />
-          <Route path="/audiobook-player" element={<ProtectedRoute element={AudioBookPlayer} />} />
-          <Route path="/view-bookmarks" element={<ProtectedRoute element={ViewBookmarks} />} />
+          <Route path="/" element={<ProtectedRoute element={Dashboard} isAuthenticated={isAuthenticated} />} />
+          <Route path="/bookmarks" element={<ProtectedRoute element={Bookmarks} isAuthenticated={isAuthenticated} />} />
+          <Route path="/library" element={<ProtectedRoute element={Library} isAuthenticated={isAuthenticated} />} />
+          <Route path="/settings" element={<ProtectedRoute element={Settings} isAuthenticated={isAuthenticated} />} />
+          <Route path="/genre" element={<ProtectedRoute element={GenreSelection} isAuthenticated={isAuthenticated} />} />
+          <Route
+            path="/book-info/:genre/:bookId"
+            element={<ProtectedRoute element={BookInfo} isAuthenticated={isAuthenticated} />}
+          />
+          <Route path="/audiobook-player" element={<ProtectedRoute element={AudioBookPlayer} isAuthenticated={isAuthenticated} />} />
+          <Route path="/view-bookmarks" element={<ProtectedRoute element={ViewBookmarks} isAuthenticated={isAuthenticated} />} />
+
+          {/* Catch-All Redirect */}
+          <Route path="*" element={<Navigate to={isAuthenticated ? "/" : "/signin"} />} />
         </Routes>
       </div>
     </Router>

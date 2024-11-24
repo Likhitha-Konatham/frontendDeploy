@@ -40,3 +40,25 @@ const ProtectedRoute = ({ element: Component }) => {
 };
 
 export default ProtectedRoute;
+
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { Navigate } from "react-router-dom";
+
+// const ProtectedRoute = ({ element: Component, isAuthenticated }) => {
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     setLoading(false);
+//   }, []);
+
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   return isAuthenticated ? <Component /> : <Navigate to="/" />;
+// };
+
+// export default ProtectedRoute;
