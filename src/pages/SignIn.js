@@ -36,6 +36,7 @@ const SignIn = () => {
 
   const [errorMessage, setErrorMessage] = useState(""); // State for error messages
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loading
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -47,6 +48,9 @@ const SignIn = () => {
   };
 
   const handleNext = async () => {
+    setIsLoading(true); // Start loading
+    setErrorMessage(""); // Clear previous errors
+
     const loginData = {
       email: formData.email,
       password: formData.password,
@@ -57,6 +61,7 @@ const SignIn = () => {
         console.log("Callback Data:", data);
       });
       if (response && response.status === "success") {
+        console.log("User Data:", response.data);
         localStorage.setItem("access_token", response.data.access_token);
         window.location.href = "/";
       } else {
@@ -66,6 +71,8 @@ const SignIn = () => {
       setErrorMessage(
         "An error occurred while logging in. Please try again later."
       );
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -162,8 +169,9 @@ const SignIn = () => {
           type="submit"
           onClick={handleNext}
           className="signin-signUpButton"
+          disabled={isLoading} // Disable button when loading
         >
-          Login
+          {isLoading ? "Logging in..." : "Login"} {/* Dynamic button text */}
         </button>
       </div>
     </main>

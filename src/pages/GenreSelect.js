@@ -47,45 +47,6 @@ const GenreSelection = () => {
     );
   };
 
-  // const handleNext = async () => {
-  //   if (!formData.email || !formData.password || !formData.firstname) {
-  //     console.warn("Required form data is missing. Redirecting to home page.");
-  //     navigate("/"); // Redirect to the home page or another fallback route
-  //     return;
-  //   }
-
-  //   const selectedOptionsLabel = selectedOptions
-  //     .map((id) => {
-  //       const option = options.find((opt) => opt.id === id);
-  //       return option ? option.label : null;
-  //     })
-  //     .filter((label) => label !== null); // Filter out any null values for safety
-
-  //   const updatedFormData = { ...formData, genre: selectedOptionsLabel };
-
-  //   try {
-  //     const result = await registerUser(updatedFormData);
-
-  //     // Check if the result exists and has the expected structure
-  //     if (!result || typeof result !== "object" || !result.status) {
-  //       console.error("Unexpected response from registerUser:", result);
-  //       return;
-  //     }
-
-  //     // Handle success case
-  //     if (result.status === "success") {
-  //       console.log("Registration successful:", result.message);
-  //       console.log("User Data:", result.data);
-  //       navigate("/"); // Navigate to the desired route
-  //     } else {
-  //       // Handle failure case
-  //       console.error(result.message || "Error during registration.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occurred:", error);
-  //   }
-  // };
-
   const handleNext = async () => {
     // Ensure formData exists before accessing its properties
 
@@ -111,6 +72,7 @@ const GenreSelection = () => {
       if (result.status === "success") {
         console.log("Registration successful:", result.message);
         console.log("User Data:", result.data);
+        localStorage.setItem("access_token", result.data.access_token);
         navigate("/"); // Navigate to the desired route
       } else {
         // Handle failure case
@@ -120,16 +82,12 @@ const GenreSelection = () => {
       console.error("Error occurred:", error);
     }
 
-    if (
-      !formData ||
-      !formData.email ||
-      !formData.password ||
-      !formData.firstname
-    ) {
+    if (!formData.email || !formData.password || !formData.firstName) {
       console.warn(
         "Required form data is missing or incomplete. Redirecting to home page."
       );
-      navigate("/"); // Redirect to the home page or another fallback route
+      alert("Required form data is missing or incomplete.");
+      //navigate("/"); // Redirect to the home page or another fallback route
       return;
     }
   };
