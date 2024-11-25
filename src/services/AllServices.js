@@ -138,6 +138,18 @@ export const validateOTP = async (formData, callback) => {
   }
 };
 
+export const fetchAllBooks = async (callback) => {
+  const urlEndPoint = `AllBooks`; // API endpoint for all books
+  try {
+    // Make the GET API call
+    const response = await requestGetApiCall(urlEndPoint);
+    return response; // Return the response for further handling
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error; // Re-throw the error for caller functions to handle
+  }
+};
+
 export const fetchAllGenreBooks = async (callback) => {
   const urlEndPoint = `ALLGenreBooks`; // API endpoint for all genres
   try {
@@ -155,5 +167,26 @@ export const fetchUserBookmarks = async () => {
     return response; // Return the response
   } catch (error) {
     throw error; // Let the caller handle the error
+  }
+};
+
+export const insertReadLater = async (formData, callback) => {
+  console.log("bookid", formData.bookID);
+  const urlEndPoint = `insertReadlater`;
+  const payload = {
+    bookID: formData.bookID,
+  };
+
+  await requestPostApiCall(urlEndPoint, payload, callback);
+};
+
+export const fetchReadLaterBooks = async (callback) => {
+  const urlEndPoint = `readlater`; // API endpoint for Read Later books
+  try {
+    // Make the GET API call
+    const response = await requestGetApiCall(urlEndPoint);
+    return response; // Return the response for further handling
+  } catch (error) {
+    throw error; // Re-throw the error for caller functions to handle
   }
 };

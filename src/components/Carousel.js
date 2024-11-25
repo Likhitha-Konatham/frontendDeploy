@@ -1,22 +1,38 @@
+import React, { useState, useEffect } from 'react'; 
+import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
+import { fetchAllBooks } from '../services/AllServices';
 import '../styles/Carousel.css';
-
-import slide_image_1 from '../images/bookcover1.png';
-import slide_image_2 from '../images/bookcover2.png';
-import slide_image_3 from '../images/bookcover3.png';
-import slide_image_4 from '../images/bookcover1.png';
-import slide_image_5 from '../images/bookcover2.png';
-import slide_image_6 from '../images/bookcover3.png';
-import slide_image_7 from '../images/bookcover1.png';
 
 import leftArrow from '../images/new_release_carousel_leftarrow.png'; 
 import rightArrow from '../images/new_release_carousel_rightarrow.png'; 
 
 const Carousel = () => {
+  const [books, setBooks] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getBooks = async () => {
+      try {
+        const response = await fetchAllBooks();
+        const sortedBooks = response.data.sort((a, b) => new Date(b.created) - new Date(a.created)).slice(0, 6);
+        setBooks(sortedBooks);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+
+    getBooks();
+  }, []);
+
+  const handleBookClick = (bookId, genre) => {
+    navigate(`/book-info/${genre}/${bookId}`);
+  };
+
   return (
     <div className="new-rleases-carousel-container">
       <Swiper
@@ -60,15 +76,17 @@ const Carousel = () => {
           },
         }}
       >
-        <SwiperSlide className="swiper-slide"><img src={slide_image_1} alt="slide_image" /></SwiperSlide>
-        <SwiperSlide className="swiper-slide"><img src={slide_image_2} alt="slide_image" /></SwiperSlide>
-        <SwiperSlide className="swiper-slide"><img src={slide_image_3} alt="slide_image" /></SwiperSlide>
-        <SwiperSlide className="swiper-slide"><img src={slide_image_4} alt="slide_image" /></SwiperSlide>
-        <SwiperSlide className="swiper-slide"><img src={slide_image_5} alt="slide_image" /></SwiperSlide>
-        <SwiperSlide className="swiper-slide"><img src={slide_image_6} alt="slide_image" /></SwiperSlide>
-        <SwiperSlide className="swiper-slide"><img src={slide_image_7} alt="slide_image" /></SwiperSlide>
-
+         {books.map((book) => (
+          <SwiperSlide
+            key={book._id}
+            className="swiper-slide"
+            onClick={() => handleBookClick(book._id, book.genre)} // Pass bookId and genre
+          >
+            <img src={book.thumbnail} alt={book.title} />
+          </SwiperSlide>
+        ))}
         <div className="swiper-pagination"></div>
+        
       </Swiper>
 
       {/* Custom Navigation Arrows */}

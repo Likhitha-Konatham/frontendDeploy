@@ -10,12 +10,8 @@ export const requestPostApiCall = async (urlEndPoint, payload, callback) => {
     const token = await getToken();
     const headers = {
       Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     };
-
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
     // Post request with axios, payload being FormData
     const response = await axios({
       url: `${baseUrl}${urlEndPoint}`,

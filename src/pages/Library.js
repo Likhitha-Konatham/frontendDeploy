@@ -18,25 +18,6 @@ const Library = () => {
   const [activeItem, setActiveItem] = useState("library");
   const [searchQuery, setSearchQuery] = useState(''); 
   const navigate = useNavigate();
-
-  const readlaterCarousel = [
-    {
-      heading: "Read Later",
-      images: [
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        // Add more images as needed
-      ]
-    }
-  ];
   const inprogressCarousel = [
     {
       heading: "In Progress",
@@ -132,14 +113,9 @@ const Library = () => {
         </div>
         <div className="library_body">
           <div className="carousels_container">
-            {readlaterCarousel.map((carousel, index) => (
-              <div className="readlater_carousel" key={index}>
-                <ReadlaterCarousel 
-                  heading={carousel.heading} 
-                  readlater_carousel_images={carousel.images}
-                />
+              <div className="readlater_carousel">
+                <ReadlaterCarousel />
               </div>
-            ))}
              {inprogressCarousel.map((carousel, index) => (
               <div className="inprogress_carousel" key={index}>
                 <InprogressCarousel 

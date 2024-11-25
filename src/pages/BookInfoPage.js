@@ -7,7 +7,8 @@ import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import playIcon from '../images/playIcon.png';
 import readlaterIcon from '../images/readlater_icon.png';
-import { fetchAllGenreBooks } from "../services/AllServices.js"; // Assume this API utility is available for fetching books
+import { fetchAllGenreBooks } from "../services/AllServices.js"; 
+import { insertReadLater } from "../services/AllServices.js"; // Add the API utility for InsertReadlater
 
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -39,27 +40,42 @@ const BookInfo = () => {
     }
   }, [genre, bookId, genreBooks]);
 
-// Handle carousel navigation
-const handleNext = () => {
-  setCurrentIndex((prevIndex) => {
-    const nextIndex = (prevIndex + 1) % sortedBooks.length;
-    const nextBook = sortedBooks[nextIndex];
-    navigate(`/book-info/${genre}/${nextBook._id}`);
-    return nextIndex;
-  });
-};
+  // Handle carousel navigation
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % sortedBooks.length;
+      const nextBook = sortedBooks[nextIndex];
+      navigate(`/book-info/${genre}/${nextBook._id}`);
+      return nextIndex;
+    });
+  };
 
-const handlePrev = () => {
-  setCurrentIndex((prevIndex) => {
-    const prevIndexCalc = (prevIndex - 1 + sortedBooks.length) % sortedBooks.length;
-    const prevBook = sortedBooks[prevIndexCalc];
-    navigate(`/book-info/${genre}/${prevBook._id}`);
-    return prevIndexCalc;
-  });
-};
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => {
+      const prevIndexCalc = (prevIndex - 1 + sortedBooks.length) % sortedBooks.length;
+      const prevBook = sortedBooks[prevIndexCalc];
+      navigate(`/book-info/${genre}/${prevBook._id}`);
+      return prevIndexCalc;
+    });
+  };
+  const handleReadLater = async (bookID) => {
+    console.log(`adding book with ID: ${bookID}`);
+    try {
+      const formData = { bookID: bookID };
+      await insertReadLater(formData, (response) => {
+        if (response.status === "success") {
+          alert("Book added to Read Later successfully!");
 
-const currentBook = sortedBooks[currentIndex] || {};
-  // Header and sidebar utility functions
+        } else {
+          console.log("Failed to add book to Read Later:", response.message);
+        }
+      });
+    } catch (error) {
+      console.log("Error adding book to Read Later:", error);
+    }
+  };  
+
+  const currentBook = sortedBooks[currentIndex] || {};
   const resetSearch = () => setSearchQuery("");
 
   const handleActiveItemChange = (item) => {
@@ -122,7 +138,7 @@ const currentBook = sortedBooks[currentIndex] || {};
                 </div>
                 <div className="bookinfo_author_save">
                   <div className="bookinfo_author">{currentBook.author_list?.join(", ")}</div>
-                  <div className="bookinfo_save"><img src={readlaterIcon} alt="save icon" /></div>
+                  <div className="bookinfo_save" onClick={() => handleReadLater(currentBook._id)}><img src={readlaterIcon} alt="save icon" /></div>
                 </div>
                 <p className="bookinfo_description">{currentBook.description}</p>
               </div>
