@@ -6,7 +6,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./App.css";
-import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import Bookmarks from "./pages/Bookmarks";
 import Library from "./pages/Library";
@@ -21,11 +20,7 @@ import ProtectedRoute from "./Routing/PrivateRouting";
 import { getToken } from "./storage/Storage"; // Adjust path based on your project structure
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!getToken()); // Set initial state based on token
-
-  const handleLogout = () => {
-    setIsAuthenticated(false); // Set authentication status to false on logout
-  };
+  const [isAuthenticated] = useState(!!getToken());
 
   return (
     <Router>
