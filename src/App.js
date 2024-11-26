@@ -8,6 +8,7 @@ import {
 import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import Bookmarks from "./pages/Bookmarks";
+import ViewBookmarks from "./pages/ViewBookmarks";
 import Library from "./pages/Library";
 import Settings from "./pages/Settings";
 import BookInfo from "./pages/BookInfoPage";
@@ -15,7 +16,6 @@ import AudioBookPlayer from "./pages/AudioBookPlayer";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import GenreSelection from "./pages/GenreSelect";
-import ViewBookmarks from "./pages/ViewBookmarks";
 import ProtectedRoute from "./Routing/PrivateRouting";
 import { getToken } from "./storage/Storage"; // Adjust path based on your project structure
 
@@ -45,6 +45,15 @@ function App() {
             element={
               <ProtectedRoute
                 element={Bookmarks}
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
+          <Route
+            path="/view-bookmarks"
+            element={
+              <ProtectedRoute
+                element={ViewBookmarks}
                 isAuthenticated={isAuthenticated}
               />
             }
@@ -94,16 +103,6 @@ function App() {
               />
             }
           />
-          <Route
-            path="/view-bookmarks"
-            element={
-              <ProtectedRoute
-                element={ViewBookmarks}
-                isAuthenticated={isAuthenticated}
-              />
-            }
-          />
-
           {/* Catch-All Redirect */}
           <Route
             path="*"

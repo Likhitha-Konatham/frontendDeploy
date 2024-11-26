@@ -85,6 +85,7 @@ const Bookmarks = () => {
               <div className="bookGrids" key={book._id || index}>
                 <BookGrids 
                   showingBookmarksHeading={showingBookmarksHeading}
+                  bookid = {book._id}
                   thumbnail={book.thumbnail}
                   authors={book.author_list}
                   title={book.title}

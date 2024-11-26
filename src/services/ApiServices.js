@@ -57,6 +57,7 @@ export const requestGetApiCall = async (urlEndPoint, params = {}, callback) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log('token',token)
 
     // Ensure callback is invoked if it's a function
     if (callback && typeof callback === "function") {
