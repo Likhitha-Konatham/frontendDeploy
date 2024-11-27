@@ -28,7 +28,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: -40px;
     width: 400px;
     height: 550px;
     padding: 50px 40px;
@@ -247,7 +247,7 @@
     color: black;
     text-align: center;
     font-size: 15px;
-    margin-top: 0px;
+    margin-top: -5px;
 }
 
 @media (max-width: 991px) {
@@ -259,17 +259,18 @@
 .signUpButton {
     align-self: center;
     /* margin-left: 80px; */
-    flex: 1;
+    /* flex: 1; */
     border-radius: 18px;
     background-color: #a63e71;
     min-width: 100px;
     gap: 15px;
     color: #fff;
     text-align: center;
+    min-height: 55px;
     height: 70px;
-    width:180px;
+    width:140px;
     padding: 10px 23px;
-    font: 400 22px Inter, sans-serif;
+    font: 400 17px Inter, sans-serif;
     border: none;
     cursor: pointer;
 }

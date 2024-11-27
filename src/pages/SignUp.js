@@ -31,6 +31,13 @@ const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
 );
 
 const SignUp = () => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  // Function to handle checkbox change
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
   const [formData, setFormData] = useState({
     firstName: "",
     email: "",
@@ -194,7 +201,32 @@ const SignUp = () => {
                 {emailError}
               </p>
             )}
-
+            <div
+              className="Agree_tc"
+              style={{
+                fontSize: "1vw",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <input
+                type="checkbox"
+                id="agree_tc"
+                style={{
+                  marginTop: "0vw",
+                  cursor: "pointer",
+                }}
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+              />
+              <label
+                htmlFor="agree_tc"
+                style={{ color: "black", marginLeft: "0.5vw" }}
+              >
+                I agree to the terms and conditions
+              </label>
+            </div>
             <div className="signup-loginLink">
               <p>
                 Already have an account?{" "}
