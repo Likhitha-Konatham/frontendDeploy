@@ -8,7 +8,7 @@ import rightArrow from "../images/right_arrow.png";
 import historyIcon from "../images/history_icon.png"
 
 const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,pageName,}) => {
-  const [profile, setProfile] = useState({ firstname: "", lastname: "" });
+  const [profile, setProfile] = useState({ firstname: "", lastName: "" });
   const [showSearchBar, setShowSearchBar] = useState(false); // State to toggle the search bar visibility
 
   // Fetch profile details on component mount
@@ -16,15 +16,17 @@ const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,page
     const getProfile = async () => {
       try {
         const response = await fetchProfile();
-          const { firstname, lastname } = response.data;
-          setProfile({ firstname, lastname });
+        const { firstname, lastName } = response.data;
+        setProfile({ firstname, lastName });
+        console.log({ firstname, lastName }); // Log response directly instead of using profile
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
     };
-
+  
     getProfile();
-  }, []);
+  }, []); // No missing dependencies now
+  
 
   const handleSearchClick = () => {
     setShowSearchBar((prevState) => !prevState); // Toggle visibility of search bar
@@ -94,7 +96,7 @@ const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,page
           {showUserProfile && (
             <>
               <div className="header-user-name">
-                {profile.firstname || "Guest"} {profile.lastname}
+                {profile.firstname || "Guest"} {profile.lastName}
               </div>
               <a href="/settings">
                 <img

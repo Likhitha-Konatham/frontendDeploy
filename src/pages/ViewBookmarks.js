@@ -1,29 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/ViewBookmarks.css';
 import Sidebar from "../components/Sidebar.js";
 import Header from "../components/Header.js";
-import { fetchUserBookmarks } from '../services/AllServices.js';
 import ViewBookmarksCarousel from "../components/ViewBookmarksCarousel.js";
 
 const ViewBookmarks = () => {
     const [activeItem, setActiveItem] = useState("bookmarks");
     const [searchQuery, setSearchQuery] = useState(''); 
     const navigate = useNavigate();
-    const [markedBooks, setMarkedBooks] = useState([]);
-  
-    useEffect(() => {
-      const fetchBookmarks = async () => {
-        try {
-          const response = await fetchUserBookmarks(); // Fetch data from API
-          setMarkedBooks(response.data);
-        } catch (error) {
-          console.error("Failed to fetch bookmarks:", error);
-        }
-      };
-  
-      fetchBookmarks();
-    }, []);
   
     const resetSearch = () => {
       setSearchQuery(""); // Reset the search query
@@ -79,11 +64,9 @@ const ViewBookmarks = () => {
           </div>
           <div className="view_bookmarks_body">
             <div className="view_bookmarks_container">
-              {markedBooks.map((book, index) => (
-                <div className="viewBookmarksCarousel" key={book._id || index}>
+                <div className="viewBookmarksCarousel">
                   <ViewBookmarksCarousel />
                 </div>
-              ))}
             </div>
           </div>
         </div>

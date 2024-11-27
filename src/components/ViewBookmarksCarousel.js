@@ -20,6 +20,7 @@ const ViewBookmarksCarousel = () => {
         const response = await fetchUserBookmarks(); // Fetch data from API
         const books = response.data || [];
         setMarkedBooks(books);
+        console.log('marks',response.data)
 
         // Find the index of the book with the given bookid
         const bookIndex = books.findIndex((book) => book._id === bookid);

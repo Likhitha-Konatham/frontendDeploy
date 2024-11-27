@@ -2,27 +2,29 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import "../styles/BookGrids.css";
 
-const BookGrids = ({ showingBookmarksHeading, bookid, thumbnail, authors, title, bookmarkCount }) => {
+const BookGrids = ({markedBooks }) => {
   const navigate = useNavigate();
 
-  const handleBookClick = () => {
+  const handleBookClick = (bookid) => {
     navigate(`/view-bookmarks?bookid=${bookid}`); // Append bookid as query parameter
   };
 
   return (
     <div className="bookGrid__wrap">
-      <div className="bookGrid__heading">{showingBookmarksHeading}</div>
+      <div className="bookGrid__heading">Showing Bookmarks</div>
       <div className="bookGrid__grid">
-        <div className="bookGrid__grid-item">
-          <div onClick={handleBookClick}>
-            <img src={thumbnail} alt={`${title} Thumbnail`} />
-          </div>
-          <div className="bookGrid__details">
-            <div className="bookGrid__name">{title}</div>
-            <div className="bookGrid__author">{authors.join(", ")}</div>
-            <div className="bookGrid__bookmarks">Bookmarks - {bookmarkCount}</div>
-          </div>
-        </div>
+        {markedBooks.map((book, index) => (
+            <div className="bookGrid__grid-item" key={book._id || index}>
+              <div onClick={() => handleBookClick(book._id)}>
+                <img src={book.thumbnail} alt={`${book.title} Thumbnail`} />
+              </div>
+              <div className="bookGrid__details">
+                <div className="bookGrid__name">{book.title}</div>
+                <div className="bookGrid__author">{book.author_list.join(", ")}</div>
+                <div className="bookGrid__bookmarks">Bookmarks - {book.bookMarkCount}</div>
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );

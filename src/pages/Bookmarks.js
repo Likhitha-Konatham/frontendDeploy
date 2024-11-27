@@ -25,8 +25,6 @@ const Bookmarks = () => {
     fetchBookmarks();
   }, []);
 
-  const showingBookmarksHeading = "Showing Bookmarks";
-
   const resetSearch = () => {
     setSearchQuery(""); // Reset the search query
   };
@@ -81,18 +79,9 @@ const Bookmarks = () => {
         </div>
         <div className="bookmarks_body">
           <div className="bookGrids_container">
-            {markedBooks.map((book, index) => (
-              <div className="bookGrids" key={book._id || index}>
-                <BookGrids 
-                  showingBookmarksHeading={showingBookmarksHeading}
-                  bookid = {book._id}
-                  thumbnail={book.thumbnail}
-                  authors={book.author_list}
-                  title={book.title}
-                  bookmarkCount={book.bookMarkCount}
-                />
-              </div>
-            ))}
+            <div className="bookGrids" >
+              <BookGrids markedBooks={markedBooks} />
+            </div>
           </div>
         </div>
       </div>
