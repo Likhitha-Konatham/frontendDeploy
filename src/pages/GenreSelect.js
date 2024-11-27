@@ -92,56 +92,112 @@ const GenreSelection = () => {
     }
   };
 
+  // return (
+  //   <div className="main-content">
+  //     <div className="sidebar_container">
+  //       <Sidebar />
+  //     </div>
+  //     <div className="genre-selection-container">
+  //       <div className="header_container">
+  //         <Header
+  //           showSearch={false}
+  //           showUserProfile={false}
+  //           showArrows={true}
+  //         />
+  //       </div>
+  //       <div className="genre-content">
+  //         <h1>What would you like to read?</h1>
+  //         <p>Choose your favourites</p>
+  //         <div className="genre-card-container">
+  //           {options.map((option) => (
+  //             <div
+  //               key={option.id}
+  //               className={`genre-card ${
+  //                 selectedOptions.includes(option.id) ? "genre-selected" : ""
+  //               }`}
+  //               style={{ backgroundColor: option.color }}
+  //               onClick={() => handleSelect(option.id)}
+  //             >
+  //               <div className="genre-checkbox">
+  //                 <img
+  //                   src={
+  //                     selectedOptions.includes(option.id)
+  //                       ? checkboxFilled
+  //                       : checkboxEmpty
+  //                   }
+  //                   alt="checkbox"
+  //                 />
+  //               </div>
+  //               <div className="genre-icon">
+  //                 <img src={option.icon} alt={option.label} />
+  //               </div>
+  //               <p>{option.label}</p>
+  //             </div>
+  //           ))}
+  //         </div>
+  //         <button
+  //           type="button"
+  //           onClick={handleNext}
+  //           className="genre-signUpButton"
+  //         >
+  //           Next
+  //         </button>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
   return (
-    <div className="main-content">
-      <div className="sidebar_container">
-        <Sidebar />
-      </div>
-      <div className="genre-selection-container">
-        <div className="header_container">
-          <Header
-            showSearch={false}
-            showUserProfile={false}
-            showArrows={true}
-          />
+    <div className="genre-select-wrapper">
+      <div className="main-content">
+        <div className="sidebar_container">
+          <Sidebar />
         </div>
-        <div className="genre-content">
-          <h1>What would you like to read?</h1>
-          <p>Choose your favourites</p>
-          <div className="genre-card-container">
-            {options.map((option) => (
-              <div
-                key={option.id}
-                className={`genre-card ${
-                  selectedOptions.includes(option.id) ? "genre-selected" : ""
-                }`}
-                style={{ backgroundColor: option.color }}
-                onClick={() => handleSelect(option.id)}
-              >
-                <div className="genre-checkbox">
-                  <img
-                    src={
-                      selectedOptions.includes(option.id)
-                        ? checkboxFilled
-                        : checkboxEmpty
-                    }
-                    alt="checkbox"
-                  />
-                </div>
-                <div className="genre-icon">
-                  <img src={option.icon} alt={option.label} />
-                </div>
-                <p>{option.label}</p>
-              </div>
-            ))}
+        <div className="genre-selection-container">
+          <div className="header_container">
+            <Header
+              showSearch={false}
+              showUserProfile={false}
+              showArrows={true}
+            />
           </div>
-          <button
-            type="button"
-            onClick={handleNext}
-            className="genre-signUpButton"
-          >
-            Next
-          </button>
+          <div className="genre-content">
+            <h1>What would you like to read?</h1>
+            <p>Choose your favourites</p>
+            <div className="genre-card-container">
+              {options.map((option) => (
+                <div
+                  key={option.id}
+                  className={`genre-card ${
+                    selectedOptions.includes(option.id) ? "genre-selected" : ""
+                  }`}
+                  style={{ backgroundColor: option.color }}
+                  onClick={() => handleSelect(option.id)}
+                >
+                  <div className="genre-checkbox">
+                    <img
+                      src={
+                        selectedOptions.includes(option.id)
+                          ? checkboxFilled
+                          : checkboxEmpty
+                      }
+                      alt="checkbox"
+                    />
+                  </div>
+                  <div className="genre-icon">
+                    <img src={option.icon} alt={option.label} />
+                  </div>
+                  <p>{option.label}</p>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={handleNext}
+              className="genre-signUpButton"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
