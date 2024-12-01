@@ -204,7 +204,7 @@ const SignUp = () => {
             <div
               className="Agree_tc"
               style={{
-                fontSize: "1vw",
+                fontSize: "0.6vw",
                 color: "white",
                 display: "flex",
                 alignItems: "center",
