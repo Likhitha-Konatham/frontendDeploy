@@ -6,18 +6,40 @@ import Header from "../components/Header.js";
 import Carousel from "../components/Carousel.js";
 import GenreCarousel from "../components/Genre_carousel.js";
 import InProgessBooksBar from "../components/InProgressBooksBar.js";
-import { fetchAllGenreBooks } from "../services/AllServices.js";
+import { fetchAllGenreBooks, fetchInProgressBooks } from "../services/AllServices.js";
 
 const Dashboard = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState("");
-  const [genreBooks, setGenreBooks] = useState({}); // Object to hold genre and their books
+  const [genreBooks, setGenreBooks] = useState({});
+  const [inProgressBooks, setInProgressBooks] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await fetchInProgressBooks();
+        if (response.status === "success") {
+          const colorClasses = ["green", "yellow", "orange"];
+          const lastThreeBooks = response.data.slice(-3).map((book, index) => ({
+            name: book.title,
+            percentage: Math.floor(Math.random() * 100) + 1,
+            colorClass: colorClasses[index % colorClasses.length],
+          }));
+          setInProgressBooks(lastThreeBooks);
+        }
+      } catch (error) {
+        console.error("Error fetching in-progress books:", error);
+      }
+    };
+
+    fetchBooks();
+  }, []);
 
   useEffect(() => {
     const fetchGenreBooks = async () => {
       try {
-        const response = await fetchAllGenreBooks(); // Fetch data from API
+        const response = await fetchAllGenreBooks();
         setGenreBooks(response.data);
       } catch (error) {
         console.error("Failed to fetch genre books:", error);
@@ -27,22 +49,26 @@ const Dashboard = () => {
     fetchGenreBooks();
   }, []);
 
+  const handleProfileClick = () => {
+    navigate("/settings", { state: { selectedSection: "account" } });
+  };
+
   const resetSearch = () => {
-    setSearchQuery(""); // Reset the search query
+    setSearchQuery("");
   };
 
   const handleActiveItemChange = (item) => {
-    setActiveItem(item); // Update active item
+    setActiveItem(item);
     if (item === "dashboard") {
-      navigate("/"); // Navigate to dashboard
+      navigate("/");
     } else if (item === "bookmarks") {
-      navigate("/bookmarks"); // Navigate to bookmarks
+      navigate("/bookmarks");
     } else if (item === "library") {
-      navigate("/library"); // Navigate to library
+      navigate("/library");
     } else if (item === "settings") {
-      navigate("/settings"); // Navigate to settings
+      navigate("/settings");
     }
-    resetSearch(); // Reset search whenever a new section is selected
+    resetSearch();
   };
 
   const getHeaderVisibility = () => {
@@ -78,18 +104,22 @@ const Dashboard = () => {
             pageName={pageName}
             searchQuery={searchQuery}
             onSearch={(query) => setSearchQuery(query)}
+            onProfileClick={handleProfileClick} 
           />
         </div>
         <div className="dashboard_body">
-          <div className="carousels_container">
+          <div
+            className="carousels_container"
+            style={{ width: inProgressBooks.length === 0 ? "100%" : "72%" }}
+          >
             <div className="new_releases_carousel">
               <Carousel />
             </div>
-            {Object.keys(genreBooks).map((genre, index) => (
+            {genreBooks && Object.keys(genreBooks).map((genre, index) => (
               <div className="genre_carousel" key={index}>
                 <GenreCarousel
-                  heading={genre} // Genre heading (e.g., 'cosmos')
-                  genre_carousel_images={genreBooks[genre].map((book) => ({
+                  heading={genre}
+                  genre_carousel_images={genreBooks[genre]?.map((book) => ({
                     image: book.thumbnail,
                     id: book._id,
                   }))}
@@ -97,9 +127,11 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-          <div className="inprogress_booksbar">
-            <InProgessBooksBar />
-          </div>
+          {inProgressBooks.length > 0 && (
+            <div className="inprogress_booksbar">
+              <InProgessBooksBar inProgressBooks={inProgressBooks} />
+            </div>
+          )}
         </div>
       </div>
     </main>
@@ -107,4 +139,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

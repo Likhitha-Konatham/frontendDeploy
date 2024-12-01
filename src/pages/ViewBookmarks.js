@@ -9,7 +9,7 @@ const ViewBookmarks = () => {
     const [activeItem, setActiveItem] = useState("bookmarks");
     const [searchQuery, setSearchQuery] = useState(''); 
     const navigate = useNavigate();
-  
+    
     const resetSearch = () => {
       setSearchQuery(""); // Reset the search query
     };
@@ -41,6 +41,10 @@ const ViewBookmarks = () => {
     };
   
     const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
+
+    const handleProfileClick = () => {
+      navigate("/settings", { state: { selectedSection: "account" } });
+    };
   
     return (
       <main className="main-content">
@@ -60,6 +64,7 @@ const ViewBookmarks = () => {
               pageName={pageName} 
               searchQuery={searchQuery}
               onSearch={(query) => setSearchQuery(query)}
+              onProfileClick={handleProfileClick} 
             />
           </div>
           <div className="view_bookmarks_body">

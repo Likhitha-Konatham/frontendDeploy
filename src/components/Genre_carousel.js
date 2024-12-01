@@ -1,31 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Genre_carousel.css";
 import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import { useNavigate } from "react-router-dom";
+import { fetchAllGenreBooks } from "../services/AllServices.js";
 
 const GenreCarousel = ({ heading, genre_carousel_images }) => {
-  const [currentIdx, setCurrentIdx] = React.useState(0);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [genreBooks, setGenreBooks] = useState({});
   const maxIndex = Math.max(0, genre_carousel_images.length - 5); // Restrict sliding if items are <5
   const navigate = useNavigate();
 
-  // Handle previous slide
+  useEffect(() => {
+    const fetchGenreBooks = async () => {
+      try {
+        const response = await fetchAllGenreBooks();
+        setGenreBooks(response.data);
+      } catch (error) {
+        console.error("Failed to fetch genre books:", error);
+      }
+    };
+    fetchGenreBooks();
+  }, []);
+
   const prevSlide = () => {
     if (genre_carousel_images.length > 5) {
       setCurrentIdx((prevIdx) => (prevIdx === 0 ? maxIndex : prevIdx - 1));
     }
   };
 
-  // Handle next slide
   const nextSlide = () => {
     if (genre_carousel_images.length > 5) {
       setCurrentIdx((prevIdx) => (prevIdx === maxIndex ? 0 : prevIdx + 1));
     }
   };
 
-  // Ensure that genre_carousel_images is an array and is not empty
   if (!Array.isArray(genre_carousel_images) || genre_carousel_images.length === 0) {
-    return null; // Return nothing if no images
+    return null;
   }
 
   return (
@@ -52,7 +63,7 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
                 <div 
                   role="button" 
                   tabIndex={0} 
-                  onClick={() => navigate(`/book-info/${heading}/${item.id}`)} 
+                  onClick={() => navigate(`/book-info/${heading}/${item.id}`, { state: { genreBooks } })} 
                   className="carousel__item-link"
                 >
                   <img src={item.image} alt={`carousel-item-${index}`} />

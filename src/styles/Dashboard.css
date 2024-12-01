@@ -23,6 +23,7 @@
 }
 .dashboard_body .carousels_container .new_releases_carousel{
     width: 100%;
+    margin: auto;
 }
 .dashboard_body .carousels_container .genre_carousel{
     width: 100%;

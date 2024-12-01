@@ -15,10 +15,11 @@ const Bookmarks = () => {
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
-        const response = await fetchUserBookmarks(); // Fetch data from API
-        setMarkedBooks(response.data);
+        const response = await fetchUserBookmarks();
+        setMarkedBooks(response.data || []); // Set to empty array if no data
       } catch (error) {
         console.error("Failed to fetch bookmarks:", error);
+        setMarkedBooks([]); // Set to empty array on error
       }
     };
 
@@ -57,6 +58,10 @@ const Bookmarks = () => {
 
   const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
 
+  const handleProfileClick = () => {
+    navigate("/settings", { state: { selectedSection: "account" } });
+  };
+
   return (
     <main className="main-content">
       <div className="sidebar_container">
@@ -75,6 +80,7 @@ const Bookmarks = () => {
             pageName={pageName} 
             searchQuery={searchQuery}
             onSearch={(query) => setSearchQuery(query)}
+            onProfileClick={handleProfileClick} 
           />
         </div>
         <div className="bookmarks_body">

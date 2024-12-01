@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getToken} from '../storage/Storage'; // Import your storage functions
+import { getToken } from '../storage/Storage'; // Import your storage functions
 
-const ProtectedRoute = ({ element: Component }) => {
+const ProtectedRoute = ({ element: Component}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null); 
   const [loading, setLoading] = useState(true); // Track loading state
 

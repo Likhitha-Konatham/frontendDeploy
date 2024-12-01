@@ -29,10 +29,6 @@ const Carousel = () => {
     getBooks();
   }, []);
 
-  const handleBookClick = (bookId, genre) => {
-    navigate(`/book-info/${genre}/${bookId}`);
-  };
-
   return (
     <div className="new-rleases-carousel-container">
       <Swiper
@@ -59,28 +55,29 @@ const Carousel = () => {
         className="swiper-container"
         breakpoints={{
           320: {
-            slidesPerView: 2,  // For small screens, show 1 slide
-            spaceBetween: 200,   // Adjust space between slides
+            slidesPerView: 2,  
+            spaceBetween: 200,   
           },
           480: {
-            slidesPerView: 2, // For slightly larger screens, show 1.5 slides
-            spaceBetween: 120,   // Adjust space between slides
+            slidesPerView: 2, 
+            spaceBetween: 120,   
           },
           768: {
-            slidesPerView: 2,  // For medium screens, show 2 slides
-            spaceBetween: 20,  // Adjust space between slides
+            slidesPerView: 2,  
+            spaceBetween: 20,  
           },
           1024: {
-            slidesPerView: 2,  // For larger screens, show 3 slides
-            spaceBetween: -65,  // Adjust space between slides
+            slidesPerView: 2,  
+            spaceBetween: -65,  
           },
         }}
       >
-         {books.map((book) => (
+        {books.map((book) => (
           <SwiperSlide
             key={book._id}
             className="swiper-slide"
-            onClick={() => handleBookClick(book._id, book.genre)} // Pass bookId and genre
+            onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })} 
+            
           >
             <img src={book.thumbnail} alt={book.title} />
           </SwiperSlide>

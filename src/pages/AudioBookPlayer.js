@@ -109,6 +109,10 @@ const AudioBookPlayer = () => {
     }
   };
 
+  const handleProfileClick = () => {
+    navigate("/settings", { state: { selectedSection: "account" } });
+  };
+
   return (
     <main className="main-content">
       <div className="sidebar_container">
@@ -128,6 +132,7 @@ const AudioBookPlayer = () => {
             pageName={pageName} 
             searchQuery={searchQuery}
             onSearch={(query) => setSearchQuery(query)}
+            onProfileClick={handleProfileClick} 
           />
         </div>
 

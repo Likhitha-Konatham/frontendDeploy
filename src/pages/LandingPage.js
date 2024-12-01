@@ -53,6 +53,10 @@ const LandingPage = () => {
 
   const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
 
+  const handleProfileClick = () => {
+    navigate("/settings", { state: { selectedSection: "account" } });
+  };
+
   return (
     <main className="main-content">
       <div className="sidebar_container">
@@ -72,6 +76,7 @@ const LandingPage = () => {
             pageName={pageName}
             searchQuery={searchQuery}
             onSearch={(query) => setSearchQuery(query)}
+            onProfileClick={handleProfileClick} 
           />
         </div>
         <div className="dashboard_body">
@@ -79,11 +84,11 @@ const LandingPage = () => {
             <div className="new_releases_carousel">
               <Carousel />
             </div>
-            {Object.keys(genreBooks).map((genre, index) => (
+            {genreBooks && Object.keys(genreBooks).map((genre, index) => (
               <div className="genre_carousel" key={index}>
                 <GenreCarousel
-                  heading={genre} // Genre heading (e.g., 'cosmos')
-                  genre_carousel_images={genreBooks[genre].map((book) => ({
+                  heading={genre}
+                  genre_carousel_images={genreBooks[genre]?.map((book) => ({
                     image: book.thumbnail,
                     id: book._id,
                   }))}

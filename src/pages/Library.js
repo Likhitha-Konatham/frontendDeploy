@@ -18,6 +18,7 @@ const Library = () => {
   const [activeItem, setActiveItem] = useState("library");
   const [searchQuery, setSearchQuery] = useState(''); 
   const navigate = useNavigate();
+  
   const inprogressCarousel = [
     {
       heading: "In Progress",
@@ -90,6 +91,10 @@ const Library = () => {
 
   const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
 
+  const handleProfileClick = () => {
+    navigate("/settings", { state: { selectedSection: "account" } });
+  };
+
   return (
     <main className="main-content">
       <div className="sidebar_container">
@@ -109,6 +114,7 @@ const Library = () => {
             pageName={pageName} 
             searchQuery={searchQuery}
             onSearch={(query) => setSearchQuery(query)}
+            onProfileClick={handleProfileClick} 
           />
         </div>
         <div className="library_body">

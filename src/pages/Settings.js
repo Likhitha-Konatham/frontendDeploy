@@ -1,84 +1,21 @@
 // src/pages/Settings.js
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import '../styles/Settings.css';
 import Sidebar from "../components/Sidebar.js";
 import Header from "../components/Header.js";
 import AccountSection from '../components/AccountSection.js';
 import SettingsSection from '../components/SettingsSection.js';
-import ReadlaterCarousel from "../components/Readlater_carousel.js";
-import InprogressCarousel from "../components/Inprogress_carousel.js";
-import HistoryCarousel from "../components/History_carousel.js";
 import SettingsNavbar from "../components/SettingsNavbar.js";
 
-// Import local book cover images
-import bookcover1 from "../images/bookcover1.png";
-import bookcover2 from "../images/bookcover2.png";
-import bookcover3 from "../images/bookcover3.png";
-import bookcover4 from "../images/bookcover4.png";
-import bookcover5 from "../images/bookcover5.png";
-
 const Settings = () => {
+  const location = useLocation();
   const [activeItem, setActiveItem] = useState("settings");
-  const [selectedSection, setSelectedSection] = useState("account");
+  const [selectedSection, setSelectedSection] = useState(
+    location.state?.selectedSection || "settings"
+  );
   const [searchQuery, setSearchQuery] = useState(''); 
   const navigate = useNavigate();
-
-
-  const readlaterCarousel = [
-    {
-      heading: "Read Later",
-      images: [
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        // Add more images as needed
-      ]
-    }
-  ];
-  const inprogressCarousel = [
-    {
-      heading: "In Progress",
-      images: [
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        // Add more images as needed
-      ]
-    }
-  ];
-  const historyCarousel = [
-    {
-        heading: "My History",
-        images: [
-            { image: bookcover1 },
-            { image: bookcover2 },
-            { image: bookcover3 },
-            { image: bookcover4 },
-            { image: bookcover5 },
-            { image: bookcover1 },
-            { image: bookcover2 },
-            { image: bookcover3 },
-            { image: bookcover4 },
-            { image: bookcover5 },
-            // Add more images as needed
-          ]
-      },
-  ];
 
   const resetSearch = () => {
     setSearchQuery(""); // Reset the search query
@@ -89,15 +26,14 @@ const Settings = () => {
     if (item === "dashboard") {
       navigate("/"); // Navigate to feedback page
     } else if (item === "bookmarks") {
-      navigate("/bookmarks"); // Navigate to home page
+      navigate("/bookmarks"); // Navigate to bookmarks page
+    } else if (item === "library") {
+      navigate("/library"); // Navigate to library page
+    } else if (item === "settings") {
+      setSelectedSection("settings"); // Reset to settings section
+      navigate("/settings"); // Navigate to settings page
     }
-    else if (item === "library") {
-      navigate("/library"); // Navigate to home page
-    }
-    else if (item === "settings") {
-      navigate("/settings"); // Navigate to home page
-    }
-
+  
     resetSearch(); // Reset search whenever a new section is selected
   };
 
@@ -109,7 +45,7 @@ const Settings = () => {
     } else if (activeItem === "library") {
       return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Library" };
     } else if (activeItem === "settings") {
-      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Account" };
+      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "" };
     }
   };
 
@@ -118,45 +54,9 @@ const Settings = () => {
   const handleSectionClick = (section) => {
     setSelectedSection(section);
   };
-
-  const renderContent = () => {
-    switch (selectedSection) {
-      case "account":
-        return <AccountSection />;
-      case "books":
-        return (
-          <div className="carousels_container">
-            {readlaterCarousel.map((carousel, index) => (
-              <div className="readlater_carousel" key={index}>
-                <ReadlaterCarousel 
-                  heading={carousel.heading} 
-                  readlater_carousel_images={carousel.images}
-                />
-              </div>
-            ))}
-            {inprogressCarousel.map((carousel, index) => (
-              <div className="inprogress_carousel" key={index}>
-                <InprogressCarousel 
-                  heading={carousel.heading} 
-                  inprogress_carousel_images={carousel.images}
-                />
-              </div>
-            ))}
-            {historyCarousel.map((carousel, index) => (
-              <div className="history_carousel" key={index}>
-                <HistoryCarousel 
-                  heading={carousel.heading} 
-                  history_carousel_images={carousel.images}
-                />
-              </div>
-            ))}
-          </div>
-        );
-      case "settings":
-        return <SettingsSection />;
-      default:
-        return <AccountSection />;
-    }
+  const handleProfileClick = () => {
+    setSelectedSection("account");
+    navigate("/settings", { state: { selectedSection: "account" } });
   };
 
   return (
@@ -171,25 +71,28 @@ const Settings = () => {
 
       <div className="settings_container">
         <div className="header_container">
-          <Header
+           <Header
             showSearch={showSearch}
             showUserProfile={showUserProfile}
-            showArrows={showArrows} 
-            pageName={pageName} 
+            showArrows={showArrows}
+            pageName={pageName}
             searchQuery={searchQuery}
             onSearch={(query) => setSearchQuery(query)}
+            onProfileClick={handleProfileClick} // Pass the function here
           />
         </div>
         <div className="settings-nav-bar">
-            <SettingsNavbar 
-                selectedSection={selectedSection} 
-                handleSectionClick={handleSectionClick} 
-            />
+             <SettingsNavbar
+                selectedSection={selectedSection}
+                onSelectSection={handleSectionClick}
+              />
+             
         </div>
         
 
         <div className="settings_body">
-            {renderContent()}
+        {selectedSection === "account" && <AccountSection />}
+        {selectedSection === "settings" && <SettingsSection />}
         </div>
       </div>
     </main>

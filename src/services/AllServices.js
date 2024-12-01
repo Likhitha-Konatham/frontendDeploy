@@ -1,33 +1,34 @@
 import { requestPostApiCall, requestGetApiCall } from "./ApiServices";
 
+const handleError = (error, operation) => {
+  // Log error details for debugging purposes
+  console.error(`Error during ${operation} API call:`, error);
+
+  const serverResponse = error.response?.data;
+  if (serverResponse?.code) {
+    console.error(
+      `Server Error Code: ${serverResponse.code}, Message: ${serverResponse.message}`
+    );
+  }
+
+  // Return a standardized error response
+  return null;
+};
+
 export const registerUser = async (formData, callback) => {
   const urlEndPoint = `register`;
-
-  // Create the payload
   const payload = {
     firstname: formData.firstName,
     email: formData.email,
     password: formData.password,
-    genre: formData.genre, // Ensure genre is an array as expected
+    genre: formData.genre,
   };
 
-  console.log("Payload being sent to API:", payload);
-
   try {
-    // Make the API call using requestPostApiCall
     const response = await requestPostApiCall(urlEndPoint, payload, callback);
-
-    // Log and return the response
-    if (!response) {
-      console.error("Unexpected response from requestPostApiCall:", response);
-      return undefined;
-    }
-
-    console.log("API Response:", response);
-    return response; // Ensure this returns the API's response for further handling
+    return response || null;
   } catch (error) {
-    console.error("Error during API call:", error);
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "registerUser");
   }
 };
 
@@ -39,35 +40,11 @@ export const loginUser = async (loginData, callback) => {
   };
 
   try {
-    // Make the API call
     const response = await requestPostApiCall(urlEndPoint, payload);
-
-    if (!response) {
-      console.error("Unexpected response from requestPostApiCall:", response);
-      return undefined;
-    }
-
-    console.log("API Response:", response);
-
-    // Invoke the callback with the response data, if provided
-    if (callback) callback(response.data);
-
-    return response; // Return the response for further handling
+    if (callback) callback(response?.data);
+    return response || null;
   } catch (error) {
-    console.error("Error during API call:", error);
-
-    // Handle server-side or client-side errors
-    const serverResponse = error.response?.data;
-    if (serverResponse?.code) {
-      console.error(
-        "Server Error Code:",
-        serverResponse.code,
-        "Message:",
-        serverResponse.message
-      );
-    }
-
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "loginUser");
   }
 };
 
@@ -75,89 +52,56 @@ export const fetchProfile = async () => {
   const urlEndPoint = `profile`;
   try {
     const response = await requestGetApiCall(urlEndPoint);
-    console.log("allServices fetch profile:", response);
-    return response; // Return the response
+    return response || null;
   } catch (error) {
-    throw error; // Let the caller handle the error
+    return handleError(error, "fetchProfile");
   }
 };
 
 export const sendOTP = async (formData, callback) => {
   const urlEndPoint = `send-otp`;
-
-  // Create the payload
-  const payload = {
-    email: formData.email,
-  };
-
-  console.log("Payload being sent to API:", payload);
+  const payload = { email: formData.email };
 
   try {
-    // Make the API call using requestPostApiCall
     const response = await requestPostApiCall(urlEndPoint, payload, callback);
-
-    // Log and return the response
-    if (!response) {
-      console.error("Unexpected response from requestPostApiCall:", response);
-      return undefined;
-    }
-
-    console.log("API Response:", response);
-    return response; // Ensure this returns the API's response for further handling
+    return response || null;
   } catch (error) {
-    console.error("Error during API call:", error);
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "sendOTP");
   }
 };
 
 export const validateOTP = async (formData, callback) => {
   const urlEndPoint = `validate-otp`;
-
-  // Create the payload
   const payload = {
     email: formData.email,
-    enteredOTP: formData.enteredOTP, // Ensure genre is an array as expected
+    enteredOTP: formData.enteredOTP,
   };
 
-  console.log("Payload being sent to API:", payload);
-
   try {
-    // Make the API call using requestPostApiCall
     const response = await requestPostApiCall(urlEndPoint, payload, callback);
-
-    // Log and return the response
-    if (!response) {
-      console.error("Unexpected response from requestPostApiCall:", response);
-      return undefined;
-    }
-
-    console.log("API Response:", response);
-    return response; // Ensure this returns the API's response for further handling
+    return response || null;
   } catch (error) {
-    console.error("Error during API call:", error);
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "validateOTP");
   }
 };
 
-export const fetchAllBooks = async (callback) => {
-  const urlEndPoint = `AllBooks`; // API endpoint for all books
+export const fetchAllBooks = async () => {
+  const urlEndPoint = `AllBooks`;
   try {
-    // Make the GET API call
     const response = await requestGetApiCall(urlEndPoint);
-    return response; // Return the response for further handling
+    return response || null;
   } catch (error) {
-    console.error("Error during API call:", error);
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "fetchAllBooks");
   }
 };
 
-export const fetchAllGenreBooks = async (callback) => {
-  const urlEndPoint = `ALLGenreBooks`; // API endpoint for all genres
+export const fetchAllGenreBooks = async () => {
+  const urlEndPoint = `ALLGenreBooks`;
   try {
     const response = await requestGetApiCall(urlEndPoint);
-    return response; // Return the response
+    return response || null;
   } catch (error) {
-    throw error; // Let the caller handle the error
+    return handleError(error, "fetchAllGenreBooks");
   }
 };
 
@@ -165,59 +109,58 @@ export const fetchUserBookmarks = async () => {
   const urlEndPoint = `UserBookMarks`;
   try {
     const response = await requestGetApiCall(urlEndPoint);
-    return response; // Return the response
+    return response || null;
   } catch (error) {
-    throw error; // Let the caller handle the error
+    return handleError(error, "fetchUserBookmarks");
   }
 };
 
 export const insertReadLater = async (formData, callback) => {
-  console.log("bookid", formData.bookID);
   const urlEndPoint = `insertReadlater`;
-  const payload = {
-    bookID: formData.bookID,
-  };
+  const payload = { bookID: formData.bookID };
 
-  await requestPostApiCall(urlEndPoint, payload, callback);
-};
-
-export const fetchReadLaterBooks = async (callback) => {
-  const urlEndPoint = `readlater`; // API endpoint for Read Later books
   try {
-    // Make the GET API call
-    const response = await requestGetApiCall(urlEndPoint);
-    return response; // Return the response for further handling
+    await requestPostApiCall(urlEndPoint, payload, callback);
   } catch (error) {
-    throw error; // Re-throw the error for caller functions to handle
+    handleError(error, "insertReadLater");
   }
 };
 
-export const getCountries = async (callback) => {
+export const fetchReadLaterBooks = async () => {
+  const urlEndPoint = `readlater`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchReadLaterBooks");
+  }
+};
+
+export const getCountries = async () => {
   const urlEndPoint = `getcountries`;
   try {
     const response = await requestGetApiCall(urlEndPoint);
-    return response; // Return the response for further handling
+    return response || null;
   } catch (error) {
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "getCountries");
   }
 };
 
 export const getStates = async (country, callback) => {
   const urlEndPoint = `getstates`;
-  const params = { country }; // Include the country parameter
+  const params = { country };
 
   try {
     const response = await requestGetApiCall(urlEndPoint, params);
-    if (callback) callback(response); // Trigger the callback with the response
-    return response; // Return the response for further handling
+    if (callback) callback(response);
+    return response || null;
   } catch (error) {
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "getStates");
   }
 };
 
 export const updateProfile = async (profileData, callback) => {
   const urlEndPoint = `update_profile`;
-
   const payload = {
     firstName: profileData.firstname,
     lastName: profileData.lastName,
@@ -231,67 +174,41 @@ export const updateProfile = async (profileData, callback) => {
 
   try {
     const response = await requestPostApiCall(urlEndPoint, payload);
-    if (!response) {
-      console.error("Unexpected response from requestPostApiCall:", response);
-      return undefined;
-    }
-
-    console.log("Update Profile API Response:", response);
-
-    // Trigger the callback with the response data, if provided
-    if (callback) callback(response.data);
-
-    return response; // Return the response for further handling
+    if (callback) callback(response?.data);
+    return response || null;
   } catch (error) {
-    console.error("Error during updateProfile API call:", error);
-
-    // Handle server-side or client-side errors
-    const serverResponse = error.response?.data;
-    if (serverResponse?.code) {
-      console.error(
-        "Server Error Code:",
-        serverResponse.code,
-        "Message:",
-        serverResponse.message
-      );
-    }
-
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "updateProfile");
   }
 };
 
 export const updateVoiceSelection = async (voiceSelection) => {
-  const urlEndPoint = `VoiceSelection?gendervoice=${voiceSelection}`; // Keep the endpoint as is
-
-  // Sending the voice selection as a query parameter instead of in the body
-  const params = {
-    gendervoice: voiceSelection, // Ensure it's sent as a query param
-  };
+  const urlEndPoint = `VoiceSelection?gendervoice=${voiceSelection}`;
 
   try {
-    // API call with query parameters using requestPostApiCall
-    const response = await requestPostApiCall(urlEndPoint, params); // Assuming requestPostApiCall handles query params
-    return response;
+    const response = await requestPostApiCall(urlEndPoint);
+    return response || null;
   } catch (error) {
-    console.error("Error during VoiceSelection API call:", error);
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "updateVoiceSelection");
   }
 };
 
 export const updatePlaySpeed = async (playbackSpeed) => {
-  const urlEndPoint = `PlaySpeed?PlaySpeed=${playbackSpeed}`; // Keep the endpoint as is
-
-  // Sending the playbackSpeed as a query parameter instead of in the body
-  const params = {
-    PlaySpeed: playbackSpeed, // Ensure it's sent as a query param
-  };
+  const urlEndPoint = `PlaySpeed?PlaySpeed=${playbackSpeed}`;
 
   try {
-    // API call with query parameters using requestPostApiCall
-    const response = await requestPostApiCall(urlEndPoint, params); // Assuming requestPostApiCall handles query params in this way
-    return response;
+    const response = await requestPostApiCall(urlEndPoint);
+    return response || null;
   } catch (error) {
-    console.error("Error during PlaySpeed API call:", error);
-    throw error; // Re-throw the error for caller functions to handle
+    return handleError(error, "updatePlaySpeed");
+  }
+};
+
+export const fetchInProgressBooks = async () => {
+  const urlEndPoint = `InprogressBook`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchInProgressBooks");
   }
 };

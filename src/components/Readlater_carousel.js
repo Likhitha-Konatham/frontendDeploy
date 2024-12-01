@@ -8,23 +8,28 @@ import { fetchReadLaterBooks } from "../services/AllServices";
 const ReadlaterCarousel = () => {
   const [currentIdx, setCurrentIdx] = React.useState(0);
   const [readLaterBooks, setReadLaterBooks] = useState([]);
+  const [books, setBooks] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const response = await fetchReadLaterBooks();
-        setReadLaterBooks(response.data); // Update state with API data
-        console.log("Fetched Read Later books:", response.data);
+        setReadLaterBooks(response?.data || []); // Ensure fallback to an empty array
+        setBooks(response?.data || []); // Update state with API data or empty array
+        console.log("Fetched Read Later books:", response?.data);
       } catch (error) {
         console.error("Error fetching Read Later books:", error);
+        setReadLaterBooks([]); // Set to empty array on error
+        setBooks([]); // Ensure no invalid state
       }
     };
 
     fetchBooks(); // Call the function to fetch data
   }, []);
 
-  const maxIndex = Math.max(0, readLaterBooks.length - 5);
+  // Safeguard maxIndex calculation
+  const maxIndex = Math.max(0, (readLaterBooks?.length || 0) - 5);
 
   // Handle previous slide
   const prevSlide = () => {
@@ -35,9 +40,7 @@ const ReadlaterCarousel = () => {
   const nextSlide = () => {
     setCurrentIdx((prevIdx) => (prevIdx === maxIndex ? 0 : prevIdx + 1));
   };
-  const handleBookClick = (bookId, genre) => {
-    navigate(`/book-info/${genre}/${bookId}`);
-  };
+
   return (
     <div className="carousel__wrap">
       <div className="carousel__inner">
@@ -53,11 +56,11 @@ const ReadlaterCarousel = () => {
             className="carousel__slide-list"
             style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}
           >
-            {readLaterBooks.map((book, index) => (
+            {readLaterBooks?.map((book, index) => (
               <div
                 key={book._id}
                 className="carousel__slide-item"
-                onClick={() => handleBookClick(book._id, book.genre)}
+                onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })}
               >
                 <img
                   src={book.thumbnail}

@@ -1,19 +1,12 @@
 import React from 'react';
 import '../styles/InProgessBooksBar.css';
 
-const InProgessBooksBar = () => {
-  // Hardcoded book data with CSS class names for colors
-  const books = [
-    { name: 'Book Name 1', percentage: 60, colorClass: 'green' },
-    { name: 'Book Name 2', percentage: 87, colorClass: 'yellow' },
-    { name: 'Book Name 3', percentage: 46, colorClass: 'orange' },
-  ];
-
+const InProgessBooksBar = ({inProgressBooks}) => {
   return (
     <div className="progressbar_container">
       <h3 className="progressbook_title">Continue Reading</h3>
       <div className="progessbar-book-list">
-        {books.map((book, index) => (
+        {inProgressBooks.map((book, index) => (
           <div key={index} className={`progress-container ${book.colorClass}-bg`}>
             <div
               className={`progress-bar ${book.colorClass}`}

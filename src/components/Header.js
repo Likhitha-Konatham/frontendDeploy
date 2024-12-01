@@ -7,25 +7,30 @@ import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
 import historyIcon from "../images/history_icon.png"
 
-const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,pageName,}) => {
+const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,pageName,onProfileClick}) => {
   const [profile, setProfile] = useState({ firstname: "", lastName: "" });
-  const [showSearchBar, setShowSearchBar] = useState(false); // State to toggle the search bar visibility
+  const [showSearchBar, setShowSearchBar] = useState(false); 
 
-  // Fetch profile details on component mount
   useEffect(() => {
     const getProfile = async () => {
       try {
         const response = await fetchProfile();
-        const { firstname, lastName } = response.data;
-        setProfile({ firstname, lastName });
-        console.log({ firstname, lastName }); // Log response directly instead of using profile
+        if (response && response.data) {
+          const { firstname = "Guest", lastName = "" } = response.data; // Provide default values
+          setProfile({ firstname, lastName });
+          console.log("Fetched profile:", response.data);
+        } else {
+          console.warn("Profile data is missing in the response");
+          setProfile({ firstname: "Guest", lastName: "" }); // Set default profile values
+        }
       } catch (error) {
         console.error("Error fetching profile:", error);
+        setProfile({ firstname: "Guest", lastName: "" }); // Handle error by setting default profile values
       }
     };
   
     getProfile();
-  }, []); // No missing dependencies now
+  }, []);
   
 
   const handleSearchClick = () => {
@@ -35,6 +40,10 @@ const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,page
   const handleSearch = (event) => {
     const query = event.target.value;
     onSearch(query); // Pass the query to the parent component
+  };
+
+  const handleProfileClick = () => {
+    onProfileClick(); // Trigger the parent-provided function
   };
 
   return (
@@ -92,23 +101,22 @@ const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,page
           </div>
         )}
 
-        <div className="header-user-profile">
-          {showUserProfile && (
-            <>
-              <div className="header-user-name">
-                {profile.firstname || "Guest"} {profile.lastName}
-              </div>
-              <a href="/settings">
-                <img
-                  src={userIcon}
-                  alt="User Icon"
-                  className="header-user-icon"
-                  style={{ cursor: "pointer" }}
-                />
-              </a>
-            </>
-          )}
-        </div>
+       <div className="header-user-profile">
+        {showUserProfile && (
+          <>
+            <div className="header-user-name">
+              {profile.firstname || "Guest"} {profile.lastName}
+            </div>
+            <img
+              src={userIcon}
+              alt="User Icon"
+              className="header-user-icon"
+              style={{ cursor: "pointer" }}
+              onClick={handleProfileClick} // Use the handler here
+            />
+          </>
+        )}
+      </div>
       </header>
     </>
   );

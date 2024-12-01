@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import '../styles/BookInfo.css';
 import Sidebar from "../components/Sidebar.js";
@@ -12,35 +12,36 @@ import { insertReadLater } from "../services/AllServices.js";
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortedBooks, setSortedBooks] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { bookId, genre } = useParams();
+  const { bookId } = useParams(); // Get bookId from URL
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Memoize books to avoid unnecessary re-renders
+  const books = useMemo(() => location.state?.books || [], [location.state]);
+
+
   useEffect(() => {
-    if (genre && location.state?.genreBooks[genre]) {
-      const booksInGenre = location.state.genreBooks[genre];
-      setSortedBooks(booksInGenre);
-      const selectedIndex = booksInGenre.findIndex((book) => book._id === bookId);
+    if (books.length > 0) {
+      const selectedIndex = books.findIndex((book) => book._id === bookId);
       setCurrentIndex(selectedIndex !== -1 ? selectedIndex : 0);
     }
-  }, [genre, bookId, location.state]);
+  }, [bookId, books]);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => {
-      const nextIndex = (prevIndex + 1) % sortedBooks.length;
-      const nextBook = sortedBooks[nextIndex];
-      navigate(`/book-info/${genre}/${nextBook._id}`, { state: location.state });
+      const nextIndex = (prevIndex + 1) % books.length;
+      const nextBook = books[nextIndex];
+      navigate(`/book-info/${nextBook._id}`, { state: { books } });
       return nextIndex;
     });
   };
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => {
-      const prevIndexCalc = (prevIndex - 1 + sortedBooks.length) % sortedBooks.length;
-      const prevBook = sortedBooks[prevIndexCalc];
-      navigate(`/book-info/${genre}/${prevBook._id}`, { state: location.state });
+      const prevIndexCalc = (prevIndex - 1 + books.length) % books.length;
+      const prevBook = books[prevIndexCalc];
+      navigate(`/book-info/${prevBook._id}`, { state: { books } });
       return prevIndexCalc;
     });
   };
@@ -55,7 +56,7 @@ const BookInfo = () => {
     }
   };
 
-  const currentBook = sortedBooks[currentIndex] || {};
+  const currentBook = books[currentIndex] || {}; 
 
   const handleProfileClick = () => {
     navigate("/settings", { state: { selectedSection: "account" } });
