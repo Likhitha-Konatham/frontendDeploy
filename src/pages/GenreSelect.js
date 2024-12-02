@@ -25,17 +25,15 @@ const options = [
 
 const GenreSelection = () => {
   const location = useLocation();
-  // const { formData } = location.state;
   const navigate = useNavigate();
-
   const { formData } = location.state || {};
 
   useEffect(() => {
-    if (!location.state) {
-      console.error("No data passed to GenreSelection.");
-      navigate("/genre"); // Redirect to the home page or a fallback route
+    if (!formData) {
+      console.warn("Access denied. No form data provided.");
+      navigate("/signup");
     }
-  }, [location.state, navigate]);
+  }, [formData, navigate]);
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 

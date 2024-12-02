@@ -10,7 +10,34 @@ import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
 import { sendOTP, validateOTP } from "../services/AllServices";
 
-const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
+// const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
+//   <div className="inputfield-wrapper">
+//     <div className="inputfield-container">
+//       <div className="inputfield-content">
+//         <img loading="lazy" src={icon} alt="" className="inputfield-icon" />
+//         <input
+//           type={type}
+//           id={id}
+//           placeholder={placeholder}
+//           className="inputfield-inside"
+//           value={value}
+//           onChange={onChange}
+//           required
+//           aria-label={placeholder}
+//         />
+//       </div>
+//     </div>
+//   </div>
+// );
+const InputField = ({
+  icon,
+  placeholder,
+  type,
+  id,
+  value,
+  onChange,
+  error,
+}) => (
   <div className="inputfield-wrapper">
     <div className="inputfield-container">
       <div className="inputfield-content">
@@ -18,10 +45,13 @@ const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
         <input
           type={type}
           id={id}
-          placeholder={placeholder}
-          className="inputfield-inside"
+          placeholder={error || placeholder} // Show error or placeholder dynamically
+          className={`inputfield-inside ${error ? "error-border" : ""}`}
           value={value}
           onChange={onChange}
+          style={{
+            "--placeholder-color": error ? "red" : "#999", // Placeholder color
+          }}
           required
           aria-label={placeholder}
         />
@@ -50,6 +80,8 @@ const SignUp = () => {
   const [emailError, setEmailError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingResendOTP, setLoadingResendOTP] = useState(false); // Loading state for Resend OTP
+  const [loadingVerifyOTP, setLoadingVerifyOTP] = useState(false);
 
   const navigate = useNavigate();
 
@@ -66,8 +98,33 @@ const SignUp = () => {
     setOtp(e.target.value);
   };
 
+  // const handleResendOtp = () => {
+  //   setLoading(true); // Optional: show loading state if needed
+  //   // Add your resend OTP logic here (e.g., API call)
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000); // Simulate an API call
+  // };
+
+  const validateFields = () => {
+    const errors = {};
+    if (!formData.firstName) errors.firstName = "Field required";
+    if (!formData.email) errors.email = "Field required";
+    if (!formData.password) errors.password = "Field required";
+    if (!isChecked) errors.terms = "You must agree to the terms";
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0; // Return true if no errors
+  };
+
+  const [formErrors, setFormErrors] = useState({}); // State to store errors
+
   const handleSignUpClick = async () => {
+    setFormErrors({}); // Reset errors
+    if (!validateFields()) return; // Stop submission if validation fails
+
     setLoading(true);
+    setLoadingResendOTP(true);
     setEmailError("");
     try {
       const response = await sendOTP(formData);
@@ -96,11 +153,45 @@ const SignUp = () => {
       console.error(error);
     } finally {
       setLoading(false);
+      setLoadingResendOTP(false);
     }
   };
 
+  // const handleSignUpClick = async () => {
+  //   setLoading(true);
+  //   setEmailError("");
+  //   try {
+  //     const response = await sendOTP(formData);
+  //     if (
+  //       response.detail ===
+  //       "Email already registered. Please use a different email address."
+  //     ) {
+  //       setEmailError(response.detail);
+  //     } else if (response.status === "success") {
+  //       setIsPopupOpen(true);
+  //       setErrorMessage("");
+  //     } else {
+  //       setErrorMessage(response.message || "Failed to send OTP.");
+  //     }
+  //   } catch (error) {
+  //     if (
+  //       error.response?.data?.detail ===
+  //       "Email already registered. Please use a different email address."
+  //     ) {
+  //       setEmailError(
+  //         "Email already registered. Please use a different email address or log in."
+  //       );
+  //     } else {
+  //       setErrorMessage("An error occurred while sending the OTP.");
+  //     }
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleOtpSubmit = async () => {
-    setLoading(true);
+    setLoadingVerifyOTP(true);
     try {
       const response = await validateOTP({
         email: formData.email,
@@ -115,7 +206,7 @@ const SignUp = () => {
       setErrorMessage("An error occurred during OTP validation.");
       console.error(error);
     } finally {
-      setLoading(false);
+      setLoadingVerifyOTP(false);
     }
   };
 
@@ -155,6 +246,7 @@ const SignUp = () => {
                   id="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
+                  error={formErrors.firstName} // Pass error for validation
                 />
                 <InputField
                   icon={message_logo}
@@ -163,6 +255,7 @@ const SignUp = () => {
                   id="email"
                   value={formData.email}
                   onChange={handleInputChange}
+                  error={formErrors.email} // Pass error for validation
                 />
                 <div className="passwordInputWrapper">
                   <div className="passwordInputContainer">
@@ -176,8 +269,12 @@ const SignUp = () => {
                       <input
                         type={showPassword ? "text" : "password"}
                         id="password"
-                        placeholder="Create a Strong Password"
-                        className="passwordField"
+                        placeholder={
+                          formErrors.password || "Create a Strong Password"
+                        } // Dynamic placeholder
+                        className={`passwordField ${
+                          formErrors.password ? "error-border" : ""
+                        }`}
                         value={formData.password}
                         onChange={handleInputChange}
                       />
@@ -227,6 +324,11 @@ const SignUp = () => {
                 I agree to the terms and conditions
               </label>
             </div>
+            {formErrors.terms && ( // Display the error message if terms validation fails
+              <p className="signup-error-terms" style={{ color: "red" }}>
+                {formErrors.terms}
+              </p>
+            )}
             <div className="signup-loginLink">
               <p>
                 Already have an account?{" "}
@@ -248,7 +350,7 @@ const SignUp = () => {
         </button>
       </div>
 
-      {isPopupOpen && (
+      {/* {isPopupOpen && (
         <>
           <div className="popup-overlay"></div>
           <div className="otp-popup">
@@ -280,6 +382,52 @@ const SignUp = () => {
               >
                 {loading ? "Verifying..." : "Verify OTP"}
               </button>
+            </div>
+          </div>
+        </>
+      )} */}
+
+      {isPopupOpen && (
+        <>
+          <div className="popup-overlay"></div>
+          <div className="otp-popup">
+            <div className="otp-popup-content">
+              <button
+                className="close-popup-button"
+                onClick={() => setIsPopupOpen(false)}
+                aria-label="Close Popup"
+              >
+                &times;
+              </button>
+              <h2>Email Verification</h2>
+              <p>
+                An email has been sent to <strong>{formData.email}</strong>.
+                Please enter the OTP below to verify your account.
+              </p>
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                className="otp-input"
+                value={enteredOTP}
+                onChange={handleOtpChange}
+              />
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
+              <div className="otp-buttons">
+                <button
+                  onClick={handleSignUpClick}
+                  className="otp-submit-button"
+                  disabled={loadingResendOTP}
+                >
+                  {loadingResendOTP ? "Resending..." : "Resend OTP"}
+                </button>
+                <button
+                  onClick={handleOtpSubmit}
+                  className="otp-submit-button"
+                  disabled={loadingVerifyOTP}
+                >
+                  {loadingVerifyOTP ? "Verifying..." : "Verify OTP"}
+                </button>
+              </div>
             </div>
           </div>
         </>
