@@ -19,6 +19,8 @@ const BookGrids = ({ markedBooks, loading }) => {
               <div key={index} className="carousel__skeleton-item"></div>
             ))}
           </div>
+        ) : markedBooks.length === 0 ? ( // No bookmarks yet
+          <div className="no-books-message">You haven't bookmarked any books yet.</div>
         ) : ( // Render actual books after loading
           markedBooks.map((book, index) => (
             <div className="bookGrid__grid-item" key={book._id || index}>

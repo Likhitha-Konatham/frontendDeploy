@@ -95,7 +95,15 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
                     onClick={() => handleItemClick(item.id)} // Token check on click
                     className="carousel__item-link"
                   >
-                    <img src={item.image} alt={`carousel-item-${index}`} />
+                     <img
+                      src={item.image}
+                      alt={item.title}
+                      className="carousel__slide-thumbnail"
+                    />
+                    <div className="hover_container">
+                      <div className="hover_book_name">{item.title}</div>
+                      <div className="hover_book_author">{item.author_list.join(", ")}</div>
+                    </div>
                   </div>
                 </div>
               ))

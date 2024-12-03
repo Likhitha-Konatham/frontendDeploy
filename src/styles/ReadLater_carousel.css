@@ -67,15 +67,54 @@
 cursor: pointer;
 }
 
+.carousel__hover-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 10.4vw;
+  height: 17vw;
+  margin: 0 0.4vw;
+cursor: pointer;
+}
 
-.carousel__slide-item img {
+.carousel__slide-thumbnail {
   width: 100%;
   height: 100%;
   border-radius: 1vw;
   object-fit: cover;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  
 }
+
+.hover_container {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin:9vw 5vw;
+  width: 8vw;
+  height: 4vw;
+  font-weight: 500;
+  font-family: Inter;
+  z-index: 1000;
+  color: #000;
+  background-color: white;
+  border-radius: 0.5vw;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hover_book_name {
+  font-size: 1vw;
+  margin:0.5vw;
+}
+
+.hover_book_author {
+  font-size: 0.7vw;
+  margin:0.5vw;
+}
+
+.carousel__hover-wrapper:hover .hover_container {
+  display: block;
+}
+
 .carousel__skeleton-loader {
   display: flex;
 }
@@ -100,4 +139,3 @@ cursor: pointer;
     background-position: -200% 0;
   }
 }
-

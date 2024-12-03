@@ -83,7 +83,7 @@ const Library = () => {
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {
-      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Library" };
+      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "My Library" };
     } else if (activeItem === "settings") {
       return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Account" };
     }
