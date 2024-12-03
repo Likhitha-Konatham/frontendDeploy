@@ -60,7 +60,7 @@ const Dashboard = () => {
   const handleActiveItemChange = (item) => {
     setActiveItem(item);
     if (item === "dashboard") {
-      navigate("/");
+      navigate("/dashboard");
     } else if (item === "bookmarks") {
       navigate("/bookmarks");
     } else if (item === "library") {

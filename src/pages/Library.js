@@ -63,7 +63,7 @@ const Library = () => {
   const handleActiveItemChange = (item) => {
     setActiveItem(item); // Update active item
     if (item === "dashboard") {
-      navigate("/"); // Navigate to feedback page
+      navigate("/dashboard"); // Navigate to feedback page
     } else if (item === "bookmarks") {
       navigate("/bookmarks"); // Navigate to home page
     }

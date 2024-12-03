@@ -21,6 +21,7 @@
     display: flex;
     justify-content: center;
     overflow: hidden;
+    cursor: grab;
     transition: transform 0.3s ease;
   }
   
@@ -83,3 +84,41 @@
     height: 100% !important;
     object-fit: contain;
   }
+
+
+  /* Skeleton Loader Styles */
+.carousel-skeleton-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16.5vw; /* Match the swiper container height */
+  width: auto;
+  overflow: hidden;
+  cursor: grab;
+  transition: transform 0.3s ease;
+}
+
+/* Skeleton image for carousel */
+.carousel-skeleton-image {
+  width: 10vw; /* Match the default width of the image */
+  height: 11.2vw; /* Match the default height of the image */
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite linear;
+  border-radius: 0.3vw /* Round corners to match the image style */
+}
+
+/* Active skeleton effect, similar to active image */
+.carousel-skeleton-item-active .carousel-skeleton-image {
+  width: 10.2vw; /* Increase the width for the active skeleton */
+  height: 13.3vw; /* Increase the height for the active skeleton */
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

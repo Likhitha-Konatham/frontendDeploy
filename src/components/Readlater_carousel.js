@@ -6,37 +6,33 @@ import bigRightArrow from '../images/bigRightArrow.png';
 import { fetchReadLaterBooks } from "../services/AllServices";
 
 const ReadlaterCarousel = () => {
-  const [currentIdx, setCurrentIdx] = React.useState(0);
+  const [currentIdx, setCurrentIdx] = useState(0);
   const [readLaterBooks, setReadLaterBooks] = useState([]);
-  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const response = await fetchReadLaterBooks();
-        setReadLaterBooks(response?.data || []); // Ensure fallback to an empty array
-        setBooks(response?.data || []); // Update state with API data or empty array
-        console.log("Fetched Read Later books:", response?.data);
+        setReadLaterBooks(response?.data || []);
+        setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error("Error fetching Read Later books:", error);
-        setReadLaterBooks([]); // Set to empty array on error
-        setBooks([]); // Ensure no invalid state
+        setReadLaterBooks([]);
+        setLoading(false); // Set loading to false on error
       }
     };
 
-    fetchBooks(); // Call the function to fetch data
+    fetchBooks();
   }, []);
 
-  // Safeguard maxIndex calculation
   const maxIndex = Math.max(0, (readLaterBooks?.length || 0) - 5);
 
-  // Handle previous slide
   const prevSlide = () => {
     setCurrentIdx((prevIdx) => (prevIdx === 0 ? maxIndex : prevIdx - 1));
   };
 
-  // Handle next slide
   const nextSlide = () => {
     setCurrentIdx((prevIdx) => (prevIdx === maxIndex ? 0 : prevIdx + 1));
   };
@@ -56,20 +52,29 @@ const ReadlaterCarousel = () => {
             className="carousel__slide-list"
             style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}
           >
-            {readLaterBooks?.map((book, index) => (
-              <div
-                key={book._id}
-                className="carousel__slide-item"
-                onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })}
-              >
-                <img
-                  src={book.thumbnail}
-                  alt={book.title}
-                  className="carousel__slide-thumbnail"
-                />
-                <div className="carousel__slide-title">{book.title}</div>
+            {loading ? (
+              // Placeholder: skeleton loader
+              <div className="carousel__skeleton-loader">
+                {[...Array(7)].map((_, index) => (
+                  <div key={index} className="carousel__skeleton-item"></div>
+                ))}
               </div>
-            ))}
+            ) : (
+              readLaterBooks?.map((book) => (
+                <div
+                  key={book._id}
+                  className="carousel__slide-item"
+                  onClick={() => navigate(`/book-info/${book._id}`, { state: { books: readLaterBooks } })}
+                >
+                  <img
+                    src={book.thumbnail}
+                    alt={book.title}
+                    className="carousel__slide-thumbnail"
+                  />
+                  <div className="carousel__slide-title">{book.title}</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 

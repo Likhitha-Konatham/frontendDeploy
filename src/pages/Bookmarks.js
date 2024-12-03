@@ -9,17 +9,21 @@ import { fetchUserBookmarks } from '../services/AllServices.js';
 const Bookmarks = () => {
   const [activeItem, setActiveItem] = useState("bookmarks");
   const [searchQuery, setSearchQuery] = useState(''); 
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [markedBooks, setMarkedBooks] = useState([]);
-
+  
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
+        setLoading(true); // Start loading
         const response = await fetchUserBookmarks();
-        setMarkedBooks(response.data || []); // Set to empty array if no data
+        setMarkedBooks(response.data || []);
       } catch (error) {
         console.error("Failed to fetch bookmarks:", error);
-        setMarkedBooks([]); // Set to empty array on error
+        setMarkedBooks([]);
+      } finally {
+        setLoading(false); // End loading
       }
     };
 
@@ -33,7 +37,7 @@ const Bookmarks = () => {
   const handleActiveItemChange = (item) => {
     setActiveItem(item); // Update active item
     if (item === "dashboard") {
-      navigate("/"); // Navigate to dashboard
+      navigate("/dashboard"); // Navigate to dashboard
     } else if (item === "bookmarks") {
       navigate("/bookmarks"); // Navigate to bookmarks
     } else if (item === "library") {
@@ -86,7 +90,7 @@ const Bookmarks = () => {
         <div className="bookmarks_body">
           <div className="bookGrids_container">
             <div className="bookGrids" >
-              <BookGrids markedBooks={markedBooks} />
+            <BookGrids markedBooks={markedBooks} loading={loading} />
             </div>
           </div>
         </div>

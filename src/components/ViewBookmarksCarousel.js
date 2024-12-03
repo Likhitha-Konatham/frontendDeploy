@@ -8,6 +8,7 @@ import { fetchUserBookmarks } from "../services/AllServices.js";
 import { useSearchParams } from "react-router-dom";
 
 const ViewBookmarksCarousel = () => {
+  const [loading, setLoading] = useState(true);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [markedBooks, setMarkedBooks] = useState([]);
   const [selectedBookIdx, setSelectedBookIdx] = useState(0);
@@ -30,6 +31,8 @@ const ViewBookmarksCarousel = () => {
         }
       } catch (error) {
         console.error("Failed to fetch bookmarks:", error);
+      } finally {
+        setLoading(false); // End loading
       }
     };
 
@@ -64,26 +67,34 @@ const ViewBookmarksCarousel = () => {
 
         <div className="viewbookmarks_carousel__container">
           <div className="viewbookmarks_heading">View Bookmarks</div>
-          <div
-            className="viewbookmarks_carousel__slide-list"
-            style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}
-          >
-            {markedBooks.map((book, index) => (
+           {loading ? ( // Show skeleton loader while loading
+            <div className="viewbookmarks__skeleton-loader">
+              {[...Array(10)].map((_, index) => (
+                <div key={index} className="viewbookmarks__skeleton-item"></div>
+              ))}
+            </div>
+            ) : ( 
               <div
-                key={book._id}
-                className={`viewbookmarks_carousel__slide-item ${
-                  index === selectedBookIdx ? "active" : ""
-                }`}
-                onClick={() => handleBookSelect(index)}
+                className="viewbookmarks_carousel__slide-list"
+                style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}
               >
-                <img
-                  src={book.thumbnail}
-                  alt={book.title}
-                  className="viewbookmarks_carousel__slide-thumbnail"
-                />
+                {markedBooks.map((book, index) => (
+                  <div
+                    key={book._id}
+                    className={`viewbookmarks_carousel__slide-item ${
+                      index === selectedBookIdx ? "active" : ""
+                    }`}
+                    onClick={() => handleBookSelect(index)}
+                  >
+                    <img
+                      src={book.thumbnail}
+                      alt={book.title}
+                      className="viewbookmarks_carousel__slide-thumbnail"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
         </div>
 
         <button className="viewbookmarks_carousel__btn" onClick={nextSlide}>

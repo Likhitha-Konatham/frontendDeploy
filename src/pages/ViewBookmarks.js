@@ -17,7 +17,7 @@ const ViewBookmarks = () => {
     const handleActiveItemChange = (item) => {
       setActiveItem(item); // Update active item
       if (item === "dashboard") {
-        navigate("/"); // Navigate to dashboard
+        navigate("/dashboard"); // Navigate to dashboard
       } else if (item === "bookmarks") {
         navigate("/bookmarks"); // Navigate to bookmarks
       } else if (item === "library") {

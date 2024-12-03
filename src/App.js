@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/Dashboard";
@@ -14,25 +14,14 @@ import SignUp from "./pages/SignUp";
 import GenreSelection from "./pages/GenreSelect";
 import ProtectedRoute from "./Routing/PrivateRouting";
 import NotFound from "./components/NotFound.js";
-import { getToken } from "./storage/Storage"; // Adjust path based on your project structure
+import LandingPage from "./pages/LandingPage.js";
+
+function NotFoundWrapper() {
+  const location = useLocation(); // Get the current location (i.e., URL path)
+  return <NotFound location={location} />;
+}
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, []); // Re-check authentication when the component mounts
-
-  function NotFoundWrapper() {
-    const location = useLocation(); // Get the current location (i.e., URL path)
-    return <NotFound location={location} />;
-  }
-
   return (
     <Router>
       <div className="pagesall">
@@ -40,14 +29,14 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/genre" element={<GenreSelection />} />
-          
+          <Route path="/" element={<LandingPage />} />
+    
           {/* Protected Routes */}
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <ProtectedRoute
                 element={Dashboard}
-                isAuthenticated={isAuthenticated}
               />
             }
           />
@@ -56,7 +45,7 @@ function App() {
             element={
               <ProtectedRoute
                 element={Bookmarks}
-                isAuthenticated={isAuthenticated}
+                
               />
             }
           />
@@ -65,7 +54,7 @@ function App() {
             element={
               <ProtectedRoute
                 element={ViewBookmarks}
-                isAuthenticated={isAuthenticated}
+                
               />
             }
           />
@@ -74,7 +63,7 @@ function App() {
             element={
               <ProtectedRoute
                 element={Library}
-                isAuthenticated={isAuthenticated}
+                
               />
             }
           />
@@ -83,7 +72,7 @@ function App() {
             element={
               <ProtectedRoute
                 element={Settings}
-                isAuthenticated={isAuthenticated}
+                
               />
             }
           />
@@ -92,7 +81,7 @@ function App() {
             element={
               <ProtectedRoute
                 element={BookInfo}
-                isAuthenticated={isAuthenticated}
+                
               />
             }
           />
@@ -101,7 +90,7 @@ function App() {
             element={
               <ProtectedRoute
                 element={BookInformationPage}
-                isAuthenticated={isAuthenticated}
+                
               />
             }
           />
@@ -110,7 +99,7 @@ function App() {
             element={
               <ProtectedRoute
                 element={AudioBookPlayer}
-                isAuthenticated={isAuthenticated}
+                
               />
             }
           />

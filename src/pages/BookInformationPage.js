@@ -62,26 +62,59 @@ const BookInfo = () => {
     navigate("/settings", { state: { selectedSection: "account" } });
   };
 
+  
+  const resetSearch = () => {
+    setSearchQuery("");
+  };
+
+  const handleActiveItemChange = (item) => {
+    setActiveItem(item);
+    if (item === "dashboard") {
+      navigate("/dashboard");
+    } else if (item === "bookmarks") {
+      navigate("/bookmarks");
+    } else if (item === "library") {
+      navigate("/library");
+    } else if (item === "settings") {
+      navigate("/settings");
+    }
+    resetSearch();
+  };
+
+  const getHeaderVisibility = () => {
+    if (activeItem === "dashboard" || activeItem === "") {
+      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "Dashboard" };
+    } else if (activeItem === "bookmarks") {
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
+    } else if (activeItem === "library") {
+      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Library" };
+    } else if (activeItem === "settings") {
+      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Account" };
+    }
+  };
+
+  const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
+
   return (
     <main className="main-content">
       <div className="sidebar_container">
         <Sidebar
           activeItem={activeItem}
-          setActiveItem={setActiveItem}
-          resetSearch={() => setSearchQuery("")}
+          setActiveItem={handleActiveItemChange}
+          resetSearch={resetSearch}
         />
       </div>
 
       <div className="bookInfo_container">
-        <Header
-          showSearch
-          showUserProfile
-          showArrows
-          pageName=""
-          searchQuery={searchQuery}
-          onSearch={setSearchQuery}
-          onProfileClick={handleProfileClick} 
-        />
+         <Header
+            showSearch={showSearch}
+            showUserProfile={showUserProfile}
+            showArrows={showArrows}
+            pageName={pageName}
+            searchQuery={searchQuery}
+            onSearch={(query) => setSearchQuery(query)}
+            onProfileClick={handleProfileClick} 
+          />
 
         <div className="bookInfo_body">
           <div className="carousel-container">

@@ -63,7 +63,7 @@ const SignIn = () => {
       if (response && response.status === "success") {
         console.log("User Data:", response.data);
         localStorage.setItem("access_token", response.data.access_token);
-        window.location.href = "/";
+        window.location.href = "/dashboard";
       } else {
         setErrorMessage(response.message || "Login failed. Please try again.");
       }

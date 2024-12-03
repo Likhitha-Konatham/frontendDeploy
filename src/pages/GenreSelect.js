@@ -71,7 +71,7 @@ const GenreSelection = () => {
         console.log("Registration successful:", result.message);
         console.log("User Data:", result.data);
         localStorage.setItem("access_token", result.data.access_token);
-        navigate("/"); // Navigate to the desired route
+        navigate("/dashboard"); // Navigate to the desired route
       } else {
         // Handle failure case
         console.error(result.message || "Error during registration.");
@@ -85,7 +85,7 @@ const GenreSelection = () => {
         "Required form data is missing or incomplete. Redirecting to home page."
       );
       alert("Required form data is missing or incomplete.");
-      //navigate("/"); // Redirect to the home page or another fallback route
+      //navigate("/dashboard"); // Redirect to the home page or another fallback route
       return;
     }
   };

@@ -35,6 +35,16 @@ const AudioBookPlayer = () => {
   const [zoomLevel, setZoomLevel] = useState(100); // Zoom level for text box
 
   const [currentChapter, setCurrentChapter] = useState(0); // State to track current chapter
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+    const leftSection = document.querySelector('.left-section');
+    if (leftSection) {
+      leftSection.classList.toggle('fullscreen-active', !isFullScreen);
+    }
+  };
+  
 
   const chapters = [
     {
@@ -68,7 +78,7 @@ const AudioBookPlayer = () => {
   const handleActiveItemChange = (item) => {
     setActiveItem(item); // Update active item
     if (item === "dashboard") {
-      navigate("/"); // Navigate to feedback page
+      navigate("/dashboard"); // Navigate to feedback page
     } else if (item === "bookmarks") {
       navigate("/bookmarks"); // Navigate to home page
     }
@@ -159,15 +169,19 @@ const AudioBookPlayer = () => {
 
             {/* Lyrics Box */}
             <div
-              className="book_context_box"
-              style={{ zoom: `${zoomLevel}%`, filter: `brightness(${brightness}%)` }}
-            >
-              <p className="book_context">
-                {chapters[currentChapter].context}
-                <span className="highlight"> Duis non erat in urna cursus malesuada sed sed mauris.</span>
-              </p>
-              <div className="fullscreen" ><img src={fullScreen} alt="full screen" /></div>
-            </div>
+                className={`book_context_box ${isFullScreen ? 'fullscreen-active' : ''}`}
+                style={{
+                  zoom: `${zoomLevel}%`,
+                  filter: `brightness(${brightness}%)`,
+                }}
+              >
+                <p className="book_context">
+                  {chapters[currentChapter].context}
+                  <span className="highlight"> Duis non erat in urna cursus malesuada sed sed mauris.</span>
+                </p>
+                <div className="fullscreen" onClick={toggleFullScreen}><img src={fullScreen} alt="full screen" /></div>
+              </div>
+
 
             {/* Playback Controls */}
             <div className="book-player-controls">

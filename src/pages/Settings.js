@@ -24,7 +24,7 @@ const Settings = () => {
   const handleActiveItemChange = (item) => {
     setActiveItem(item); // Update active item
     if (item === "dashboard") {
-      navigate("/"); // Navigate to feedback page
+      navigate("/dashboard"); // Navigate to feedback page
     } else if (item === "bookmarks") {
       navigate("/bookmarks"); // Navigate to bookmarks page
     } else if (item === "library") {

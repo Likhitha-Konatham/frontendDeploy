@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { getToken } from '../storage/Storage'; // Import your storage functions
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { getToken } from "../storage/Storage";
 
-const ProtectedRoute = ({ element: Component}) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); 
-  const [loading, setLoading] = useState(true); // Track loading state
+const ProtectedRoute = ({ element: Component }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -12,53 +12,26 @@ const ProtectedRoute = ({ element: Component}) => {
         const token = await getToken();
         if (token) {
           setIsAuthenticated(true); 
-
-        } else {
+        }
+        else {
           setIsAuthenticated(false); // Not authenticated
         }
       } catch (error) {
         console.error("Error checking authentication:", error);
         setIsAuthenticated(false);
       } finally {
-        setLoading(false); // Stop loading after check
+        setLoading(false);
       }
     };
-
     checkAccess();
-  });
+  }, []); // Add dependency array
 
-  if (loading) {
-    // Optionally, show a loading spinner or message while checking auth
-    return <div>Loading...</div>;
-  }
-
+  if (loading) return <div>Loading...</div>;
   if (!isAuthenticated) {
     return <Navigate to="/signin" />; // Redirect to sign-in page if not authenticated
   }
 
-  return <Component />; // Render the component if authenticated and authorized
+  return <Component />; 
 };
 
 export default ProtectedRoute;
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import { Navigate } from "react-router-dom";
-
-// const ProtectedRoute = ({ element: Component, isAuthenticated }) => {
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     setLoading(false);
-//   }, []);
-
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return isAuthenticated ? <Component /> : <Navigate to="/" />;
-// };
-
-// export default ProtectedRoute;

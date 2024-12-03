@@ -1,50 +1,60 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Header.css";
 import { fetchProfile } from "../services/AllServices";
+import { getToken } from "../storage/Storage";
 import searchIcon from "../images/search_icon.png";
 import userIcon from "../images/user_icon.png";
 import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
-import historyIcon from "../images/history_icon.png"
+import historyIcon from "../images/history_icon.png";
 
-const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,pageName,onProfileClick}) => {
-  const [profile, setProfile] = useState({ firstname: "", lastName: "" });
-  const [showSearchBar, setShowSearchBar] = useState(false); 
+const Header = ({
+  showSearch,
+  showUserProfile,
+  onSearch,
+  searchQuery,
+  showArrows,
+  pageName,
+  onProfileClick,
+}) => {
+  const [profile, setProfile] = useState();
+  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [token, setTokenState] = useState(null); // Token state
+  const [showPopup, setShowPopup] = useState(false); // Popup state
+  const navigate = useNavigate();
 
+  // Fetch token and profile
   useEffect(() => {
-    const getProfile = async () => {
+    const fetchTokenAndProfile = async () => {
       try {
-        const response = await fetchProfile();
-        if (response && response.data) {
-          const { firstname = "Guest", lastName = "" } = response.data; // Provide default values
-          setProfile({ firstname, lastName });
-          console.log("Fetched profile:", response.data);
-        } else {
-          console.warn("Profile data is missing in the response");
-          setProfile({ firstname: "Guest", lastName: "" }); // Set default profile values
+        const storedToken = await getToken();
+        setTokenState(storedToken);
+        if (storedToken) {
+          const response = await fetchProfile();
+          setProfile(response?.data || []);
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
-        setProfile({ firstname: "Guest", lastName: "" }); // Handle error by setting default profile values
+        alert("Failed to load profile. Please try again later.");
       }
     };
-  
-    getProfile();
+    fetchTokenAndProfile();
   }, []);
   
 
-  const handleSearchClick = () => {
-    setShowSearchBar((prevState) => !prevState); // Toggle visibility of search bar
-  };
+  // Toggle search bar visibility
+  const handleSearchClick = () => setShowSearchBar((prevState) => !prevState);
 
-  const handleSearch = (event) => {
-    const query = event.target.value;
-    onSearch(query); // Pass the query to the parent component
-  };
+  // Handle search query
+  const handleSearch = (event) => onSearch(event.target.value);
 
-  const handleProfileClick = () => {
-    onProfileClick(); // Trigger the parent-provided function
-  };
+  // Popup toggle
+  const togglePopup = () => setShowPopup((prev) => !prev);
+
+  // Popup actions
+  const handleSignIn = () => navigate("/signin");
+  const handleSignUp = () => navigate("/signup");
 
   return (
     <>
@@ -58,7 +68,7 @@ const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,page
         <div className="active_screen_text">
           <span className="page_label">{pageName}</span>
         </div>
-
+  
         {showSearch && (
           <div className="search-bar-container">
             <div className="search-bar" onClick={handleSearchClick}>
@@ -72,26 +82,29 @@ const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,page
             </div>
             {showSearchBar && (
               <div className="search-dropdown">
-                {/* This is the dropdown where recent searches or suggestions will appear */}
                 <div className="search-container">
-                  <div className="searchbyplaceholder">Search by book name, author, genre, etc..</div>
+                  <div className="searchbyplaceholder">
+                    Search by book name, author, genre, etc.
+                  </div>
                   <div className="tags-container">
                     <span className="tag">M.Tech</span>
                     <span className="tag">Science</span>
                     <span className="tag">Data Science</span>
-                    {/* Add more tags or dynamic content */}
                   </div>
                   <div className="recent-container">
                     <h3 className="recent-heading">Recent</h3>
                     <ul className="recent-list">
                       <li>
-                        <img src={historyIcon} className="history-icon" alt="history icon"/> Statistics for Dummies
+                        <img src={historyIcon} className="history-icon" alt="history icon" />{" "}
+                        Statistics for Dummies
                       </li>
                       <li>
-                       <img src={historyIcon} className="history-icon" alt="history icon"/> Data Science for Beginners
+                        <img src={historyIcon} className="history-icon" alt="history icon" />{" "}
+                        Data Science for Beginners
                       </li>
                       <li>
-                        <img src={historyIcon} className="history-icon" alt="history icon"/> The Data Science Handbook
+                        <img src={historyIcon} className="history-icon" alt="history icon" />{" "}
+                        The Data Science Handbook
                       </li>
                     </ul>
                   </div>
@@ -100,23 +113,53 @@ const Header = ({showSearch,showUserProfile,onSearch,searchQuery,showArrows,page
             )}
           </div>
         )}
-
-       <div className="header-user-profile">
-        {showUserProfile && (
-          <>
-            <div className="header-user-name">
-              {profile.firstname || "Guest"} {profile.lastName}
+  
+        <div className="header-user-profile">
+          {showUserProfile && (
+            <>
+              {!token ? ( // If the token does not exist (i.e., not authenticated)
+                <div
+                  className="header-user-name"
+                  onClick={togglePopup} // Trigger the popup for login
+                  style={{ cursor: "pointer" }}
+                >
+                  Sign In / Account
+                </div>
+              ) : ( // If the token exists (authenticated)
+                <div
+                  className="header-user-name"
+                  style={{ cursor: "default" }}
+                >
+                  {profile?.firstname} {profile?.lastName} {/* Display user name */}
+                </div>
+              )}
+              <img
+                src={userIcon}
+                alt="User Icon"
+                className="header-user-icon"
+                style={{ cursor: token ? "pointer" : "default" }}
+                onClick={token ? onProfileClick : null} // Only clickable if token exists
+              />
+            
+            </>
+          )}
+        </div>
+        {showPopup && !token && (
+          <div className="popup-container">
+            <div className="popup-arrow"></div>
+            <div className="popup-content">
+              <button className="signin-button" onClick={handleSignIn}>
+                Sign In
+              </button>
+              <div className="new-customer">
+                New customer?{" "}
+                <span className="start-here" onClick={handleSignUp}>
+                  Start here
+                </span>
+              </div>
             </div>
-            <img
-              src={userIcon}
-              alt="User Icon"
-              className="header-user-icon"
-              style={{ cursor: "pointer" }}
-              onClick={handleProfileClick} // Use the handler here
-            />
-          </>
+          </div>
         )}
-      </div>
       </header>
     </>
   );

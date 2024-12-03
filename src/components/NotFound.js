@@ -9,10 +9,10 @@ function NotFoundWrapper() {
     const checkAuthAndRedirect = async () => {
       const token = await getToken();
       if (token) {
-          navigate("/");
+          navigate("/dashboard");
       } else {
         // If not authenticated, redirect to the landing page
-        navigate("/signin");
+        navigate("/");
       }
     };
 

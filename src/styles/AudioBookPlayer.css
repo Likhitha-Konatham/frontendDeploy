@@ -289,4 +289,40 @@
     background: #666;
   }
   
-  
+  .left-section {
+    width: 71%;
+    padding: 2vw 1vw 0vw;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+}
+
+.left-section.fullscreen-active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full screen width */
+    height: 100vh; /* Full screen height */
+    z-index: 1000; /* Ensure it's on top */
+    background-color: white; /* Optional, for clean fullscreen background */
+    padding: 10px; /* Optional, for padding around content */
+    overflow: hidden; /* Hide any overflowing content */
+}
+
+.left-section.fullscreen-active .header{
+    width: 96%;
+    margin: 0vw auto 0vw;
+}
+.left-section.fullscreen-active .book_context_box {
+    height: 32vw;
+    width: 96%;
+    margin: 2vw auto 0vw;
+    border-radius: 1vw;
+}
+.left-section.fullscreen-active .book-player-controls {
+    margin-left: 28vw;
+
+}
+.left-section.fullscreen-active .book-player-progress-bar {
+    margin-left: 33vw;
+}
