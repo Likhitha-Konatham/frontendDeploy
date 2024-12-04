@@ -83,7 +83,7 @@ const SignIn = () => {
             </div>
           </div>
 
-          <form className="signup-form" onSubmit={handleNext} noValidate>
+          <form className="signup-form" onSubmit={handleNext}>
             <div className="signup-form-group">
               <div className="signup-input-fields">
                 <div className="inputfield-wrapper">
