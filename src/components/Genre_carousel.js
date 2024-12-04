@@ -102,7 +102,11 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
                     />
                     <div className="hover_container">
                       <div className="hover_book_name">{item.title}</div>
-                      <div className="hover_book_author">{item.author_list.join(", ")}</div>
+                      <div className="hover_book_author">
+                        {item.author_list && item.author_list.length > 0
+                          ? item.author_list.join(", ")
+                          : ""}
+                      </div>
                     </div>
                   </div>
                 </div>
