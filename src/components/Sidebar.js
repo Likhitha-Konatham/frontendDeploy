@@ -67,9 +67,6 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
     }
   };
 
-  if (token === null) {
-    return null; // Show nothing until the token state is resolved
-  }
 
   return (
     <div className="sidebar">
