@@ -8,35 +8,15 @@ import { loginUser } from "../services/AllServices";
 import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
 
-const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
-  <div className="inputfield-wrapper">
-    <div className="inputfield-container">
-      <div className="inputfield-content">
-        <img loading="lazy" src={icon} alt="" className="inputfield-icon" />
-        <input
-          type={type}
-          id={id}
-          placeholder={placeholder}
-          className="inputfield-inside"
-          value={value}
-          onChange={onChange}
-          required
-          aria-label={placeholder}
-        />
-      </div>
-    </div>
-  </div>
-);
-
 const SignIn = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
+  const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // State for loading
+  const [isLoading, setIsLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -47,9 +27,10 @@ const SignIn = () => {
     setFormData({ ...formData, [id]: value });
   };
 
-  const handleNext = async () => {
-    setIsLoading(true); // Start loading
-    setErrorMessage(""); // Clear previous errors
+  const handleNext = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMessage("");
 
     const loginData = {
       email: formData.email,
@@ -72,7 +53,7 @@ const SignIn = () => {
         "An error occurred while logging in. Please try again later."
       );
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -102,17 +83,31 @@ const SignIn = () => {
             </div>
           </div>
 
-          <form className="signup-form">
+          <form className="signup-form" onSubmit={handleNext}>
             <div className="signup-form-group">
               <div className="signup-input-fields">
-                <InputField
-                  icon={fullname_logo}
-                  placeholder="Enter Your Email"
-                  type="text"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
+                <div className="inputfield-wrapper">
+                  <div className="inputfield-container">
+                    <div className="inputfield-content">
+                      <img
+                        loading="lazy"
+                        src={fullname_logo}
+                        alt=""
+                        className="inputfield-icon"
+                      />
+                      <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter Your Email"
+                        className="inputfield-inside"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        aria-label="Enter Your Email"
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 <div className="passwordInputWrapper">
                   <div className="passwordInputContainer">
@@ -131,6 +126,7 @@ const SignIn = () => {
                         aria-label="Enter Your Password"
                         value={formData.password}
                         onChange={handleInputChange}
+                        required
                       />
                       <img
                         loading="lazy"
@@ -152,27 +148,28 @@ const SignIn = () => {
                 </div>
               </div>
             </div>
+
+            {errorMessage && (
+              <div className="signin-error-message">{errorMessage}</div>
+            )}
+            <div className="signin-loginLink">
+              <p>
+                Don't have an Account?{" "}
+                <a href="/signup" style={{ color: "#a63e71" }}>
+                  Sign Up
+                </a>
+              </p>
+            </div>
+
+            <button
+              type="submit"
+              className="signin-signUpButton"
+              disabled={isLoading}
+            >
+              {isLoading ? "Logging in..." : "Login"}
+            </button>
           </form>
-          {errorMessage && (
-            <div className="signin-error-message">{errorMessage}</div>
-          )}
-          <div className="signin-loginLink">
-            <p>
-              Don't have an Account?{" "}
-              <a href="/signup" style={{ color: "#a63e71" }}>
-                Sign Up
-              </a>
-            </p>
-          </div>
         </div>
-        <button
-          type="submit"
-          onClick={handleNext}
-          className="signin-signUpButton"
-          disabled={isLoading} // Disable button when loading
-        >
-          {isLoading ? "Logging in..." : "Login"} {/* Dynamic button text */}
-        </button>
       </div>
     </main>
   );

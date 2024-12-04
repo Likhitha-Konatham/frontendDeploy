@@ -1,606 +1,919 @@
-// // import React, { useState, useEffect } from "react";
-// // import "../styles/AccountSection.css";
-// // import {
-// //   InputField,
-// //   PhoneInput,
-// //   CityField,
-// //   SelectField,
-// // } from "./AccountComponents.js";
-// // import account_pfp from "../images/account_pfp.png";
-// // import { fetchProfile, getCountries, getStates } from "../services/AllServices";
+// // import React, { useState } from "react";
+// // import { useNavigate } from "react-router-dom";
+// // import "../styles/SignUp.css";
+// // import book_logo from "../images/vector_booklogo.svg";
+// // import fullname_logo from "../images/fullname_logo.svg";
+// // import message_logo from "../images/message_logo.svg";
+// // import password_eye from "../images/password_eye.svg";
+// // import lock_logo from "../images/lock_logo.svg";
+// // import leftArrow from "../images/left_arrow.png";
+// // import rightArrow from "../images/right_arrow.png";
+// // import { sendOTP, validateOTP } from "../services/AllServices";
 
-// // const AccountSection = () => {
-// //   const [profile, setProfile] = useState({
-// //     firstname: "",
-// //     lastname: "",
+// // const SignUp = () => {
+// //   const [isChecked, setIsChecked] = useState(false);
+// //   const [formData, setFormData] = useState({
+// //     firstName: "",
 // //     email: "",
-// //     phone: "",
-// //     address: "",
-// //     city: "",
-// //     country: "",
-// //     state: "",
+// //     password: "",
+// //     genre: [],
 // //   });
+// //   const [showPassword, setShowPassword] = useState(false);
+// //   const [isPopupOpen, setIsPopupOpen] = useState(false);
+// //   const [enteredOTP, setOtp] = useState("");
+// //   const [emailError, setEmailError] = useState("");
+// //   const [errorMessage, setErrorMessage] = useState("");
+// //   const [loading, setLoading] = useState(false);
+// //   const [loadingResendOTP, setLoadingResendOTP] = useState(false);
+// //   const [loadingVerifyOTP, setLoadingVerifyOTP] = useState(false);
 
-// //   const [isEditable, setIsEditable] = useState(false);
-// //   const [countries, setCountries] = useState([]); // List of countries
-// //   const [states, setStates] = useState([]); // List of states for selected country
+// //   const navigate = useNavigate();
 
-// //   // Fetch profile details on component mount
-// //   useEffect(() => {
-// //     const fetchData = async () => {
-// //       try {
-// //         // Fetch user profile
-// //         const response = await fetchProfile();
-// //         const {
-// //           firstname,
-// //           lastname,
-// //           email,
-// //           phone,
-// //           address,
-// //           city,
-// //           country,
-// //           state,
-// //         } = response.data;
-
-// //         setProfile({
-// //           firstname,
-// //           lastname,
-// //           email,
-// //           phone,
-// //           address,
-// //           city,
-// //           country,
-// //           state,
-// //         });
-
-// //         // Fetch countries
-// //         const countriesResponse = await getCountries();
-// //         setCountries(countriesResponse.data);
-// //       } catch (error) {
-// //         console.error("Error fetching data:", error);
-// //       }
-// //     };
-
-// //     fetchData();
-// //   }, []);
-
-// //   // Fetch states when country changes
-// //   useEffect(() => {
-// //     if (profile.country) {
-// //       const fetchStates = async () => {
-// //         try {
-// //           const statesResponse = await getStates(profile.country);
-// //           setStates(statesResponse.data);
-// //         } catch (error) {
-// //           console.error("Error fetching states:", error);
-// //         }
-// //       };
-
-// //       fetchStates();
-// //     }
-// //   }, [profile.country]);
-
-// //   const handleInputChange = (field, value) => {
-// //     setProfile((prev) => ({
-// //       ...prev,
-// //       [field]: value,
-// //     }));
+// //   const togglePasswordVisibility = () => {
+// //     setShowPassword(!showPassword);
 // //   };
 
-// //   const handleUpdateClick = () => {
-// //     if (isEditable) {
-// //       console.log("Updated profile:", profile); // Send to API if necessary
+// //   const handleInputChange = (e) => {
+// //     const { id, value } = e.target;
+// //     setFormData({ ...formData, [id]: value });
+// //   };
+
+// //   const handleOtpChange = (e) => {
+// //     setOtp(e.target.value);
+// //   };
+
+// //   const handleCheckboxChange = (e) => {
+// //     setIsChecked(e.target.checked);
+// //   };
+
+// //   const handleSignUpClick = async (e) => {
+// //     e.preventDefault();
+
+// //     if (!isChecked) {
+// //       // You might want to replace this with a more React-friendly approach
+// //       // like setting a state that triggers a tooltip/error message
+// //       return;
 // //     }
-// //     setIsEditable(!isEditable);
+
+// //     setLoading(true);
+// //     setLoadingResendOTP(true);
+// //     setEmailError("");
+// //     try {
+// //       const response = await sendOTP(formData);
+// //       if (
+// //         response.detail ===
+// //         "Email already registered. Please use a different email address."
+// //       ) {
+// //         setEmailError(response.detail);
+// //       } else if (response.status === "success") {
+// //         setIsPopupOpen(true);
+// //         setErrorMessage("");
+// //       } else {
+// //         setErrorMessage(response.message || "Failed to send OTP.");
+// //       }
+// //     } catch (error) {
+// //       if (
+// //         error.response?.data?.detail ===
+// //         "Email already registered. Please use a different email address."
+// //       ) {
+// //         setEmailError(
+// //           "Email already registered. Please use a different email address or log in."
+// //         );
+// //       } else {
+// //         setErrorMessage("An error occurred while sending the OTP.");
+// //       }
+// //       console.error(error);
+// //     } finally {
+// //       setLoading(false);
+// //       setLoadingResendOTP(false);
+// //     }
+// //   };
+
+// //   const handleOtpSubmit = async () => {
+// //     setLoadingVerifyOTP(true);
+// //     try {
+// //       const response = await validateOTP({
+// //         email: formData.email,
+// //         enteredOTP,
+// //       });
+// //       if (response.status === "success") {
+// //         navigate("/genre", { state: { formData } });
+// //       } else {
+// //         setErrorMessage(response.message || "Invalid OTP. Please try again.");
+// //       }
+// //     } catch (error) {
+// //       setErrorMessage("An error occurred during OTP validation.");
+// //       console.error(error);
+// //     } finally {
+// //       setLoadingVerifyOTP(false);
+// //     }
 // //   };
 
 // //   return (
-// //     <div className="settings-accountSection">
-// //       <div className="settings-formSection">
-// //         <form className="settings-inputFields">
-// //           <InputField
-// //             label="First Name"
-// //             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-// //             value={profile.firstname}
-// //             editable={isEditable}
-// //             placeholder="Update First Name"
-// //             onChange={(e) => handleInputChange("firstname", e.target.value)}
+// //     <div className="signup-page">
+// //       <header className="header">
+// //         <div className="header-left-section">
+// //           <img src={book_logo} alt="book logo" className="book-logo-icon" />
+// //           <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
+// //           <img
+// //             src={rightArrow}
+// //             alt="Right Arrow"
+// //             className="right-arrow-icon"
 // //           />
-// //           <InputField
-// //             label="Last Name"
-// //             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-// //             value={profile.lastname}
-// //             editable={isEditable}
-// //             placeholder="Update Last Name"
-// //             onChange={(e) => handleInputChange("lastname", e.target.value)}
-// //           />
-// //           <InputField
-// //             label="Email"
-// //             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/e29ef37c58780e5cd8ee2986297041a310e893fe82c262a872c641b0392efceb?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-// //             value={profile.email}
-// //             editable={isEditable}
-// //             placeholder="Update Email"
-// //             onChange={(e) => handleInputChange("email", e.target.value)}
-// //             type="email"
-// //           />
-// //           <PhoneInput
-// //             value={profile.phone}
-// //             editable={isEditable}
-// //             placeholder="Update Phone Number"
-// //             onChange={(e) => handleInputChange("phone", e.target.value)}
-// //           />
-// //           <InputField
-// //             label="Address"
-// //             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/b091961851e79cde67f245be388279a07ffb670efa44b1323cca629ecbc0e41c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-// //             value={profile.address}
-// //             editable={isEditable}
-// //             placeholder="Update Address"
-// //             onChange={(e) => handleInputChange("address", e.target.value)}
-// //           />
-// //           <CityField
-// //             label="City"
-// //             value={profile.city}
-// //             editable={isEditable}
-// //             placeholder="Update City"
-// //             onChange={(e) => handleInputChange("city", e.target.value)}
-// //           />
-// //           <section className="settings-city-selectorContainer">
-// //             <SelectField
-// //               label="Country"
-// //               value={profile.country}
-// //               editable={isEditable}
-// //               placeholder="Update Country"
-// //               iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/92f4cbd241b1e3b6a60b7cf89795a6d16f5b548ceabce6d988518cc7a7eefb3c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-// //               options={countries}
-// //               onChange={(selectedCountry) => {
-// //                 handleInputChange("country", selectedCountry);
-// //                 handleInputChange("state", ""); // Reset state when country changes
-// //               }}
+// //         </div>
+// //       </header>
+// //       <div className="signup-container">
+// //         <div className="signup-form">
+// //           <div className="booklogo-heading">
+// //             <img
+// //               className="booklogo-img"
+// //               alt="site logo of book"
+// //               src={book_logo}
 // //             />
-// //             <SelectField
-// //               label="State"
-// //               value={profile.state}
-// //               placeholder="Update State"
-// //               editable={isEditable}
-// //               iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/16af09298139f26b39c29e840d7dec61a10fcc30926ce43a906849901322e2b5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-// //               options={states}
-// //               onChange={(selectedState) =>
-// //                 handleInputChange("state", selectedState)
-// //               }
-// //             />
-// //           </section>
-// //           <button
-// //             type="button"
-// //             className="settings-update-button"
-// //             onClick={handleUpdateClick}
-// //           >
-// //             {isEditable ? "Save" : "Update"}
-// //           </button>
-// //         </form>
+// //             <div className="booklogo-heading-text">
+// //               <div className="heading-text-wrapper">Let's get Started</div>
+// //             </div>
+// //           </div>
+
+// //           <form className="signup-form" onSubmit={handleSignUpClick} noValidate>
+// //             <div className="signup-form-group">
+// //               <div className="signup-input-fields">
+// //                 <div className="inputfield-wrapper">
+// //                   <div className="inputfield-container">
+// //                     <div className="inputfield-content">
+// //                       <img loading="lazy" src={fullname_logo} alt="" className="inputfield-icon" />
+// //                       <input
+// //                         type="text"
+// //                         id="firstName"
+// //                         placeholder="Your Full Name"
+// //                         className="inputfield-inside"
+// //                         value={formData.firstName}
+// //                         onChange={handleInputChange}
+// //                         required
+// //                       />
+// //                     </div>
+// //                   </div>
+// //                 </div>
+
+// //                 <div className="inputfield-wrapper">
+// //                   <div className="inputfield-container">
+// //                     <div className="inputfield-content">
+// //                       <img loading="lazy" src={message_logo} alt="" className="inputfield-icon" />
+// //                       <input
+// //                         type="email"
+// //                         id="email"
+// //                         placeholder="Your Email Address"
+// //                         className="inputfield-inside"
+// //                         value={formData.email}
+// //                         onChange={handleInputChange}
+// //                         required
+// //                       />
+// //                     </div>
+// //                   </div>
+// //                 </div>
+
+// //                 <div className="passwordInputWrapper">
+// //                   <div className="passwordInputContainer">
+// //                     <div className="passwordInputContent">
+// //                       <img
+// //                         loading="lazy"
+// //                         src={lock_logo}
+// //                         alt=""
+// //                         className="passwordIcon"
+// //                       />
+// //                       <input
+// //                         type={showPassword ? "text" : "password"}
+// //                         id="password"
+// //                         placeholder="Create a Strong Password"
+// //                         className="passwordField"
+// //                         value={formData.password}
+// //                         onChange={handleInputChange}
+// //                         required
+// //                       />
+// //                       <img
+// //                         loading="lazy"
+// //                         src={password_eye}
+// //                         alt={showPassword ? "Hide password" : "Show password"}
+// //                         className="visibilityIcon"
+// //                         onClick={togglePasswordVisibility}
+// //                         tabIndex="0"
+// //                         role="button"
+// //                       />
+// //                     </div>
+// //                   </div>
+// //                 </div>
+// //               </div>
+// //             </div>
+
+// //             {emailError && (
+// //               <p className="signup-error-email" style={{ color: "red" }}>
+// //                 {emailError}
+// //               </p>
+// //             )}
+// //             <div className="Agree_tc">
+// //               <input
+// //                 type="checkbox"
+// //                 id="agree_tc"
+// //                 style={{
+// //                   marginTop: "0vw",
+// //                   cursor: "pointer",
+// //                 }}
+// //                 checked={isChecked}
+// //                 onChange={handleCheckboxChange}
+// //                 required
+// //               />
+// //               <label
+// //                 htmlFor="agree_tc"
+// //                 style={{ color: "black", marginLeft: "0.5vw" }}
+// //               >
+// //                 I agree to the terms and conditions
+// //               </label>
+// //             </div>
+// //             <div className="signup-loginLink">
+// //               <p>
+// //                 Already have an account?{" "}
+// //                 <a href="/signin" style={{ color: "#a63e71" }}>
+// //                   Login
+// //                 </a>
+// //               </p>
+// //             </div>
+
+// //             <button
+// //               type="submit"
+// //               className="signUpButton"
+// //               disabled={loading}
+// //             >
+// //               {loading ? "Sending..." : "Sign up"}
+// //             </button>
+// //           </form>
+// //         </div>
 // //       </div>
-// //       <div className="settings-imageSection">
-// //         <img src={account_pfp} alt="Profile" />
-// //       </div>
+
+// //       {/* Rest of the OTP popup remains the same */}
+// //       {isPopupOpen && (
+// //         <>
+// //           <div className="popup-overlay"></div>
+// //           <div className="otp-popup">
+// //             <div className="otp-popup-content">
+// //               <button
+// //                 className="close-popup-button"
+// //                 onClick={() => setIsPopupOpen(false)}
+// //                 aria-label="Close Popup"
+// //               >
+// //                 &times;
+// //               </button>
+// //               <h2>Email Verification</h2>
+// //               <p>
+// //                 An email has been sent to <strong>{formData.email}</strong>.
+// //                 Please enter the OTP below to verify your account.
+// //               </p>
+// //               <input
+// //                 type="text"
+// //                 placeholder="Enter OTP"
+// //                 className="otp-input"
+// //                 value={enteredOTP}
+// //                 onChange={handleOtpChange}
+// //                 required
+// //               />
+// //               {errorMessage && <p className="error-message">{errorMessage}</p>}
+// //               <div className="otp-buttons">
+// //                 <button
+// //                   onClick={handleSignUpClick}
+// //                   className="otp-submit-button"
+// //                   disabled={loadingResendOTP}
+// //                 >
+// //                   {loadingResendOTP ? "Resending..." : "Resend OTP"}
+// //                 </button>
+// //                 <button
+// //                   onClick={handleOtpSubmit}
+// //                   className="otp-submit-button"
+// //                   disabled={loadingVerifyOTP}
+// //                 >
+// //                   {loadingVerifyOTP ? "Verifying..." : "Verify OTP"}
+// //                 </button>
+// //               </div>
+// //             </div>
+// //           </div>
+// //         </>
+// //       )}
 // //     </div>
 // //   );
 // // };
 
-// // export default AccountSection;
+// // export default SignUp;
 
-// import React, { useState, useEffect } from "react";
-// import "../styles/AccountSection.css";
-// import {
-//   InputField,
-//   PhoneInput,
-//   CityField,
-//   SelectField,
-// } from "./AccountComponents.js";
-// import account_pfp from "../images/account_pfp.png";
-// import {
-//   fetchProfile,
-//   getCountries,
-//   getStates,
-//   updateProfile,
-// } from "../services/AllServices";
+// import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import "../styles/SignUp.css";
+// import book_logo from "../images/vector_booklogo.svg";
+// import fullname_logo from "../images/fullname_logo.svg";
+// import message_logo from "../images/message_logo.svg";
+// import password_eye from "../images/password_eye.svg";
+// import lock_logo from "../images/lock_logo.svg";
+// import leftArrow from "../images/left_arrow.png";
+// import rightArrow from "../images/right_arrow.png";
+// import { sendOTP, validateOTP } from "../services/AllServices";
 
-// const AccountSection = () => {
-//   const [profile, setProfile] = useState({
-//     firstname: "",
-//     lastname: "",
-//     email: "",
-//     phone: "",
-//     address: "",
-//     city: "",
-//     country: "",
-//     state: "",
-//   });
+// // const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
+// //   <div className="inputfield-wrapper">
+// //     <div className="inputfield-container">
+// //       <div className="inputfield-content">
+// //         <img loading="lazy" src={icon} alt="" className="inputfield-icon" />
+// //         <input
+// //           type={type}
+// //           id={id}
+// //           placeholder={placeholder}
+// //           className="inputfield-inside"
+// //           value={value}
+// //           onChange={onChange}
+// //           required
+// //           aria-label={placeholder}
+// //         />
+// //       </div>
+// //     </div>
+// //   </div>
+// // );
+// const InputField = ({
+//   icon,
+//   placeholder,
+//   type,
+//   id,
+//   value,
+//   onChange,
+//   error,
+// }) => (
+//   <div className="inputfield-wrapper">
+//     <div className="inputfield-container">
+//       <div className="inputfield-content">
+//         <img loading="lazy" src={icon} alt="" className="inputfield-icon" />
+//         <input
+//           type={type}
+//           id={id}
+//           placeholder={error || placeholder} // Show error or placeholder dynamically
+//           className={`inputfield-inside ${error ? "error-border" : ""}`}
+//           value={value}
+//           onChange={onChange}
+//           style={{
+//             "--placeholder-color": error ? "red" : "#999", // Placeholder color
+//           }}
+//           required
+//           aria-label={placeholder}
+//         />
+//       </div>
+//     </div>
+//   </div>
+// );
 
-//   const [isEditable, setIsEditable] = useState(false);
-//   const [countries, setCountries] = useState([]); // List of countries
-//   const [states, setStates] = useState([]); // List of states for selected country
+// const SignUp = () => {
+//   const [isChecked, setIsChecked] = useState(false);
 
-//   // Fetch profile details on component mount
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         // Fetch user profile
-//         const response = await fetchProfile();
-//         const {
-//           firstname,
-//           lastname,
-//           email,
-//           phone,
-//           address,
-//           city,
-//           country,
-//           state,
-//         } = response.data;
-
-//         setProfile({
-//           firstname,
-//           lastname,
-//           email,
-//           phone,
-//           address,
-//           city,
-//           country,
-//           state,
-//         });
-
-//         // Fetch countries
-//         const countriesResponse = await getCountries();
-//         setCountries(countriesResponse.data);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   // Fetch states when country changes
-//   useEffect(() => {
-//     if (profile.country) {
-//       const fetchStates = async () => {
-//         try {
-//           const statesResponse = await getStates(profile.country);
-//           setStates(statesResponse.data);
-//         } catch (error) {
-//           console.error("Error fetching states:", error);
-//         }
-//       };
-
-//       fetchStates();
-//     }
-//   }, [profile.country]);
-
-//   const handleInputChange = (field, value) => {
-//     setProfile((prev) => ({
-//       ...prev,
-//       [field]: value,
-//     }));
+//   // Function to handle checkbox change
+//   const handleCheckboxChange = (e) => {
+//     setIsChecked(e.target.checked);
 //   };
 
-//   const handleUpdateClick = async () => {
-//     // if (isEditable) {
-//     //   console.log("Updated profile:", profile); // Send to API if necessary
-//     // }
-//     // setIsEditable(!isEditable);
-//     if (isEditable) {
-//       try {
-//         // Call the updateProfile API
-//         const response = await updateProfile(profile);
-//         console.log("Profile updated successfully:", response);
+//   const [formData, setFormData] = useState({
+//     firstName: "",
+//     email: "",
+//     password: "",
+//     genre: [],
+//   });
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [isPopupOpen, setIsPopupOpen] = useState(false);
+//   const [enteredOTP, setOtp] = useState("");
+//   const [emailError, setEmailError] = useState("");
+//   const [errorMessage, setErrorMessage] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [loadingResendOTP, setLoadingResendOTP] = useState(false); // Loading state for Resend OTP
+//   const [loadingVerifyOTP, setLoadingVerifyOTP] = useState(false);
 
-//         // Optional: Provide user feedback for successful update
-//         alert("Profile updated successfully!");
-//       } catch (error) {
-//         console.error("Error updating profile:", error);
+//   const navigate = useNavigate();
 
-//         // Optional: Provide user feedback for failed update
-//         alert("Failed to update profile. Please try again.");
+//   const togglePasswordVisibility = () => {
+//     setShowPassword(!showPassword);
+//   };
+
+//   const handleInputChange = (e) => {
+//     const { id, value } = e.target;
+//     setFormData({ ...formData, [id]: value });
+//   };
+
+//   const handleOtpChange = (e) => {
+//     setOtp(e.target.value);
+//   };
+
+//   // const handleResendOtp = () => {
+//   //   setLoading(true); // Optional: show loading state if needed
+//   //   // Add your resend OTP logic here (e.g., API call)
+//   //   setTimeout(() => {
+//   //     setLoading(false);
+//   //   }, 2000); // Simulate an API call
+//   // };
+
+//   const validateFields = () => {
+//     const errors = {};
+//     if (!formData.firstName) errors.firstName = "Field required";
+//     if (!formData.email) errors.email = "Field required";
+//     if (!formData.password) errors.password = "Field required";
+//     if (!isChecked) errors.terms = "You must agree to the terms";
+
+//     setFormErrors(errors);
+//     return Object.keys(errors).length === 0; // Return true if no errors
+//   };
+
+//   const [formErrors, setFormErrors] = useState({}); // State to store errors
+
+//   const handleSignUpClick = async () => {
+//     setFormErrors({}); // Reset errors
+//     if (!validateFields()) return; // Stop submission if validation fails
+
+//     setLoading(true);
+//     setLoadingResendOTP(true);
+//     setEmailError("");
+//     try {
+//       const response = await sendOTP(formData);
+//       if (
+//         response.detail ===
+//         "Email already registered. Please use a different email address."
+//       ) {
+//         setEmailError(response.detail);
+//       } else if (response.status === "success") {
+//         setIsPopupOpen(true);
+//         setErrorMessage("");
+//       } else {
+//         setErrorMessage(response.message || "Failed to send OTP.");
 //       }
+//     } catch (error) {
+//       if (
+//         error.response?.data?.detail ===
+//         "Email already registered. Please use a different email address."
+//       ) {
+//         setEmailError(
+//           "Email already registered. Please use a different email address or log in."
+//         );
+//       } else {
+//         setErrorMessage("An error occurred while sending the OTP.");
+//       }
+//       console.error(error);
+//     } finally {
+//       setLoading(false);
+//       setLoadingResendOTP(false);
 //     }
-//     setIsEditable(!isEditable);
+//   };
+
+//   // const handleSignUpClick = async () => {
+//   //   setLoading(true);
+//   //   setEmailError("");
+//   //   try {
+//   //     const response = await sendOTP(formData);
+//   //     if (
+//   //       response.detail ===
+//   //       "Email already registered. Please use a different email address."
+//   //     ) {
+//   //       setEmailError(response.detail);
+//   //     } else if (response.status === "success") {
+//   //       setIsPopupOpen(true);
+//   //       setErrorMessage("");
+//   //     } else {
+//   //       setErrorMessage(response.message || "Failed to send OTP.");
+//   //     }
+//   //   } catch (error) {
+//   //     if (
+//   //       error.response?.data?.detail ===
+//   //       "Email already registered. Please use a different email address."
+//   //     ) {
+//   //       setEmailError(
+//   //         "Email already registered. Please use a different email address or log in."
+//   //       );
+//   //     } else {
+//   //       setErrorMessage("An error occurred while sending the OTP.");
+//   //     }
+//   //     console.error(error);
+//   //   } finally {
+//   //     setLoading(false);
+//   //   }
+//   // };
+
+//   const handleOtpSubmit = async () => {
+//     setLoadingVerifyOTP(true);
+//     try {
+//       const response = await validateOTP({
+//         email: formData.email,
+//         enteredOTP,
+//       });
+//       if (response.status === "success") {
+//         navigate("/genre", { state: { formData } });
+//       } else {
+//         setErrorMessage(response.message || "Invalid OTP. Please try again.");
+//       }
+//     } catch (error) {
+//       setErrorMessage("An error occurred during OTP validation.");
+//       console.error(error);
+//     } finally {
+//       setLoadingVerifyOTP(false);
+//     }
 //   };
 
 //   return (
-//     <div className="settings-accountSection">
-//       <div className="settings-formSection">
-//         <form className="settings-inputFields">
-//           <InputField
-//             label="First Name"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.firstname}
-//             editable={isEditable}
-//             placeholder="Update First Name"
-//             onChange={(e) => handleInputChange("firstname", e.target.value)}
+//     <div className="signup-page">
+//       <header className="header">
+//         <div className="header-left-section">
+//           <img src={book_logo} alt="book logo" className="book-logo-icon" />
+//           <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
+//           <img
+//             src={rightArrow}
+//             alt="Right Arrow"
+//             className="right-arrow-icon"
 //           />
-//           <InputField
-//             label="Last Name"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.lastname}
-//             editable={isEditable}
-//             placeholder="Update Last Name"
-//             onChange={(e) => handleInputChange("lastname", e.target.value)}
-//           />
-//           <InputField
-//             label="Email"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/e29ef37c58780e5cd8ee2986297041a310e893fe82c262a872c641b0392efceb?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.email}
-//             editable={isEditable}
-//             placeholder="Update Email"
-//             onChange={(e) => handleInputChange("email", e.target.value)}
-//             type="email"
-//           />
-//           <PhoneInput
-//             value={profile.phone}
-//             editable={isEditable}
-//             placeholder="Update Phone Number"
-//             onChange={(e) => handleInputChange("phone", e.target.value)}
-//           />
-//           <InputField
-//             label="Address"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/b091961851e79cde67f245be388279a07ffb670efa44b1323cca629ecbc0e41c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.address}
-//             editable={isEditable}
-//             placeholder="Update Address"
-//             onChange={(e) => handleInputChange("address", e.target.value)}
-//           />
-//           <CityField
-//             label="City"
-//             value={profile.city}
-//             editable={isEditable}
-//             placeholder="Update City"
-//             onChange={(e) => handleInputChange("city", e.target.value)}
-//           />
-//           <section className="settings-city-selectorContainer">
-//             <SelectField
-//               label="Country"
-//               value={profile.country}
-//               editable={isEditable}
-//               placeholder="Update Country"
-//               iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/92f4cbd241b1e3b6a60b7cf89795a6d16f5b548ceabce6d988518cc7a7eefb3c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//               options={countries}
-//               onChange={(selectedCountry) => {
-//                 handleInputChange("country", selectedCountry);
-//                 handleInputChange("state", ""); // Reset state when country changes
-//               }}
+//         </div>
+//       </header>
+//       <div className="signup-container">
+//         <div className="signup-form">
+//           <div className="booklogo-heading">
+//             <img
+//               className="booklogo-img"
+//               alt="site logo of book"
+//               src={book_logo}
 //             />
-//             <SelectField
-//               label="State"
-//               value={profile.state}
-//               placeholder="Update State"
-//               editable={isEditable}
-//               iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/16af09298139f26b39c29e840d7dec61a10fcc30926ce43a906849901322e2b5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//               options={states}
-//               onChange={(selectedState) =>
-//                 handleInputChange("state", selectedState)
-//               }
-//             />
-//           </section>
-//           <button
-//             type="button"
-//             className="settings-update-button"
-//             onClick={handleUpdateClick}
-//           >
-//             {isEditable ? "Save" : "Update"}
-//           </button>
-//         </form>
+//             <div className="booklogo-heading-text">
+//               <div className="heading-text-wrapper">Let's get Started</div>
+//             </div>
+//           </div>
+
+//           <form className="signup-form">
+//             <div className="signup-form-group">
+//               <div className="signup-input-fields">
+//                 <InputField
+//                   icon={fullname_logo}
+//                   placeholder="Your Full Name"
+//                   type="text"
+//                   id="firstName"
+//                   value={formData.firstName}
+//                   onChange={handleInputChange}
+//                   error={formErrors.firstName}
+//                   required // Pass error for validation
+//                 />
+//                 <InputField
+//                   icon={message_logo}
+//                   placeholder="Your Email Address"
+//                   type="email"
+//                   id="email"
+//                   value={formData.email}
+//                   onChange={handleInputChange}
+//                   error={formErrors.email}
+//                   required // Pass error for validation
+//                 />
+//                 <div className="passwordInputWrapper">
+//                   <div className="passwordInputContainer">
+//                     <div className="passwordInputContent">
+//                       <img
+//                         loading="lazy"
+//                         src={lock_logo}
+//                         alt=""
+//                         className="passwordIcon"
+//                       />
+//                       <input
+//                         type={showPassword ? "text" : "password"}
+//                         id="password"
+//                         placeholder={
+//                           formErrors.password || "Create a Strong Password"
+//                         } // Dynamic placeholder
+//                         className={`passwordField ${
+//                           formErrors.password ? "error-border" : ""
+//                         }`}
+//                         value={formData.password}
+//                         onChange={handleInputChange}
+//                       />
+//                       <img
+//                         loading="lazy"
+//                         src={password_eye}
+//                         alt={showPassword ? "Hide password" : "Show password"}
+//                         className="visibilityIcon"
+//                         onClick={togglePasswordVisibility}
+//                         tabIndex="0"
+//                         role="button"
+//                       />
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {emailError && (
+//               <p className="signup-error-email" style={{ color: "red" }}>
+//                 {emailError}
+//               </p>
+//             )}
+//             <div className="Agree_tc">
+//               <input
+//                 type="checkbox"
+//                 id="agree_tc"
+//                 style={{
+//                   marginTop: "0vw",
+//                   cursor: "pointer",
+//                 }}
+//                 checked={isChecked}
+//                 onChange={handleCheckboxChange}
+//               />
+//               <label
+//                 htmlFor="agree_tc"
+//                 style={{ color: "black", marginLeft: "0.5vw" }}
+//               >
+//                 I agree to the terms and conditions
+//               </label>
+//             </div>
+//             {formErrors.terms && ( // Display the error message if terms validation fails
+//               <p className="signup-error-terms" style={{ color: "red" }}>
+//                 {formErrors.terms}
+//               </p>
+//             )}
+//             <div className="signup-loginLink">
+//               <p>
+//                 Already have an account?{" "}
+//                 <a href="/signin" style={{ color: "#a63e71" }}>
+//                   Login
+//                 </a>
+//               </p>
+//             </div>
+//           </form>
+//         </div>
+
+//         <button
+//           type="button"
+//           onClick={handleSignUpClick}
+//           className="signUpButton"
+//           disabled={loading}
+//         >
+//           {loading ? "Sending..." : "Sign up"}
+//         </button>
 //       </div>
-//       <div className="settings-imageSection">
-//         <img src={account_pfp} alt="Profile" />
-//       </div>
+
+//       {/* {isPopupOpen && (
+//         <>
+//           <div className="popup-overlay"></div>
+//           <div className="otp-popup">
+//             <div className="otp-popup-content">
+//               <button
+//                 className="close-popup-button"
+//                 onClick={() => setIsPopupOpen(false)}
+//                 aria-label="Close Popup"
+//               >
+//                 &times;
+//               </button>
+//               <h2>Email Verification</h2>
+//               <p>
+//                 An email has been sent to <strong>{formData.email}</strong>.
+//                 Please enter the OTP below to verify your account.
+//               </p>
+//               <input
+//                 type="text"
+//                 placeholder="Enter OTP"
+//                 className="otp-input"
+//                 value={enteredOTP}
+//                 onChange={handleOtpChange}
+//               />
+//               {errorMessage && <p className="error-message">{errorMessage}</p>}
+//               <button
+//                 onClick={handleOtpSubmit}
+//                 className="otp-submit-button"
+//                 disabled={loading}
+//               >
+//                 {loading ? "Verifying..." : "Verify OTP"}
+//               </button>
+//             </div>
+//           </div>
+//         </>
+//       )} */}
+
+//       {isPopupOpen && (
+//         <>
+//           <div className="popup-overlay"></div>
+//           <div className="otp-popup">
+//             <div className="otp-popup-content">
+//               <button
+//                 className="close-popup-button"
+//                 onClick={() => setIsPopupOpen(false)}
+//                 aria-label="Close Popup"
+//               >
+//                 &times;
+//               </button>
+//               <h2>Email Verification</h2>
+//               <p>
+//                 An email has been sent to <strong>{formData.email}</strong>.
+//                 Please enter the OTP below to verify your account.
+//               </p>
+//               <input
+//                 type="text"
+//                 placeholder="Enter OTP"
+//                 className="otp-input"
+//                 value={enteredOTP}
+//                 onChange={handleOtpChange}
+//               />
+//               {errorMessage && <p className="error-message">{errorMessage}</p>}
+//               <div className="otp-buttons">
+//                 <button
+//                   onClick={handleSignUpClick}
+//                   className="otp-submit-button"
+//                   disabled={loadingResendOTP}
+//                 >
+//                   {loadingResendOTP ? "Resending..." : "Resend OTP"}
+//                 </button>
+//                 <button
+//                   onClick={handleOtpSubmit}
+//                   className="otp-submit-button"
+//                   disabled={loadingVerifyOTP}
+//                 >
+//                   {loadingVerifyOTP ? "Verifying..." : "Verify OTP"}
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         </>
+//       )}
 //     </div>
 //   );
 // };
 
-// export default AccountSection;
+// export default SignUp;
 
-// import React, { useState, useEffect } from "react";
-// import "../styles/AccountSection.css";
-// import {
-//   InputField,
-//   PhoneInput,
-//   CityField,
-//   SelectField,
-// } from "./AccountComponents.js";
-// import account_pfp from "../images/account_pfp.png";
-// import {
-//   fetchProfile,
-//   getCountries,
-//   getStates,
-//   updateProfile,
-// } from "../services/AllServices";
+import React, { useState } from "react";
+import "../styles/SignIn.css";
+import book_logo from "../images/vector_booklogo.svg";
+import fullname_logo from "../images/fullname_logo.svg";
+import password_eye from "../images/password_eye.svg";
+import lock_logo from "../images/lock_logo.svg";
+import { loginUser } from "../services/AllServices";
+import leftArrow from "../images/left_arrow.png";
+import rightArrow from "../images/right_arrow.png";
 
-// const AccountSection = () => {
-//   const [profile, setProfile] = useState({
-//     firstname: "",
-//     lastName: "",
-//     email: "",
-//     mobileNumber: "",
-//     address: "",
-//     city: "",
-//     country: "",
-//     state: "",
-//   });
+const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
+  <div className="inputfield-wrapper">
+    <div className="inputfield-container">
+      <div className="inputfield-content">
+        <img loading="lazy" src={icon} alt="" className="inputfield-icon" />
+        <input
+          type={type}
+          id={id}
+          placeholder={placeholder}
+          className="inputfield-inside"
+          value={value}
+          onChange={onChange}
+          required
+          aria-label={placeholder}
+        />
+      </div>
+    </div>
+  </div>
+);
 
-//   const [isEditable, setIsEditable] = useState(false);
-//   const [countries, setCountries] = useState([]); // List of countries
-//   const [states, setStates] = useState([]); // List of states for selected country
+const SignIn = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-//   // Fetch profile details on component mount
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         // Fetch user profile
-//         const response = await fetchProfile();
-//         const {
-//           firstname,
-//           lastName,
-//           email,
-//           mobileNumber,
-//           address,
-//           city,
-//           country,
-//           state,
-//         } = response.data;
+  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loading
 
-//         setProfile({
-//           firstname,
-//           lastName,
-//           email,
-//           mobileNumber,
-//           address,
-//           city,
-//           country,
-//           state,
-//         });
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
-//         console.log("fetching profile data:", profile);
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
 
-//         // Fetch countries
-//         const countriesResponse = await getCountries();
-//         setCountries(countriesResponse.data);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       }
-//     };
+  const handleNext = async () => {
+    setIsLoading(true); // Start loading
+    setErrorMessage(""); // Clear previous errors
 
-//     fetchData();
-//   }, []);
+    const loginData = {
+      email: formData.email,
+      password: formData.password,
+    };
 
-//   // Fetch states when country changes
-//   useEffect(() => {
-//     if (profile.country) {
-//       const fetchStates = async () => {
-//         try {
-//           const statesResponse = await getStates(profile.country);
-//           setStates(statesResponse.data);
-//         } catch (error) {
-//           console.error("Error fetching states:", error);
-//         }
-//       };
+    try {
+      const response = await loginUser(loginData, (data) => {
+        console.log("Callback Data:", data);
+      });
+      if (response && response.status === "success") {
+        console.log("User Data:", response.data);
+        localStorage.setItem("access_token", response.data.access_token);
+        window.location.href = "/dashboard";
+      } else {
+        setErrorMessage(response.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage(
+        "An error occurred while logging in. Please try again later."
+      );
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
 
-//       fetchStates();
-//     }
-//   }, [profile.country]);
+  return (
+    <main className="signup-page">
+      <header className="header">
+        <div className="header-left-section">
+          <img src={book_logo} alt="book logo" className="book-logo-icon" />
+          <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
+          <img
+            src={rightArrow}
+            alt="Right Arrow"
+            className="right-arrow-icon"
+          />
+        </div>
+      </header>
+      <div className="signup-container">
+        <div className="signup-form">
+          <div className="booklogo-heading">
+            <img
+              className="booklogo-img"
+              alt="site logo of book"
+              src={book_logo}
+            />
+            <div className="booklogo-heading-text">
+              <div className="heading-text-wrapper">Login</div>
+            </div>
+          </div>
 
-//   const handleInputChange = (field, value) => {
-//     setProfile((prev) => ({
-//       ...prev,
-//       [field]: value,
-//     }));
-//   };
+          <form className="signup-form">
+            <div className="signup-form-group">
+              <div className="signup-input-fields">
+                <InputField
+                  icon={fullname_logo}
+                  placeholder="Enter Your Email"
+                  type="text"
+                  id="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
 
-//   const handleUpdateClick = async () => {
-//     if (isEditable) {
-//       try {
-//         // Call the updateProfile API
-//         const response = await updateProfile(profile);
-//         console.log("Profile updated successfully:", response);
+                <div className="passwordInputWrapper">
+                  <div className="passwordInputContainer">
+                    <div className="passwordInputContent">
+                      <img
+                        loading="lazy"
+                        src={lock_logo}
+                        alt=""
+                        className="passwordIcon"
+                      />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        placeholder="Enter Your Password"
+                        className="passwordField"
+                        aria-label="Enter Your Password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                      />
+                      <img
+                        loading="lazy"
+                        src={password_eye}
+                        alt={showPassword ? "Hide password" : "Show password"}
+                        className="visibilityIcon"
+                        onClick={togglePasswordVisibility}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            togglePasswordVisibility();
+                          }
+                        }}
+                        tabIndex="0"
+                        role="button"
+                        aria-pressed={showPassword}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          {errorMessage && (
+            <div className="signin-error-message">{errorMessage}</div>
+          )}
+          <div className="signin-loginLink">
+            <p>
+              Don't have an Account?{" "}
+              <a href="/signup" style={{ color: "#a63e71" }}>
+                Sign Up
+              </a>
+            </p>
+          </div>
+        </div>
+        <button
+          type="submit"
+          onClick={handleNext}
+          className="signin-signUpButton"
+          disabled={isLoading} // Disable button when loading
+        >
+          {isLoading ? "Logging in..." : "Login"} {/* Dynamic button text */}
+        </button>
+      </div>
+    </main>
+  );
+};
 
-//         // Optional: Provide user feedback for successful update
-//         alert("Profile updated successfully!");
-//       } catch (error) {
-//         console.error("Error updating profile:", error);
-
-//         // Optional: Provide user feedback for failed update
-//         alert("Failed to update profile. Please try again.");
-//       }
-//     }
-//     setIsEditable(!isEditable);
-//   };
-
-//   return (
-//     <div className="settings-accountSection">
-//       <div className="settings-formSection">
-//         <form className="settings-inputFields">
-//           <InputField
-//             label="First Name"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.firstname}
-//             editable={isEditable}
-//             placeholder="Update First Name"
-//             onChange={(e) => handleInputChange("firstname", e.target.value)}
-//           />
-//           <InputField
-//             label="Last Name"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.lastName}
-//             editable={isEditable}
-//             placeholder="Update Last Name"
-//             onChange={(e) => handleInputChange("lastname", e.target.value)}
-//           />
-//           <InputField
-//             label="Email"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/e29ef37c58780e5cd8ee2986297041a310e893fe82c262a872c641b0392efceb?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.email}
-//             editable={isEditable}
-//             placeholder="Update Email"
-//             onChange={(e) => handleInputChange("email", e.target.value)}
-//             type="email"
-//           />
-//           <PhoneInput
-//             value={profile.mobileNumber}
-//             editable={isEditable}
-//             placeholder="Update Phone Number"
-//             onChange={(e) => handleInputChange("phone", e.target.value)}
-//           />
-//           <InputField
-//             label="Address"
-//             icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/b091961851e79cde67f245be388279a07ffb670efa44b1323cca629ecbc0e41c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//             value={profile.address}
-//             editable={isEditable}
-//             placeholder="Update Address"
-//             onChange={(e) => handleInputChange("address", e.target.value)}
-//           />
-//           <CityField
-//             label="City"
-//             value={profile.city}
-//             editable={isEditable}
-//             placeholder="Update City"
-//             onChange={(e) => handleInputChange("city", e.target.value)}
-//           />
-//           <section className="settings-city-selectorContainer">
-//             <SelectField
-//               label="Country"
-//               value={profile.country}
-//               editable={isEditable}
-//               placeholder="Update Country"
-//               iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/92f4cbd241b1e3b6a60b7cf89795a6d16f5b548ceabce6d988518cc7a7eefb3c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//               options={countries}
-//               onChange={(selectedCountry) => {
-//                 handleInputChange("country", selectedCountry);
-//                 handleInputChange("state", ""); // Reset state when country changes
-//               }}
-//             />
-//             <SelectField
-//               label="State"
-//               value={profile.state}
-//               placeholder="Update State"
-//               editable={isEditable}
-//               iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/16af09298139f26b39c29e840d7dec61a10fcc30926ce43a906849901322e2b5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-//               options={states}
-//               onChange={(selectedState) =>
-//                 handleInputChange("state", selectedState)
-//               }
-//             />
-//           </section>
-//           <button
-//             type="button"
-//             className="settings-update-button"
-//             onClick={handleUpdateClick}
-//           >
-//             {isEditable ? "Save" : "Update"}
-//           </button>
-//         </form>
-//       </div>
-//       <div className="settings-imageSection">
-//         <img src={account_pfp} alt="Profile" />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AccountSection;
+export default SignIn;
