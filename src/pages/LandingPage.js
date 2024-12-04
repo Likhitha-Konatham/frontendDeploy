@@ -109,6 +109,8 @@ const LandingPage = () => {
                     genre_carousel_images={genreBooks[genre]?.map((book) => ({
                       image: book.thumbnail,
                       id: book._id,
+                      title:book.title,
+                      author_list:book.author_list
                     }))}
                   />
                 </div>
