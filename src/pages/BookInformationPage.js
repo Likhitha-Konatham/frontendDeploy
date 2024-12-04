@@ -6,14 +6,15 @@ import Header from "../components/Header.js";
 import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import playIcon from '../images/playIcon.png';
+import tickReadLaterIcon from '../images/tick_readlater.png';
 import readlaterIcon from '../images/readlater_icon.png';
-import { insertReadLater } from "../services/AllServices.js";
-
+import { insertReadLater, deleteReadLater } from "../services/AllServices.js"; // Import delete API
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const { bookId } = useParams(); // Get bookId from URL
+  const [isBookmarked, setIsBookmarked] = useState(false); // State to track bookmark status
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -46,18 +47,6 @@ const BookInfo = () => {
     });
   };
 
-  const handleReadLater = async (bookID) => {
-    try {
-      const formData = { bookID: bookID };
-      await insertReadLater(formData);
-      alert("Book added to Read Later successfully!");
-    } catch (error) {
-      console.error("Error adding book to Read Later:", error);
-    }
-  };
-
-  const currentBook = books[currentIndex] || {}; 
-
   const handleProfileClick = () => {
     navigate("/settings", { state: { selectedSection: "account" } });
   };
@@ -66,6 +55,24 @@ const BookInfo = () => {
   const resetSearch = () => {
     setSearchQuery("");
   };
+
+  const toggleBookmark = async (bookID) => {
+    try {
+      if (isBookmarked) {
+        await deleteReadLater({ bookID }); 
+      } else {
+        await insertReadLater({ bookID }); 
+      }
+  
+      // Toggle the state and refresh the book's bookmark status
+      setIsBookmarked(!isBookmarked);
+    } catch (error) {
+      console.error("Error toggling bookmark status:", error);
+    }
+  };
+  
+
+  const currentBook = books[currentIndex] || {}; 
 
   const handleActiveItemChange = (item) => {
     setActiveItem(item);
@@ -133,8 +140,14 @@ const BookInfo = () => {
                 </div>
                 <div className="bookinfo_author_save">
                   <div className="bookinfo_author">{currentBook.author_list?.join(", ")}</div>
-                  <div className="bookinfo_save" onClick={() => handleReadLater(currentBook._id)}>
-                    <img src={readlaterIcon} alt="save icon" />
+                  <div
+                      className="bookinfo_save"
+                      onClick={() => toggleBookmark(currentBook._id)}
+                    >
+                     <img
+                        src={isBookmarked ? tickReadLaterIcon : readlaterIcon}
+                        alt="bookmark icon"
+                      />
                   </div>
                 </div>
                 <p className="bookinfo_description">{currentBook.description}</p>

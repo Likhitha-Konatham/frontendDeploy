@@ -115,6 +115,18 @@ export const fetchUserBookmarks = async () => {
   }
 };
 
+export const deleteBookMarks = async (formData, callback) => {
+  const urlEndPoint = `DeleteBookMarks`;
+  const payload = { bookMarkID: formData.bookmarkId };
+
+  try {
+    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "deleteBookMarks");
+  }
+};
+
 export const insertReadLater = async (formData, callback) => {
   const urlEndPoint = `insertReadlater`;
   const payload = { bookID: formData.bookID };
@@ -123,6 +135,18 @@ export const insertReadLater = async (formData, callback) => {
     await requestPostApiCall(urlEndPoint, payload, callback);
   } catch (error) {
     handleError(error, "insertReadLater");
+  }
+};
+
+export const deleteReadLater = async (formData, callback) => {
+  const urlEndPoint = `deleteReadlater`;
+  const payload = { bookID: formData.bookID };
+
+  try {
+    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "deleteReadLater");
   }
 };
 

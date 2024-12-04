@@ -7,15 +7,17 @@ import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import playIcon from '../images/playIcon.png';
 import readlaterIcon from '../images/readlater_icon.png';
-import { insertReadLater } from "../services/AllServices.js";
-import loadingSpinner from "../images/loadingSpinner.gif"
+import tickReadLaterIcon from '../images/tick_readlater.png'; // New tick icon
+import loadingSpinner from "../images/loadingSpinner.gif";
+import { insertReadLater, deleteReadLater } from "../services/AllServices.js"; // Import delete API
 
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const [sortedBooks, setSortedBooks] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isBookmarked, setIsBookmarked] = useState(false); // State to track bookmark status
   const { bookId, genre } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +30,10 @@ const BookInfo = () => {
         setSortedBooks(booksInGenre);
         const selectedIndex = booksInGenre.findIndex((book) => book._id === bookId);
         setCurrentIndex(selectedIndex !== -1 ? selectedIndex : 0);
+
+        // Check if the current book is already bookmarked
+        const currentBook = booksInGenre[selectedIndex];
+        setIsBookmarked(currentBook?.isBookmarked || false); // Assume `isBookmarked` is part of the book data
       }
     } catch (error) {
       console.error("Error fetching book data:", error);
@@ -41,6 +47,7 @@ const BookInfo = () => {
       const nextIndex = (prevIndex + 1) % sortedBooks.length;
       const nextBook = sortedBooks[nextIndex];
       navigate(`/book-info/${genre}/${nextBook._id}`, { state: location.state });
+      setIsBookmarked(nextBook?.isBookmarked || false); // Update bookmark status for the new book
       return nextIndex;
     });
   };
@@ -50,19 +57,26 @@ const BookInfo = () => {
       const prevIndexCalc = (prevIndex - 1 + sortedBooks.length) % sortedBooks.length;
       const prevBook = sortedBooks[prevIndexCalc];
       navigate(`/book-info/${genre}/${prevBook._id}`, { state: location.state });
+      setIsBookmarked(prevBook?.isBookmarked || false); // Update bookmark status for the new book
       return prevIndexCalc;
     });
   };
 
-  const handleReadLater = async (bookID) => {
+  const toggleBookmark = async (bookID) => {
     try {
-      const formData = { bookID: bookID };
-      await insertReadLater(formData);
-      alert("Book added to Read Later successfully!");
+      if (isBookmarked) {
+        await deleteReadLater({ bookID }); 
+      } else {
+        await insertReadLater({ bookID }); 
+      }
+  
+      // Toggle the state and refresh the book's bookmark status
+      setIsBookmarked(!isBookmarked);
     } catch (error) {
-      console.error("Error adding book to Read Later:", error);
+      console.error("Error toggling bookmark status:", error);
     }
   };
+  
 
   const currentBook = sortedBooks[currentIndex] || {};
 
@@ -70,8 +84,6 @@ const BookInfo = () => {
     navigate("/settings", { state: { selectedSection: "account" } });
   };
 
-
-  
   const resetSearch = () => {
     setSearchQuery("");
   };
@@ -115,22 +127,22 @@ const BookInfo = () => {
       </div>
 
       <div className="bookInfo_container">
-         <Header
-            showSearch={showSearch}
-            showUserProfile={showUserProfile}
-            showArrows={showArrows}
-            pageName={pageName}
-            searchQuery={searchQuery}
-            onSearch={(query) => setSearchQuery(query)}
-            onProfileClick={handleProfileClick} 
-          />
+        <Header
+          showSearch={showSearch}
+          showUserProfile={showUserProfile}
+          showArrows={showArrows}
+          pageName={pageName}
+          searchQuery={searchQuery}
+          onSearch={(query) => setSearchQuery(query)}
+          onProfileClick={handleProfileClick}
+        />
 
         <div className="bookInfo_body">
-          {loading ? ( // Render loading spinner while loading
-              <div className="loading-spinner">
-                <img src={loadingSpinner} alt="Loading..." />
+          {loading ? (
+            <div className="loading-spinner">
+              <img src={loadingSpinner} alt="Loading..." />
             </div>
-            ) : (
+          ) : (
             <div className="carousel-container">
               <div className="carousel-arrow" onClick={handlePrev}>
                 <img src={bigLeftArrow} alt="left arrow" />
@@ -147,8 +159,14 @@ const BookInfo = () => {
                   </div>
                   <div className="bookinfo_author_save">
                     <div className="bookinfo_author">{currentBook.author_list?.join(", ")}</div>
-                    <div className="bookinfo_save" onClick={() => handleReadLater(currentBook._id)}>
-                      <img src={readlaterIcon} alt="save icon" />
+                    <div
+                      className="bookinfo_save"
+                      onClick={() => toggleBookmark(currentBook._id)}
+                    >
+                      <img
+                        src={isBookmarked ? tickReadLaterIcon : readlaterIcon}
+                        alt="bookmark icon"
+                      />
                     </div>
                   </div>
                   <p className="bookinfo_description">{currentBook.description}</p>
