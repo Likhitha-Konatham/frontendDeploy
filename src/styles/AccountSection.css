@@ -38,7 +38,7 @@
     display: flex;
     width: 100%;
     flex-direction: column;
-    color: var(--Black-4, #5e6366);
+    color: black;
     margin-top: 1.13vw;
   }
   
@@ -161,6 +161,7 @@
     border: 0;
   }
   
+  
   .settings-city-selectorContainer {
     display: flex;
     margin-top: 0.83vw;
@@ -211,6 +212,21 @@
     flex-direction: column;
     font-size: 1.13vw;
     justify-content: center; 
+
+    
+    /* Ensure text aligns in the center */
+  }
+  .settings-phone-selectField {
+    border-radius: var(--Radius-200, 0.42vw);
+    background: var(--Input-defaultBackground, rgba(239, 241, 249, 0.6));
+    display: flex;
+    /* margin-top: 0.42vw; */
+    height: 2.26vw;
+    width: 100%;
+    padding: var(--Space-200, 0.42vw) 0.83vw;
+    flex-direction: column;
+    font-size: 1.13vw;
+    justify-content: center; 
     /* Ensure text aligns in the center */
   }
   
@@ -222,6 +238,8 @@
     height: 100%;
     align-items: center; /* Center vertically */
     justify-content: center; /* Center horizontally */
+    
+    
   /* Ensure text aligns in the center */
   }
   
@@ -244,20 +262,27 @@
     width: 1.25vw;
     margin: auto 0;
   }
+  .settings-button-group{
+    display: flex;
+    flex-direction: row;
+    gap: 3.7vw;
+  }
   
+
   .settings-update-button {
     align-self: self-start;
-    margin-top: 2.53vw;
+    margin-top: 1.83vw;
+    /* margin-right: 1vw; */
     flex: 1;
     border-radius: 0.94vw;
     background-color: #a63e71;
-    min-width: 5.21vw;
+    min-width: 10.21vw;
     gap: 0.78vw;
     color: #fff;
     text-align: center;
-    height: 5vw;
-    min-height: 3.5vw;
-    width: 10.58vw;
+    height: 4vw;
+    /* min-height: 0.5vw; */
+    /* width: 15.58vw; */
     padding: 0.52vw 1.2vw;
     font: 400 1.25vw Inter, sans-serif;
     border: none;
@@ -277,7 +302,28 @@
     width: 30%; /* Ensure the dropdown width matches the select field */
     box-shadow: 0vw 0.21vw 0.31vw rgba(0, 0, 0, 0.1); /* Converted shadow to vw */
   }
+    
   
+  .settings-phone-dropdown {
+    position: absolute;
+    font-size: larger;
+    background-color: white;
+    border: 0.12vw solid #ccc; 
+    /* Converted 1px to vw */
+    border-radius: 0.81vw; /* Converted 4px to vw */
+    margin-top: 0.26vw; /* Converted 5px to vw */
+    z-index: 1000;
+    max-height: 13.02vw; /* Converted 200px to vw */
+    overflow-y: auto; /* Enable scrolling for dropdown content */
+    width: 30%; /* Ensure the dropdown width matches the select field */
+    box-shadow: 0vw 0.21vw 0.31vw rgba(0, 0, 0, 0.1); /* Converted shadow to vw */
+  }
+  .settings-phone-dropdownOption {
+font-size: 14.932px;
+    padding: 0.52vw; /* Converted 10px to vw */
+    cursor: pointer;
+    border-bottom: 0.26vw solid #eee; /* Converted 1px to vw */
+  }
   .settings-city-dropdownOption {
     padding: 0.52vw; /* Converted 10px to vw */
     cursor: pointer;
@@ -306,8 +352,3 @@
     background-color: #aaa;
   }
   
-  
-  
-
-  
- 

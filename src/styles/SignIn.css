@@ -299,6 +299,12 @@ html, body {
     }
 }
 
+.forgot-password-div {
+    color: black;
+    text-align: center;
+    font-size: 0.9815vw;
+}
+
 .visually-hidden {
     position: absolute;
     width: 0.052vw;
@@ -313,9 +319,9 @@ html, body {
 
 .signin-error-message {
     color: #ff0000;
-    font-size: 1.04vw;
+    font-size: 0.84vw;
     margin-top: 1.08vw;
-    margin-bottom: 1.08vw;
+    /* margin-bottom: 1.08vw; */
     text-align: center;
     width: 100%;
     text-transform: uppercase;

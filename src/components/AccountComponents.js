@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-import flag_icon from "../images/flag_icon.png";
+import React, { useState, useEffect } from "react";
+// import flag_icon from "../images/flag_icon.png";
+import { getCountryCodes } from "../services/AllServices";
 
+import down_arrow_settings from "../images/down_arrow_settings.svg";
+// import { selectClasses } from "@mui/material";
 export const InputField = ({
   label,
   icon,
@@ -111,36 +114,92 @@ export const SelectField = ({
   );
 };
 
-export const PhoneInput = ({ value, editable, onChange, placeholder }) => (
-  <div className="settings-inputWrapper">
-    <label className="settings-label">Phone Number</label>
-    <div className="settings-phoneWrapper">
-      <div className="settings-countryCode">
-        <div className="settings-countryCodeInner">
-          <img
-            src={flag_icon}
-            alt="Country flag"
-            className="settings-flagIcon"
-          />
-          <span>+91</span>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/4e35eefc48b69f12c98b328a70fc7e40726666f8b9c17bae0bf8fb511fff7d08?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
-            alt=""
-            className="settings-arrowIcon"
+export const PhoneInput = ({
+  value,
+  editable,
+  onChange,
+  placeholder,
+  onCountryCodeChange,
+}) => {
+  const [countryCodes, setCountryCodes] = useState([]);
+  const [selectedCountryCode, setSelectedCountryCode] = useState("+91"); // Default country code
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const loadCountryCodes = async () => {
+      try {
+        const response = await getCountryCodes();
+        if (response) {
+          setCountryCodes(response);
+        }
+      } catch (error) {
+        console.error("Error fetching country codes:", error);
+      }
+    };
+
+    loadCountryCodes();
+  }, []);
+
+  const handleCountryCodeChange = (code) => {
+    setSelectedCountryCode(code);
+    if (onCountryCodeChange) {
+      onCountryCodeChange(code);
+    }
+    setShowDropdown(false);
+  };
+
+  return (
+    <div className="settings-inputWrapper">
+      <label className="settings-label">Phone Number</label>
+      <div className="settings-phoneWrapper">
+        <div
+          className="settings-phone-selectField"
+          onClick={() => setShowDropdown(!showDropdown)}
+        >
+          <div className="settings-city-selectContent">
+            {/* <span>{selectedCountryCode}</span> */}
+            <div
+              className="settings-city-selectValue"
+              style={{
+                color: (value = "#000"),
+                opacity: (value = 2),
+              }}
+            >
+              {selectedCountryCode}
+            </div>
+            <img
+              src={down_arrow_settings}
+              alt=""
+              className="settings-city-selectIcon"
+            />
+          </div>
+        </div>
+        {editable && showDropdown && (
+          <div className="settings-phone-dropdown">
+            {countryCodes.map((code, index) => (
+              <div
+                key={index}
+                className="settings-phone-dropdownOption"
+                onClick={() => handleCountryCodeChange(code)}
+              >
+                <span>{code}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="settings-phoneInput">
+          <input
+            type="tel"
+            value={value}
+            className="settings-inputText"
+            aria-label="Phone number"
+            disabled={!editable}
+            onChange={onChange}
+            placeholder={placeholder}
           />
         </div>
       </div>
-      <div className="settings-phoneInput">
-        <input
-          type="tel"
-          value={value}
-          className="settings-inputText"
-          aria-label="Phone number"
-          disabled={!editable}
-          onChange={onChange}
-          placeholder={placeholder}
-        />
-      </div>
     </div>
-  </div>
-);
+  );
+};

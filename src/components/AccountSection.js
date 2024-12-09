@@ -11,8 +11,13 @@ import {
   fetchProfile,
   getCountries,
   getStates,
-  updateProfile, // Ensure the updateProfile function is imported
+  updateProfile,
+  getCountryCodes,
 } from "../services/AllServices";
+import fullname_logo from "../images/fullname_logo.svg";
+import message_logo from "../images/message_logo.svg";
+import down_arrow_settings from "../images/down_arrow_settings.svg";
+import location_logo from "../images/location_logo.svg";
 
 const AccountSection = () => {
   const [profile, setProfile] = useState({
@@ -26,15 +31,15 @@ const AccountSection = () => {
     state: "",
   });
 
-  const [isEditable, setIsEditable] = useState(false);
-  const [countries, setCountries] = useState([]); // List of countries
-  const [states, setStates] = useState([]); // List of states for selected country
+  const [originalProfile, setOriginalProfile] = useState({});
+  const [isModified, setIsModified] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
 
   // Fetch profile details on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch user profile
         const response = await fetchProfile();
         const {
           firstname,
@@ -47,7 +52,7 @@ const AccountSection = () => {
           state,
         } = response.data;
 
-        setProfile({
+        const profileData = {
           firstname,
           lastName,
           email,
@@ -56,7 +61,10 @@ const AccountSection = () => {
           city,
           country,
           state,
-        });
+        };
+
+        setProfile(profileData);
+        setOriginalProfile(profileData);
 
         // Fetch countries
         const countriesResponse = await getCountries();
@@ -90,56 +98,49 @@ const AccountSection = () => {
       ...prev,
       [field]: value,
     }));
+
+    // Check if the value is different from the original
+    setIsModified(
+      JSON.stringify(originalProfile[field]) !== JSON.stringify(value)
+    );
   };
 
-  // const handleUpdateClick = async () => {
-  //   if (isEditable) {
-  //     try {
-  //       // Call the updateProfile API with the correct parameters
-  //       const response = await updateProfile(profile);
-  //       console.log("Profile updated successfully:", response);
-
-  //       // Optional: Provide user feedback for successful update
-  //       alert("Profile updated successfully!");
-  //     } catch (error) {
-  //       console.error("Error updating profile:", error);
-
-  //       // Optional: Provide user feedback for failed update
-  //       alert("Failed to update profile. Please try again.");
-  //     }
-  //   }
-  //   setIsEditable(!isEditable);
-  // };
-
   const handleUpdateClick = async () => {
-    if (isEditable) {
-      try {
-        // Prepare the updated profile object with the correct field names
-        const updatedProfile = {
-          firstname: profile.firstname, // Change 'firstname' to 'firstName'
-          lastName: profile.lastName, // Change 'lastName' to 'lastName'
-          email: profile.email,
-          mobileNumber: profile.mobileNumber, // Adjust 'phone' to 'mobileNumber'
-          address: profile.address,
-          city: profile.city,
-          country: profile.country,
-          state: profile.state,
-        };
+    try {
+      // Prepare the updated profile object
+      const updatedProfile = {
+        firstname: profile.firstname,
+        lastName: profile.lastName,
+        email: profile.email,
+        mobileNumber: profile.mobileNumber,
+        address: profile.address,
+        city: profile.city,
+        country: profile.country,
+        state: profile.state,
+      };
 
-        // Call the updateProfile API with the correct field names
-        const response = await updateProfile(updatedProfile);
-        console.log("Profile updated successfully:", response);
+      // Call the updateProfile API
+      const response = await updateProfile(updatedProfile);
+      console.log("Profile updated successfully:", response);
 
-        // Optional: Provide user feedback for successful update
-        alert("Profile updated successfully!");
-      } catch (error) {
-        console.error("Error updating profile:", error);
+      // Update the original profile to match the current profile
+      setOriginalProfile({ ...profile });
 
-        // Optional: Provide user feedback for failed update
-        alert("Failed to update profile. Please try again.");
-      }
+      // Reset modification state
+      setIsModified(false);
+
+      // Provide user feedback
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile. Please try again.");
     }
-    setIsEditable(!isEditable);
+  };
+
+  const handleResetClick = () => {
+    // Revert to the original profile
+    setProfile(originalProfile);
+    setIsModified(false);
   };
 
   return (
@@ -148,47 +149,51 @@ const AccountSection = () => {
         <form className="settings-inputFields">
           <InputField
             label="First Name"
-            icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+            icon={fullname_logo}
             value={profile.firstname}
-            editable={isEditable}
+            editable={true}
             placeholder="Update First Name"
             onChange={(e) => handleInputChange("firstname", e.target.value)}
           />
           <InputField
             label="Last Name"
-            icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/d91679b1a34eb5f5d3a9d9189173be4341bab3d8cafb2fbfdd377d5f92d1f6a5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+            icon={fullname_logo}
             value={profile.lastName}
-            editable={isEditable}
+            editable={true}
             placeholder="Update Last Name"
             onChange={(e) => handleInputChange("lastName", e.target.value)}
           />
           <InputField
             label="Email"
-            icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/e29ef37c58780e5cd8ee2986297041a310e893fe82c262a872c641b0392efceb?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+            icon={message_logo}
             value={profile.email}
-            editable={isEditable}
+            editable={true}
             placeholder="Update Email"
             onChange={(e) => handleInputChange("email", e.target.value)}
             type="email"
           />
           <PhoneInput
             value={profile.mobileNumber}
-            editable={isEditable}
+            editable={true}
             placeholder="Update Phone Number"
             onChange={(e) => handleInputChange("mobileNumber", e.target.value)}
+            fetchCountryFlags={getCountryCodes}
+            onCountryChange={(country) =>
+              handleInputChange("country", country.name)
+            }
           />
           <InputField
             label="Address"
-            icon="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/b091961851e79cde67f245be388279a07ffb670efa44b1323cca629ecbc0e41c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+            icon={location_logo}
             value={profile.address}
-            editable={isEditable}
+            editable={true}
             placeholder="Update Address"
             onChange={(e) => handleInputChange("address", e.target.value)}
           />
           <CityField
             label="City"
             value={profile.city}
-            editable={isEditable}
+            editable={true}
             placeholder="Update City"
             onChange={(e) => handleInputChange("city", e.target.value)}
           />
@@ -196,9 +201,9 @@ const AccountSection = () => {
             <SelectField
               label="Country"
               value={profile.country}
-              editable={isEditable}
+              editable={true}
               placeholder="Update Country"
-              iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/92f4cbd241b1e3b6a60b7cf89795a6d16f5b548ceabce6d988518cc7a7eefb3c?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+              iconSrc={down_arrow_settings}
               options={countries}
               onChange={(selectedCountry) => {
                 handleInputChange("country", selectedCountry);
@@ -209,21 +214,34 @@ const AccountSection = () => {
               label="State"
               value={profile.state}
               placeholder="Update State"
-              editable={isEditable}
-              iconSrc="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/16af09298139f26b39c29e840d7dec61a10fcc30926ce43a906849901322e2b5?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+              editable={true}
               options={states}
+              iconSrc={down_arrow_settings}
               onChange={(selectedState) =>
                 handleInputChange("state", selectedState)
               }
             />
           </section>
-          <button
-            type="button"
-            className="settings-update-button"
-            onClick={handleUpdateClick}
-          >
-            {isEditable ? "Save" : "Update"}
-          </button>
+          <div className="settings-button-group">
+            <button
+              type="button"
+              className="settings-update-button"
+              onClick={handleUpdateClick}
+              disabled={!isModified}
+            >
+              Update
+            </button>
+
+            {isModified && (
+              <button
+                type="button"
+                className="settings-update-button"
+                onClick={handleResetClick}
+              >
+                Discard
+              </button>
+            )}
+          </div>
         </form>
       </div>
       <div className="settings-imageSection">

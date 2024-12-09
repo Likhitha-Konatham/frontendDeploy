@@ -1,8 +1,14 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import Bookmarks from "./pages/Bookmarks";
+import ForgotPassword from "./pages/ForgotPassword";
 import ViewBookmarks from "./pages/ViewBookmarks";
 import Library from "./pages/Library";
 import Settings from "./pages/Settings";
@@ -29,82 +35,44 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/genre" element={<GenreSelection />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<LandingPage />} />
-    
+
           {/* Protected Routes */}
           <Route
             path="/dashboard"
-            element={
-              <ProtectedRoute
-                element={Dashboard}
-              />
-            }
+            element={<ProtectedRoute element={Dashboard} />}
           />
           <Route
             path="/bookmarks"
-            element={
-              <ProtectedRoute
-                element={Bookmarks}
-                
-              />
-            }
+            element={<ProtectedRoute element={Bookmarks} />}
           />
           <Route
             path="/view-bookmarks"
-            element={
-              <ProtectedRoute
-                element={ViewBookmarks}
-                
-              />
-            }
+            element={<ProtectedRoute element={ViewBookmarks} />}
           />
           <Route
             path="/library"
-            element={
-              <ProtectedRoute
-                element={Library}
-                
-              />
-            }
+            element={<ProtectedRoute element={Library} />}
           />
           <Route
             path="/settings"
-            element={
-              <ProtectedRoute
-                element={Settings}
-                
-              />
-            }
+            element={<ProtectedRoute element={Settings} />}
           />
           <Route
             path="/book-info/:genre/:bookId"
-            element={
-              <ProtectedRoute
-                element={BookInfo}
-                
-              />
-            }
+            element={<ProtectedRoute element={BookInfo} />}
           />
           <Route
             path="/book-info/:bookId"
-            element={
-              <ProtectedRoute
-                element={BookInformationPage}
-                
-              />
-            }
+            element={<ProtectedRoute element={BookInformationPage} />}
           />
           <Route
             path="/audiobook-player"
-            element={
-              <ProtectedRoute
-                element={AudioBookPlayer}
-                
-              />
-            }
+            element={<ProtectedRoute element={AudioBookPlayer} />}
           />
           {/* Catch-All Redirect */}
-           <Route path="*" element={<NotFoundWrapper />} />
+          <Route path="*" element={<NotFoundWrapper />} />
         </Routes>
       </div>
     </Router>

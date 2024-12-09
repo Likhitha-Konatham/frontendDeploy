@@ -3,13 +3,15 @@ import "../styles/SettingsSection.css";
 import ToggleTheme from "./ToggleTheme";
 import AudioSettings from "./AudioSettings";
 import "../styles/AudioSettings.css";
+import font_size_small from "../images/font_size_small.svg";
+import font_size_big from "../images/font_size_big.svg";
 
 const VolumeSlider = ({ value, onChange }) => {
   return (
     <div className="settings-slider-container">
       {/* Volume decrease icon */}
       <img
-        src="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/ad641962f052bc74316bb401a746732dd5b05d58954fb75e285eca7e1ae162fa?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+        src={font_size_small}
         alt="Volume decrease"
         className="settings-volume-icon"
       />
@@ -28,7 +30,7 @@ const VolumeSlider = ({ value, onChange }) => {
 
       {/* Volume increase icon */}
       <img
-        src="https://cdn.builder.io/api/v1/image/assets/3faf4e538f8849b6b6c9144cb99ec37a/407b1f04608d3ae67f2f99f9831ae7b252890def39c8227fb2db18c7cd70dec7?apiKey=3faf4e538f8849b6b6c9144cb99ec37a&"
+        src={font_size_big}
         alt="Volume increase"
         className="settings-volume-icon"
       />

@@ -10,7 +10,6 @@ const handleError = (error, operation) => {
       `Server Error Code: ${serverResponse.code}, Message: ${serverResponse.message}`
     );
   }
-
   // Return a standardized error response
   return null;
 };
@@ -180,6 +179,27 @@ export const getStates = async (country, callback) => {
     return response || null;
   } catch (error) {
     return handleError(error, "getStates");
+  }
+};
+
+export const getCountryCodes = async () => {
+  const urlEndPoint = `country_code`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+
+    // Validate the response structure
+    if (!response || response.status !== "success") {
+      console.error(
+        `Error fetching country codes: ${response?.message || "Unknown error"}`
+      );
+      return null;
+    }
+
+    // Ensure data is an array of country codes
+    return response.data || [];
+  } catch (error) {
+    console.error("Error in getCountryCodes:", error);
+    return null;
   }
 };
 
