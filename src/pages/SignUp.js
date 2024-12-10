@@ -9,7 +9,7 @@ import lock_logo from "../images/lock_logo.svg";
 import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
 import { sendOTP, validateOTP } from "../services/AllServices";
-
+import upload_icon from "../images/upload_icon.svg";
 const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
   <div className="inputfield-wrapper">
     <div className="inputfield-container">
@@ -166,6 +166,40 @@ const SignUp = () => {
                   value={formData.firstName}
                   onChange={handleInputChange}
                 />
+                <div className="inputfield-wrapper">
+                  <div className="inputfield-container">
+                    <div className="inputfield-content">
+                      <img
+                        loading="lazy"
+                        src={upload_icon}
+                        alt=""
+                        className="inputfield-icon"
+                      />
+                      <label
+                        htmlFor="udidUpload"
+                        className="custom-file-label"
+                        aria-label="UDID Upload"
+                      >
+                        {formData.udidFile
+                          ? formData.udidFile.name
+                          : "UDID Upload"}
+                      </label>
+                      <input
+                        type="file"
+                        id="udidUpload"
+                        className="hidden-file-input"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            udidFile: e.target.files[0],
+                          })
+                        }
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <InputField
                   icon={message_logo}
                   placeholder="Your Email Address"

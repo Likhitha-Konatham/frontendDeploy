@@ -12,7 +12,7 @@ import {
   getCountries,
   getStates,
   updateProfile,
-  getCountryCodes,
+  // getCountryCodes,
 } from "../services/AllServices";
 import fullname_logo from "../images/fullname_logo.svg";
 import message_logo from "../images/message_logo.svg";
@@ -172,16 +172,23 @@ const AccountSection = () => {
             onChange={(e) => handleInputChange("email", e.target.value)}
             type="email"
           />
-          <PhoneInput
+          {/* <PhoneInput
             value={profile.mobileNumber}
             editable={true}
             placeholder="Update Phone Number"
             onChange={(e) => handleInputChange("mobileNumber", e.target.value)}
-            fetchCountryFlags={getCountryCodes}
+            // fetchCountryFlags={getCountryCodes}
             onCountryChange={(country) =>
               handleInputChange("country", country.name)
             }
+          /> */}
+          <PhoneInput
+            value={profile.mobileNumber}
+            editable={true}
+            placeholder="Update Phone Number"
+            onChange={(newValue) => handleInputChange("mobileNumber", newValue)}
           />
+
           <InputField
             label="Address"
             icon={location_logo}

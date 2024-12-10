@@ -219,6 +219,34 @@ html, body {
     }
   }
 
+/* Hide the default file input */
+.hidden-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    z-index: -1;
+  }
+  
+  /* Style the label as a placeholder */
+  .custom-file-label {
+    flex-grow: 1;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0.5em;
+  }
+  
+  /* Hover and focus styles */
+  .custom-file-label:hover,
+  .custom-file-label:focus {
+    color: #333;
+  }
+  
+
 .passwordInputContent {
     display: flex;
     width: 100%;
