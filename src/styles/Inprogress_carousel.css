@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+.empty-state-container{
+    margin-left: 7vw;
+}
+.empty-state {
+    text-align: center;
+    margin: 1.5vw 1vw 1vw;
+    width: 30%;
+  }
+  .emptyStateIconAndHeading{
+    display: flex;
+    justify-content: left;
+  }
+  .emptyStateIcon {
+    display: flex;
+    width: 2vw;
+    height: 2vw;
+  }
+  .emptyStateIcon img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .empty-state__heading {
+    font-size: 1.2vw;
+    font-style: Inter;
+    font-weight: 500;
+    margin:0.2vw 1vw;
+}
+  
+  .empty-state__text {
+    font-size: 0.7vw;
+    color: #666;
+    margin-bottom: 1vw;
+    display: flex;
+    justify-content: left;
+  }
+  
+  .empty-state__cta {
+    background: var(--Color, #A63E71);
+    color: #fff;
+    width: 4.5vw;
+    height: 1.2vw;
+    padding: 0.4vw 1.3vw;
+    font-size: 0.7vw;
+    border-radius: 0.3vw;
+    text-decoration: none;
+    display: flex;
+    justify-content: left;
+    margin-left: 4vw;
+    transition: background-color 0.3s;
+  }

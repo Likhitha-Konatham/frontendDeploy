@@ -29,11 +29,6 @@ const BookGrids = ({ markedBooks, loading }) => {
               </div>
               <div className="bookGrid__details">
                 <div className="bookGrid__name">{book.title}</div>
-                <div className="hover_book_author">
-                  {book.author_list && book.author_list.length > 0
-                    ? book.author_list.join(", ")
-                    : ""}
-                </div>
                 <div className="bookGrid__bookmarks">Bookmarks - {book.bookMarkCount}</div>
               </div>
             </div>

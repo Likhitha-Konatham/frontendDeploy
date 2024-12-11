@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import "../styles/ReadLater_carousel.css";
 import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
+import emptyStateIcon from "../images/emptyStateIcon.png"; // Add an appropriate empty state image/illustration
 import { fetchReadLaterBooks } from "../services/AllServices";
 
 const ReadlaterCarousel = () => {
@@ -18,24 +19,17 @@ const ReadlaterCarousel = () => {
         const response = await fetchReadLaterBooks();
         setReadLaterBooks(response?.data || []); // Ensure fallback to an empty array
         setBooks(response?.data || []); // Update state with API data or empty array
-        setLoading(false); // Set loading state to false
         console.log("Fetched Read Later books:", response?.data);
       } catch (error) {
         console.error("Error fetching Read Later books:", error);
-        setReadLaterBooks([]); // Set to empty array on error
-        setBooks([]); // Ensure no invalid state
+      } finally {
+        setLoading(false); // Set loading state to false
       }
     };
 
     fetchBooks(); // Call the function to fetch data
   }, []);
 
-  // If no books, render nothing
-  if (readLaterBooks.length === 0) {
-    return null;
-  }
-
-  // Safeguard maxIndex calculation
   const maxIndex = Math.max(0, readLaterBooks?.length - 5);
 
   // Handle previous slide
@@ -48,25 +42,48 @@ const ReadlaterCarousel = () => {
     setCurrentIdx((prevIdx) => (prevIdx === maxIndex ? 0 : prevIdx + 1));
   };
 
+  if (loading) {
+    return (
+      <div className="carousel__wrap">
+        <div className="carousel__skeleton-loader">
+          {[...Array(7)].map((_, index) => (
+            <div key={index} className="carousel__skeleton-item"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="carousel__wrap">
-      <div className="carousel__inner">
-        <button className="carousel__btn" onClick={prevSlide}>
-          <div className="carousel__btn--prev">
-            <img src={bigLeftArrow} alt="Previous" className="carousel__btn-arrow" />
-          </div>
-        </button>
-
-        <div className="carousel__container">
+      {readLaterBooks.length === 0 ? (
+        <div className="empty-state-container">
           <div className="genre_heading">Read Later</div>
-          {loading ? (
-            // Skeleton loader while loading
-            <div className="carousel__skeleton-loader">
-              {[...Array(7)].map((_, index) => (
-                <div key={index} className="carousel__skeleton-item"></div>
-              ))}
+          <div className="empty-state">
+            <div className="emptyStateIconAndHeading">
+              <div className="emptyStateIcon">
+                <img src={emptyStateIcon} alt="No books" />
+              </div>
+              <div className="empty-state__heading">No Books in Read Later</div>
             </div>
-          ) : (
+            <p className="empty-state__text">
+              Add books to your Read Later list to see them here.
+            </p>
+            <a href="/" className="empty-state__cta">
+              Browse Books
+            </a>
+          </div>
+        </div>
+      ) : (
+        <div className="carousel__inner">
+          <button className="carousel__btn" onClick={prevSlide}>
+            <div className="carousel__btn--prev">
+              <img src={bigLeftArrow} alt="Previous" className="carousel__btn-arrow" />
+            </div>
+          </button>
+
+          <div className="carousel__container">
+            <div className="genre_heading">Read Later</div>
             <div
               className="carousel__slide-list"
               style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}
@@ -76,7 +93,7 @@ const ReadlaterCarousel = () => {
                   key={book._id}
                   onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })}
                 >
-                   <div className="carousel__hover-wrapper">
+                  <div className="carousel__hover-wrapper">
                     <img
                       src={book.thumbnail}
                       alt={book.title}
@@ -87,19 +104,18 @@ const ReadlaterCarousel = () => {
                       <div className="hover_book_author">{book.author_list.join(", ")}</div>
                     </div>
                   </div>
-                 
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        <button className="carousel__btn" onClick={nextSlide}>
-          <div className="carousel__btn--next">
-            <img src={bigRightArrow} alt="Next" className="carousel__btn-arrow" />
           </div>
-        </button>
-      </div>
+
+          <button className="carousel__btn" onClick={nextSlide}>
+            <div className="carousel__btn--next">
+              <img src={bigRightArrow} alt="Next" className="carousel__btn-arrow" />
+            </div>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

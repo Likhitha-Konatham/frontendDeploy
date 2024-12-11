@@ -26,6 +26,11 @@ const BookInfo = () => {
     if (books.length > 0) {
       const selectedIndex = books.findIndex((book) => book._id === bookId);
       setCurrentIndex(selectedIndex !== -1 ? selectedIndex : 0);
+  
+      // Check bookmark status from local storage
+      const currentBook = books[selectedIndex];
+      const storedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
+      setIsBookmarked(!!storedBookmarks[currentBook?._id]); // Check if the book is bookmarked
     }
   }, [bookId, books]);
 
@@ -57,20 +62,24 @@ const BookInfo = () => {
   };
 
   const toggleBookmark = async (bookID) => {
-    try {
-      if (isBookmarked) {
-        await deleteReadLater({ bookID }); 
-      } else {
-        await insertReadLater({ bookID }); 
-      }
+    // Get existing bookmarks from local storage
+    const storedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
   
-      // Toggle the state and refresh the book's bookmark status
-      setIsBookmarked(!isBookmarked);
-    } catch (error) {
-      console.error("Error toggling bookmark status:", error);
+    if (isBookmarked) {
+      // Remove the bookmark
+      await deleteReadLater({ bookID }); 
+      delete storedBookmarks[bookID];
+      setIsBookmarked(false);
+    } else {
+      // Add the bookmark
+      await insertReadLater({ bookID }); 
+      storedBookmarks[bookID] = true;
+      setIsBookmarked(true);
     }
-  };
   
+    // Save updated bookmarks back to local storage
+    localStorage.setItem("bookmarks", JSON.stringify(storedBookmarks));
+  };
 
   const currentBook = books[currentIndex] || {}; 
 

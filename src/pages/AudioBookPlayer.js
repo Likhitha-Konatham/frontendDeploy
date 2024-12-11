@@ -22,6 +22,7 @@ import downArrow from "../images/down_arrow.png";
 import skipForward from "../images/skip_forward.png";
 import skipBackward from "../images/skip_backward.png";
 import fullScreen from "../images/fullScreen.png";
+import exitFullScreen from "../images/exit_fullscreen.png"
 import brightnessImg from "../images/brightness.png";
 
 const AudioBookPlayer = () => {
@@ -179,7 +180,12 @@ const AudioBookPlayer = () => {
                   {chapters[currentChapter].context}
                   <span className="highlight"> Duis non erat in urna cursus malesuada sed sed mauris.</span>
                 </p>
-                <div className="fullscreen" onClick={toggleFullScreen}><img src={fullScreen} alt="full screen" /></div>
+                <div className="fullscreen" onClick={toggleFullScreen}>
+                  <img
+                    src={isFullScreen ? exitFullScreen : fullScreen}
+                    alt={isFullScreen ? "Exit Full Screen" : "Full Screen"}
+                  />
+                </div>
               </div>
 
 

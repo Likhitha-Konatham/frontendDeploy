@@ -41,7 +41,6 @@ const Header = ({
     };
     fetchTokenAndProfile();
   }, []);
-  
 
   // Toggle search bar visibility
   const handleSearchClick = () => setShowSearchBar((prevState) => !prevState);
@@ -56,19 +55,35 @@ const Header = ({
   const handleSignIn = () => navigate("/signin");
   const handleSignUp = () => navigate("/signup");
 
+  // Handle arrow navigation
+  const handleBack = () => navigate(-1); // Navigate to the previous page
+  const handleForward = () => navigate(1); // Navigate to the next page
+
   return (
     <>
       <header className="header">
         {showArrows && (
           <div className="header-left-section">
-            <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
-            <img src={rightArrow} alt="Right Arrow" className="right-arrow-icon" />
+            <img
+              src={leftArrow}
+              alt="Left Arrow"
+              className="left-arrow-icon"
+              onClick={handleBack} // Go back
+              style={{ cursor: "pointer" }}
+            />
+            <img
+              src={rightArrow}
+              alt="Right Arrow"
+              className="right-arrow-icon"
+              onClick={handleForward} // Go forward
+              style={{ cursor: "pointer" }}
+            />
           </div>
         )}
         <div className="active_screen_text">
           <span className="page_label">{pageName}</span>
         </div>
-  
+
         {showSearch && (
           <div className="search-bar-container">
             <div className="search-bar" onClick={handleSearchClick}>
@@ -95,15 +110,27 @@ const Header = ({
                     <h3 className="recent-heading">Recent</h3>
                     <ul className="recent-list">
                       <li>
-                        <img src={historyIcon} className="history-icon" alt="history icon" />{" "}
+                        <img
+                          src={historyIcon}
+                          className="history-icon"
+                          alt="history icon"
+                        />{" "}
                         Statistics for Dummies
                       </li>
                       <li>
-                        <img src={historyIcon} className="history-icon" alt="history icon" />{" "}
+                        <img
+                          src={historyIcon}
+                          className="history-icon"
+                          alt="history icon"
+                        />{" "}
                         Data Science for Beginners
                       </li>
                       <li>
-                        <img src={historyIcon} className="history-icon" alt="history icon" />{" "}
+                        <img
+                          src={historyIcon}
+                          className="history-icon"
+                          alt="history icon"
+                        />{" "}
                         The Data Science Handbook
                       </li>
                     </ul>
@@ -113,24 +140,24 @@ const Header = ({
             )}
           </div>
         )}
-  
+
         <div className="header-user-profile">
           {showUserProfile && (
             <>
-              {!token ? ( // If the token does not exist (i.e., not authenticated)
+              {!token ? (
                 <div
                   className="header-user-name"
-                  onClick={togglePopup} // Trigger the popup for login
+                  onClick={togglePopup}
                   style={{ cursor: "pointer" }}
                 >
                   Sign In / Account
                 </div>
-              ) : ( // If the token exists (authenticated)
+              ) : (
                 <div
                   className="header-user-name"
                   style={{ cursor: "default" }}
                 >
-                  {profile?.firstname} {profile?.lastName} {/* Display user name */}
+                  {profile?.firstname} {profile?.lastName}
                 </div>
               )}
               <img
@@ -138,9 +165,8 @@ const Header = ({
                 alt="User Icon"
                 className="header-user-icon"
                 style={{ cursor: token ? "pointer" : "default" }}
-                onClick={token ? onProfileClick : null} // Only clickable if token exists
+                onClick={token ? onProfileClick : null}
               />
-            
             </>
           )}
         </div>
