@@ -23,17 +23,33 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css"; // General styles
-import "./styles/global.css"; // Theme-specific styles (must be last)
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+
+// Import styles
+import "./index.css"; // General styles
+import "./styles/global.css"; // Global theme-specific styles
+
+// Import context providers
 import { ThemeProvider } from "./context/ThemeContext";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const rootElement = document.getElementById("root");
+
+// Ensure the root element exists before rendering
+if (!rootElement) {
+  console.error("Root element not found. Ensure your index.html has a div with id 'root'.");
+}
+
+const root = ReactDOM.createRoot(rootElement);
+
 root.render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
+  <React.StrictMode>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>
 );
 
-reportWebVitals();
+// Measure performance
+reportWebVitals(console.log); // Pass console.log to view performance metrics in the console
+

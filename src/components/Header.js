@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Header.css";
-import { fetchProfile } from "../services/AllServices";
+import { fetchProfile, searchBooks } from "../services/AllServices";
 import { getToken } from "../storage/Storage";
 import searchIcon from "../images/search_icon.png";
 import userIcon from "../images/user_icon.png";
@@ -19,7 +19,7 @@ const Header = ({
   onProfileClick,
 }) => {
   const [profile, setProfile] = useState();
-  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [showSearchBar] = useState(false);
   const [token, setTokenState] = useState(null); // Token state
   const [showPopup, setShowPopup] = useState(false); // Popup state
   const navigate = useNavigate();
@@ -42,11 +42,26 @@ const Header = ({
     fetchTokenAndProfile();
   }, []);
 
-  // Toggle search bar visibility
-  const handleSearchClick = () => setShowSearchBar((prevState) => !prevState);
+  const handleSearchClick = async () => {
+    if (searchQuery.trim()) {
+      try {
+        const response = await searchBooks(searchQuery);
+    
+        // Ensure response exists and data is valid
+        if (response) {
+          navigate("/searched-results", { state: { searchedbooks: response.data, searchedQuery:searchQuery } });
+        }
+      } catch (error) {
+        console.error("Error searching books:", error);
+        alert("Failed to fetch search results.");
+      }
+    }
+  };
+  
 
-  // Handle search query
-  const handleSearch = (event) => onSearch(event.target.value);
+  const handleSearchKeyPress = (event) => {
+    if (event.key === "Enter") handleSearchClick();
+  };
 
   // Popup toggle
   const togglePopup = () => setShowPopup((prev) => !prev);
@@ -87,13 +102,19 @@ const Header = ({
         {showSearch && (
           <div className="search-bar-container">
             <div className="search-bar" onClick={handleSearchClick}>
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchQuery}
-                onChange={handleSearch}
-              />
-              <img src={searchIcon} alt="Search" className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => onSearch(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
+            />
+            <img
+              src={searchIcon}
+              alt="Search"
+              className="search-icon"
+              onClick={handleSearchClick}
+            />
             </div>
             {showSearchBar && (
               <div className="search-dropdown">

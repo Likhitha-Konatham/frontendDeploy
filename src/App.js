@@ -18,6 +18,7 @@ import AudioBookPlayer from "./pages/AudioBookPlayer";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import GenreSelection from "./pages/GenreSelect";
+import SearchedBooksPage from "./pages/SearchedBooksPage.js";
 import ProtectedRoute from "./Routing/PrivateRouting";
 import NotFound from "./components/NotFound.js";
 import LandingPage from "./pages/LandingPage.js";
@@ -29,7 +30,7 @@ function NotFoundWrapper() {
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL || "/"}>
       <div className="pagesall">
         <Routes>
           <Route path="/signup" element={<SignUp />} />
@@ -70,6 +71,10 @@ function App() {
           <Route
             path="/audiobook-player"
             element={<ProtectedRoute element={AudioBookPlayer} />}
+          />
+          <Route
+            path="/searched-results"
+            element={<ProtectedRoute element={SearchedBooksPage} />}
           />
           {/* Catch-All Redirect */}
           <Route path="*" element={<NotFoundWrapper />} />
