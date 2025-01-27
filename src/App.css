@@ -1,0 +1,33 @@
+.pagesall{
+  overflow: auto;
+}
+
+
+
+.pagesall::-webkit-scrollbar{
+  display: none;
+}
+
+.dashboard::-webkit-scrollbar{
+  display: none;
+}
+/* General Resets */
+/* *,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+/* :root {
+  --primary: #6a59ff;
+  --white: #ffffff;
+  --bg: #f5f5f5;
+}
+
+
+body {
+  font-size: 1.6vw;
+  background: var(--bg);
+} */

@@ -1,0 +1,215 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/Header.css";
+import { fetchProfile, searchBooks } from "../services/AllServices";
+import { getToken } from "../storage/Storage";
+import searchIcon from "../images/search_icon.png";
+import userIcon from "../images/user_icon.png";
+import leftArrow from "../images/left_arrow.png";
+import rightArrow from "../images/right_arrow.png";
+import historyIcon from "../images/history_icon.png";
+
+const Header = ({
+  showSearch,
+  showUserProfile,
+  onSearch,
+  searchQuery,
+  showArrows,
+  pageName,
+  onProfileClick,
+}) => {
+  const [profile, setProfile] = useState();
+  const [showSearchBar] = useState(false);
+  const [token, setTokenState] = useState(null); // Token state
+  const [showPopup, setShowPopup] = useState(false); // Popup state
+  const navigate = useNavigate();
+
+  // Fetch token and profile
+  useEffect(() => {
+    const fetchTokenAndProfile = async () => {
+      try {
+        const storedToken = await getToken();
+        setTokenState(storedToken);
+        if (storedToken) {
+          const response = await fetchProfile();
+          setProfile(response?.data || []);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        alert("Failed to load profile. Please try again later.");
+      }
+    };
+    fetchTokenAndProfile();
+  }, []);
+
+  const handleSearchClick = async () => {
+    if (searchQuery.trim()) {
+      try {
+        const response = await searchBooks(searchQuery);
+    
+        // Ensure response exists and data is valid
+        if (response) {
+          navigate("/searched-results", { state: { searchedbooks: response.data, searchedQuery:searchQuery } });
+        }
+      } catch (error) {
+        console.error("Error searching books:", error);
+        alert("Failed to fetch search results.");
+      }
+    }
+  };
+  
+
+  const handleSearchKeyPress = (event) => {
+    if (event.key === "Enter") handleSearchClick();
+  };
+
+  // Popup toggle
+  const togglePopup = () => setShowPopup((prev) => !prev);
+
+  // Popup actions
+  const handleSignIn = () => navigate("/signin");
+  const handleSignUp = () => navigate("/signup");
+
+  // Handle arrow navigation
+  const handleBack = () => navigate(-1); // Navigate to the previous page
+  const handleForward = () => navigate(1); // Navigate to the next page
+
+  return (
+    <>
+      <header className="header">
+        {showArrows && (
+          <div className="header-left-section">
+            <img
+              src={leftArrow}
+              alt="Left Arrow"
+              className="left-arrow-icon"
+              onClick={handleBack} // Go back
+              style={{ cursor: "pointer" }}
+            />
+            <img
+              src={rightArrow}
+              alt="Right Arrow"
+              className="right-arrow-icon"
+              onClick={handleForward} // Go forward
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+        )}
+        <div className="active_screen_text">
+          <span className="page_label">{pageName}</span>
+        </div>
+
+        {showSearch && (
+          <div className="search-bar-container">
+            <div className="search-bar" onClick={handleSearchClick}>
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => onSearch(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
+            />
+            <img
+              src={searchIcon}
+              alt="Search"
+              className="search-icon"
+              onClick={handleSearchClick}
+            />
+            </div>
+            {showSearchBar && (
+              <div className="search-dropdown">
+                <div className="search-container">
+                  <div className="searchbyplaceholder">
+                    Search by book name, author, genre, etc.
+                  </div>
+                  <div className="tags-container">
+                    <span className="tag">M.Tech</span>
+                    <span className="tag">Science</span>
+                    <span className="tag">Data Science</span>
+                  </div>
+                  <div className="recent-container">
+                    <h3 className="recent-heading">Recent</h3>
+                    <ul className="recent-list">
+                      <li>
+                        <img
+                          src={historyIcon}
+                          className="history-icon"
+                          alt="history icon"
+                        />{" "}
+                        Statistics for Dummies
+                      </li>
+                      <li>
+                        <img
+                          src={historyIcon}
+                          className="history-icon"
+                          alt="history icon"
+                        />{" "}
+                        Data Science for Beginners
+                      </li>
+                      <li>
+                        <img
+                          src={historyIcon}
+                          className="history-icon"
+                          alt="history icon"
+                        />{" "}
+                        The Data Science Handbook
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="header-user-profile">
+          {showUserProfile && (
+            <>
+              {!token ? (
+                <div
+                  className="header-user-name"
+                  onClick={togglePopup}
+                  style={{ cursor: "pointer" }}
+                >
+                  Sign In / Account
+                </div>
+              ) : (
+                <div
+                  className="header-user-name"
+                  style={{ cursor: "default" }}
+                >
+                  {profile?.firstname} {profile?.lastName}
+                </div>
+              )}
+              <img
+                src={userIcon}
+                alt="User Icon"
+                className="header-user-icon"
+                style={{ cursor: token ? "pointer" : "default" }}
+                onClick={token ? onProfileClick : null}
+              />
+            </>
+          )}
+        </div>
+        {showPopup && !token && (
+          <div className="popup-container">
+            <div className="popup-arrow"></div>
+            <div className="popup-content">
+              <button className="signin-button" onClick={handleSignIn}>
+                Sign In
+              </button>
+              <div className="new-customer">
+                New customer?{" "}
+                <span className="start-here" onClick={handleSignUp}>
+                  Start here
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+    </>
+  );
+};
+
+export default Header;

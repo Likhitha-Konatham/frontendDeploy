@@ -1,0 +1,328 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.main-content {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar_container {
+    width: 4.5%;
+    background-color: white;
+}
+
+.audio_player_container {
+    width: 95.5%;
+}
+
+.header_container {
+    width: 100%;
+    height: auto;
+}
+
+.audio-book-player {
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+}
+
+.left-section {
+    width: 71%;
+    padding: 2vw 1vw 0vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-section .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .arrowSection {
+    width: 20%;
+    display: flex;
+    gap: 1.6vw;
+    padding: 0.5vw 0.5vw 0vw;
+}
+.arrowSection .arrow{
+    width: 1.8vw;
+    height: 1.8vw;
+    
+}
+.arrowSection .arrow img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.header .chapterSection{
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5vw 0.5vw 0vw;
+}
+
+.chapterSection .chapterNumber {
+    font-size: 2.08vw;
+    color: var(--Black-60, #45464E);
+    font-weight: 500;
+}
+.chapterSection .chapterDropdown{
+    width: 2.5vw;
+    height: 2.5vw;
+}
+.chapterDropdown img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.saveSection{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    padding: 0.5vw 0.5vw 0vw;
+}
+
+.book_player_save_icon {
+    width: 1.5vw;
+    height: 1.5vw;
+    margin-right: 1vw;
+}
+.book_player_save_icon img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.book_context_box {
+    background: #f0f0f0;
+    width: 100%;
+    height: 28.5vw;
+    overflow-y: auto;
+    position: relative;
+    border-radius: 0vw 0vw 1vw 1vw;
+}
+.book_context{
+    font-family: Inter;
+    padding: 1.5vw 2vw 2vw;
+    color: var(--Labels-Primary, #A7A7A7);
+    font-size: 2.08vw;
+    line-height: 3vw;
+    font-weight: 500;
+}
+.book_context .highlight {
+    color: var(--Labels-Primary, #000);
+}
+
+.fullscreen {
+    position: absolute;
+    bottom: 1.5vw; /* 10px */
+    right: 1.5vw; /* 10px */
+    width: 1.5vw; /* 24px */
+    height: 1.5vw;
+    cursor: pointer;
+}
+.fullscreen img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.book-player-controls {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    width: 50%;
+    margin:2vw 20vw 0vw;
+  }
+  
+  .control-section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .control-icon {
+    width: 3.5vw; 
+    height: 3.5vw;
+    cursor: pointer;
+    object-fit: contain;
+  }
+  
+  .speed-select-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .speed-select {
+    width: 6.5vw;
+    height: 2.5vw;
+    font-size: 1.2vw;
+    padding: 0.5vw;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: var(--Radius-200, 0.5vw);
+    background: var(--Background-Disabled-Default, #D9D9D9);
+    outline: 0;
+    border: 0;
+  }
+  
+.book-player-progress-bar {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5vw;
+    margin-left: 18.5vw;
+}
+
+.book-player-progress-bar input[type="range"] {
+    width: 30vw;
+    height: 0.3vw;
+    margin-right: 1vw
+}
+.progress-percent{
+    font-size: 1.2vw;
+}
+.section_out_of{
+    font-size: 1.2vw;
+    margin: 0.5vw auto 0vw;
+    color: var(--Black-60, #45464E);
+    text-align: center;
+    font-family: Inter;
+    font-weight: 500;
+}
+
+
+.right-section {
+    width: 29%;
+    display: flex;
+    flex-direction: column;
+    padding: 2vw 1vw 0vw;
+}
+
+.book-player-info {
+    width: 100%;
+}
+
+.book-player-cover {
+    width: 18vw;
+    height: 20vw;
+}
+.book-player-cover img{
+    border-radius: 1vw;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.book-player-details h3 {
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-size: 2.08vw;
+    font-weight: 500;
+    margin: 1vw 0vw 0vw;
+}
+
+.book-player-details h4{
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-size: 1.25vw;
+    font-weight: 500;
+    margin: 0.5vw 0vw 0vw;
+}
+
+.book-player-settings {
+    margin-top: 2vw
+}
+  .book-player-slider-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2vw;
+  }
+  
+  .small-img {
+    width: 1.5vw;
+    height: 1.5vw;
+  }
+  .small-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .big-img {
+    width: 2.2vw;
+    height: 2.2vw;
+  }
+  .big-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .book-player-custom-slider {
+    width: 13.5vw;
+    height: 0.2vw;
+    margin: 0.2vw 0.5vw;
+    background: #ccc;
+    outline: none;
+  }
+  
+  .book-player-custom-slider-thumb {
+    height: 1vw;
+    width: 1vw;
+    margin-top: -0.4vw;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    background: var(--Backgrounds-Primary, #FFF);
+    box-shadow: 0px 0.37px 2.96px 0px rgba(0, 0, 0, 0.12), 0px 4.44px 9.62px 0px rgba(0, 0, 0, 0.12);
+  }
+  
+  .book-player-custom-slider-track {
+    background: #666;
+  }
+  
+  .left-section {
+    width: 71%;
+    padding: 2vw 1vw 0vw;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+}
+
+.left-section.fullscreen-active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full screen width */
+    height: 100vh; /* Full screen height */
+    z-index: 1000; /* Ensure it's on top */
+    background-color: white; /* Optional, for clean fullscreen background */
+    padding: 10px; /* Optional, for padding around content */
+    overflow: hidden; /* Hide any overflowing content */
+}
+
+.left-section.fullscreen-active .header{
+    width: 96%;
+    margin: 0vw auto 0vw;
+}
+.left-section.fullscreen-active .book_context_box {
+    height: 32vw;
+    width: 96%;
+    margin: 2vw auto 0vw;
+    border-radius: 1vw;
+}
+.left-section.fullscreen-active .book-player-controls {
+    margin-left: 28vw;
+
+}
+.left-section.fullscreen-active .book-player-progress-bar {
+    margin-left: 33vw;
+}

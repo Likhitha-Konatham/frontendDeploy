@@ -1,0 +1,27 @@
+.main-content{
+    display: flex;
+    width: 100%;
+}
+.sidebar_container{
+    width: 4.5%;
+    background-color: white;
+}
+.viewbookmarks_container{
+    width: 95.5%;
+    overflow: hidden;
+    background: #FAFAFA;
+}
+.header_container{
+    width: 100%;
+}
+.view_bookmarks_body{
+    width: 100%;
+    display: flex;
+}
+.view_bookmarks_body .view_bookmarks_container{
+    width: 100%;
+}
+.view_bookmarks_body .view_bookmarks_container .viewBookmarksCarousel{
+    width: 100%;
+    margin-top: 3vw;
+}

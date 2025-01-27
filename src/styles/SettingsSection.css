@@ -1,0 +1,210 @@
+.settings-section {
+    width: 100%;
+    margin-right: 3vw;
+    margin-left: 3vw;
+    margin-top: 1vw;
+    display: flex;
+    flex-direction: row;
+    
+    gap: 250px;
+  }
+  
+  .settings-heading {
+    color: #45464e;
+    font: 500 20px Poppins, sans-serif;
+    margin-bottom: 61px;
+  }
+  
+  .settings-form {
+    max-width: 375px;
+  }
+  
+  .settings-form-group {
+    margin-bottom: 35px;
+  }
+  
+  .settings-form-group label {
+    display: block;
+    color: #5e6366;
+    font: 400 12px Inter, sans-serif;
+    margin-bottom: 16px;
+  }
+  
+  .settings-input {
+    width: 100%;
+    min-height: 75px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+  }
+  
+  .settings-audio-settings {
+    color: #45464e;
+    font: 500 20px Poppins, sans-serif;
+    margin-top: 80px;
+  }
+  
+  @media (max-width: 991px) {
+    .settings-container {
+      padding: 0 0 100px 20px;
+    }
+  
+    .settings-audio-settings {
+      margin-top: 40px;
+    }
+  }
+  
+
+  .settings-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 356px;
+    max-width: 100%;
+  }
+  
+  .settings-volume-icon {
+    width: 33px;
+    height: 33px;
+    object-fit: contain;
+  }
+  
+  .settings-slider {
+    position: relative;
+    flex: 1;
+    min-height: 33px;
+    padding: 15px 12px;
+  }
+  
+  .settings-track {
+    border-radius: 74px;
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 4px;
+    width: 100%;
+  }
+  
+  .settings-filled {
+    border-radius: 74px;
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 100%;
+    position: relative;
+  }
+  
+  .settings-knob {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+  }
+  
+  .settings-separator {
+    position: absolute;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+
+  .notif-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  
+  .notif-heading {
+    width: 268px;
+    max-width: 100%;
+    color: #45464e;
+    font: 500 20px Poppins, sans-serif;
+  }
+  
+  .notif-settingsGroup {
+    display: flex;
+    width: 375px;
+    max-width: 100%;
+    flex-direction: column;
+    /* margin-top: 61px; */
+  }
+  
+  .notif-settingItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .notif-settingLabel {
+    color: #5e6366;
+    font: 400 15px Inter, sans-serif;
+  }
+  
+  .notif-toggle {
+    border-radius: 100px;
+    background-color: rgb(52, 199, 89);
+    position: relative;
+    display: flex;
+    width: 51px;
+    height: 31px;
+    padding: 2px 10px;
+    overflow: hidden;
+  }
+  
+  .notif-knob {
+    border-radius: 100px;
+    background-color: #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    height: 27px;
+  }
+  
+  @media (max-width: 991px) {
+    .notif-settingsGroup {
+      margin-top: 40px;
+    }
+  }
+  
+  .slider-container {
+    width: 100%;
+    margin-top: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .slider {
+    -webkit-appearance: none; /* Remove default styling */
+    appearance: none;
+    width: 90%; /* Adjust width as needed */
+    height: 4px;
+    background: #757575;
+    /* background: linear-gradient(to right, #757575, #ccc); */
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Remove default styling */
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .slider::-webkit-slider-thumb:hover {
+    background-color: #f0f0f0;
+  }

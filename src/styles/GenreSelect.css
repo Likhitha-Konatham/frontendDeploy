@@ -1,0 +1,166 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+  .genre-select-wrapper {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .main-content{
+    display: flex;
+    width: 100%;
+}
+
+.header_container{
+    width: 100%;
+}
+
+  .sidebar_container{
+    width: 4.5%;
+    background-color: white;
+}
+  
+  .genre-selection-container {
+    display: flex;
+    width:95.5%;
+    flex: 1;
+    flex-direction: column;
+    position: relative;
+  }
+  
+  .genre-content {
+    width: 100%;
+    display: flex;
+    display: flex;
+    margin-left: 14.41vw;
+    margin-top:4.51vw;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: self-start;
+    flex-grow: 1;
+    padding: 4.16vw 1.0416vw 1.0416vw; /* Add top padding to make space for the fixed header */
+  }
+  
+  .genre-content h1 {
+    color: var(--Black-60, #45464E);
+    text-align: center;
+    font-family: Poppins;
+    font-size: 3.104vw;
+    font-style: 2.60vw;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 1.04vw;
+    margin-top: 1.0416vw;
+  }
+  
+  .genre-content p {
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-size: 1.3vw;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0vw;
+    padding: 0vw;
+  }
+  
+  .genre-card-container {
+    display: flex;
+    gap: 0.83vw;
+    margin-top: 0.83vw;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .genre-card {
+    width: 9.29vw;
+    height: 14.45vw;
+    border-radius: 0.62vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+    color: #333;
+    border-radius: 0.93vw;
+    box-shadow: 0vw 0.2vw 0.2vw 0vw rgba(0, 0, 0, 0.25);
+  }
+  
+  .genre-card.genre-selected {
+    box-shadow: 0 0.312vw 0.625vw rgba(0, 0, 0, 0.3);
+    transform: translateY(-0.2px);
+  }
+  
+  .genre-checkbox {
+    position: absolute;
+    top: 0.83vw;
+    left: 0.83vw;
+    width: 1.3vw;
+    height: 1.3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+  }
+
+  .genre-checkbox img {
+    width: 2.08vw;
+    height: 2.08vw;
+  }
+  
+  .genre-icon {
+    font-size: 2.6vw;
+    position: absolute;
+    bottom: -1.3vw;
+    right: -1.04vw;
+  }
+  
+  .genre-icon img {
+    width: 9.37vw; /* Adjust the size of the icon */
+    height: 9.37vw;
+    object-fit: contain;
+  }
+  
+  .genre-card p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    color: var(--Black-60, #45464E);
+    font-family: Inter;
+    font-size: 1.04vw;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .genre-signUpButton {
+    align-self: center;
+   
+    border-radius: 0.93vw;
+    background-color: #a63e71;
+    min-width: 10vw; /* Set a smaller min-width */
+
+    color: #fff;
+    margin-top: 2vw;
+    margin-left:-7.5vw;
+    text-align: center;
+    height: 4vw; /* Adjust height to fit better */
+    min-height: 4vw;
+    width: 12vw; /* Reduced width for better fit */
+    padding: 0.5vw 1.5vw; /* Adjust padding */
+    font: 400 1vw Inter, sans-serif; /* Reduce font size */
+    border: none;
+    cursor: pointer;
+
+
+    /* Ensure padding is included in total width/height calculation */
+    box-sizing: border-box;
+}
