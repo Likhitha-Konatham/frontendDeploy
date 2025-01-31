@@ -99,7 +99,7 @@ const Header = ({
           <span className="page_label">{pageName}</span>
         </div>
 
-        {showSearch && (
+        {/* {showSearch && (
           <div className="search-bar-container">
             <div className="search-bar" onClick={handleSearchClick}>
             <input
@@ -160,7 +160,26 @@ const Header = ({
               </div>
             )}
           </div>
-        )}
+        )} */}
+      {showSearch && (
+        <div className="search-bar-container">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => onSearch(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
+            />
+            <img
+              src={searchIcon}
+              alt="Search"
+              className="search-icon"
+              onClick={handleSearchClick}
+            />
+          </div>
+        </div>
+      )}
 
         <div className="header-user-profile">
           {showUserProfile && (
