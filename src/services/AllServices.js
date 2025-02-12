@@ -272,3 +272,22 @@ export const searchBooks = async (searchQuery) => {
     return handleError(error, "searchBooks");
   }
 };
+export const fetchSearchHistory = async () => {
+  const urlEndPoint = `search_history`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchSearchHistory");
+  }
+};
+
+export const fetchSearchCount = async () => {
+  const urlEndPoint = `search_count`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchSearchCount");
+  }
+};

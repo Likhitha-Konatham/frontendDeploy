@@ -9,7 +9,8 @@ import playIcon from '../images/playIcon.png';
 import tickReadLaterIcon from '../images/tick_readlater.png';
 import readlaterIcon from '../images/readlater_icon.png';
 import { insertReadLater, deleteReadLater } from "../services/AllServices.js"; // Import delete API
-const BookInfo = () => {
+
+const SearchedBookInfoPage = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,28 +21,23 @@ const BookInfo = () => {
 
   // Memoize books to avoid unnecessary re-renders
   const books = useMemo(() => location.state?.books || [], [location.state]);
-
-
-  useEffect(() => {
-    if (books.length > 0) {
-      const selectedIndex = books.findIndex((book) => book._id === bookId);
-      setCurrentIndex(selectedIndex !== -1 ? selectedIndex : 0);
+  const selectedBook = location.state?.selectedBook || books.find(book => book.bookID === bookId);
   
-      // Check bookmark status from local storage
-      const currentBook = books[selectedIndex];
-      const storedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
-      setIsBookmarked(!!storedBookmarks[currentBook?._id]); // Check if the book is bookmarked
+  useEffect(() => {
+    if (selectedBook) {
+      const selectedIndex = books.findIndex((book) => book.bookID === bookId);
+      setCurrentIndex(selectedIndex !== -1 ? selectedIndex : 0);
     }
   }, [bookId, books]);
-
-  const currentBook = books[currentIndex] || {}; 
+  
+  const currentBook = selectedBook || books[currentIndex] || {};
   
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => {
       const nextIndex = (prevIndex + 1) % books.length;
       const nextBook = books[nextIndex];
-      navigate(`/book-info/${nextBook._id}`, { state: { books } });
+      navigate(`/searched-books/${nextBook.bookID}`, { state: { books } });
       return nextIndex;
     });
   };
@@ -50,7 +46,7 @@ const BookInfo = () => {
     setCurrentIndex((prevIndex) => {
       const prevIndexCalc = (prevIndex - 1 + books.length) % books.length;
       const prevBook = books[prevIndexCalc];
-      navigate(`/book-info/${prevBook._id}`, { state: { books } });
+      navigate(`/searched-books/${prevBook.bookID}`, { state: { books } });
       return prevIndexCalc;
     });
   };
@@ -101,7 +97,7 @@ const BookInfo = () => {
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "Dashboard" };
+      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "" };
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {
@@ -136,11 +132,11 @@ const BookInfo = () => {
 
         <div className="bookInfo_body">
           <div className="carousel-container">
-              <div className="carousel-arrow" onClick={handlePrev}>
+            <div className="carousel-arrow" onClick={handlePrev}>
                 <div className="left-arrow">
                  <img src={bigLeftArrow} alt="left arrow" />
                 </div>
-              </div>
+            </div>
 
             <div className="carousel-content">
               <img className="bookinfo_cover" src={currentBook.thumbnail} alt="Book Cover" />
@@ -179,4 +175,4 @@ const BookInfo = () => {
   );
 };
 
-export default BookInfo;
+export default SearchedBookInfoPage;

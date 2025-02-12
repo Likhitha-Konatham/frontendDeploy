@@ -156,7 +156,9 @@ const BookInfo = () => {
           ) : (
             <div className="carousel-container">
               <div className="carousel-arrow" onClick={handlePrev}>
-                <img src={bigLeftArrow} alt="left arrow" />
+                <div className="left-arrow">
+                 <img src={bigLeftArrow} alt="left arrow" />
+                </div>
               </div>
 
               <div className="carousel-content">
@@ -185,7 +187,9 @@ const BookInfo = () => {
               </div>
 
               <div className="carousel-arrow" onClick={handleNext}>
-                <img src={bigRightArrow} alt="right arrow" />
+                <div className="right-arrow">
+                  <img src={bigRightArrow} alt="right arrow" />
+                </div>
               </div>
             </div>
           )}

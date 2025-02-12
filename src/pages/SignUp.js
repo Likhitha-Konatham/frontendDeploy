@@ -6,10 +6,9 @@ import fullname_logo from "../images/fullname_logo.svg";
 import message_logo from "../images/message_logo.svg";
 import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
-import leftArrow from "../images/left_arrow.png";
-import rightArrow from "../images/right_arrow.png";
 import { sendOTP, validateOTP } from "../services/AllServices";
 import upload_icon from "../images/upload_icon.svg";
+
 const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
   <div className="inputfield-wrapper">
     <div className="inputfield-container">
@@ -132,15 +131,9 @@ const SignUp = () => {
   return (
     <div className="signup-page">
       <header className="header">
-        <div className="header-left-section">
+        <a href="/" className="header-left-section">
           <img src={book_logo} alt="book logo" className="book-logo-icon" />
-          <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
-          <img
-            src={rightArrow}
-            alt="Right Arrow"
-            className="right-arrow-icon"
-          />
-        </div>
+        </a>
       </header>
       <div className="signup-container">
         <div className="signup-form">
@@ -151,7 +144,7 @@ const SignUp = () => {
               src={book_logo}
             />
             <div className="booklogo-heading-text">
-              <div className="heading-text-wrapper">Let's get Started</div>
+              <div className="heading-text-wrapper">Sign up</div>
             </div>
           </div>
 

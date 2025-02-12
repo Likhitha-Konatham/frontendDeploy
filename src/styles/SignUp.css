@@ -20,32 +20,19 @@
 }
 
 .signup-container {
-  margin-top: 1.562vw;
+  margin-top: 2.5vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 27.832vw;
-  height: 38vw;
+  width: 24.832vw;
+  height: 36vw;
   max-height: 150vh;
   padding: 2.604vw 2.084vw;
   background-color: #ffffff;
   border-radius: 0.937vw;
   box-shadow: 0 0.208vw 0.312vw rgba(0, 0, 0, 0.1);
 }
-
-@media (max-width: 768px) {
-  .signup-page {
-    padding: 1.042vw;
-  }
-
-  .signup-container {
-    width: 90%;
-    max-width: 20.832vw;
-    padding: 1.562vw 1.042vw;
-  }
-}
-
 html, body {
   height: 100%;
   margin: 0;
@@ -61,8 +48,8 @@ html, body {
 }
 
 .book-logo-icon {
-    width: 2.5vw;
-    height: 2.5vw;
+    width: 2vw;
+    height: 2vw;
     margin: 0 0.5vw;
 }
 
@@ -77,14 +64,14 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 1.771vw;
-    margin-bottom: 3.104vw;
+    margin-bottom: 2vw;
 
 
 }
 
 .booklogo-img {
-    width: 5.046vw;
-    height: 5.0646vw;
+    width: 4.046vw;
+    height: 4.0646vw;
 }
 
 .booklogo-heading-text .heading-text-wrapper {
@@ -105,12 +92,6 @@ html, body {
     font-weight: 400;
     justify-content: flex-start;
 }
-
-@media (max-width: 991px) {
-    .signup-form {
-      margin-top: 2.084vw;
-    }
-  }
 
 .signup-form-group {
     display: flex;
@@ -149,12 +130,6 @@ html, body {
     margin: 0.521vw;
 }
 
-@media (max-width: 991px) {
-    .inputfield-container {
-      max-width: 100%;
-      padding: 0 1.042vw;
-    }
-  }
 
 .inputfield-content {
     display: flex;
@@ -165,12 +140,6 @@ html, body {
     flex-wrap: wrap;
     height: 100%;
 }
-@media (max-width: 991px) {
-    .inputfield-content {
-      max-width: 100%;
-    }
-  }
-
 .inputfield-icon {
     aspect-ratio: 1;
     object-fit: contain;
@@ -188,17 +157,6 @@ html, body {
     color: black;
 }
 
-.inputfield-inside:focus {
-    outline: 0.104vw solid #abafb1;
-    border-radius: 0.453vw;
-}
-
-@media (max-width: 991px) {
-    .inputfield-inside {
-      max-width: 100%;
-    }
-  }
-
 .passwordInputContainer {
     border-radius: 0.609vw;
     background-color: rgba(239, 241, 249, 0.6);
@@ -211,13 +169,6 @@ html, body {
     justify-content: center;
     padding: 0.625vw 1.198vw;
 }
-
-@media (max-width: 991px) {
-    .passwordInputContainer {
-      max-width: 100%;
-      padding: 0 1.042vw;
-    }
-  }
 
 /* Hide the default file input */
 .hidden-file-input {
@@ -258,12 +209,6 @@ html, body {
     height: 100%;
 }
 
-@media (max-width: 991px) {
-    .passwordInputContent {
-      max-width: 100%;
-    }
-}
-
 .passwordIcon {
     aspect-ratio: 1;
     object-fit: contain;
@@ -282,12 +227,6 @@ html, body {
     font-size: 1.033vw;
     color: black;
 }
-
-.passwordField:focus {
-    outline: 0.104vw solid #abafb1;
-    border-radius: 0.453vw;
-}
-
 .visibilityIcon {
     aspect-ratio: 0.96;
     object-fit: contain;
@@ -298,40 +237,29 @@ html, body {
     cursor: pointer;
 }
 
-.signup-loginLink {
+.signup-loginLink p {
     color: black;
     text-align: center;
     font-size: 0.9815vw;
-    margin-top: -0.36vw;
+}
+.signup-loginLink p a {
+    text-decoration: none;
 }
 
-@media (max-width: 991px) {
-    .loginLink {
-      margin-top: 2.084vw;
-    }
-}
 
 .signUpButton {
   align-self: center;
-  border-radius: 0.938vw;
+  border-radius: 0.7vw;
   background-color: #a63e71;
   color: #fff;
   text-align: center;
-  width: 11.375vw;
-  height: 4.046vw;
+  width: 10.375vw;
+  height: 3.046vw;
   padding: 0.521vw 1.1983vw;
   font: 400 1.146vw Inter, sans-serif;
   border: none;
   cursor: pointer;
   margin-top: 1vw;
-}
-
-@media (max-width: 991px) {
-    .signUpButton {
-      padding: 1.042vw;
-      left: 50%;
-      transform: translateX(-50%);
-    }
 }
 
 .visually-hidden {

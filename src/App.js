@@ -22,6 +22,7 @@ import SearchedBooksPage from "./pages/SearchedBooksPage.js";
 import ProtectedRoute from "./Routing/PrivateRouting";
 import NotFound from "./components/NotFound.js";
 import LandingPage from "./pages/LandingPage.js";
+import SearchedBookInfoPage from "./pages/SearchedBooksInfoPage.js";
 
 function NotFoundWrapper() {
   const location = useLocation(); // Get the current location (i.e., URL path)
@@ -67,6 +68,10 @@ function App() {
           <Route
             path="/book-info/:bookId"
             element={<ProtectedRoute element={BookInformationPage} />}
+          />
+          <Route
+            path="/searched-books/:bookId"
+            element={<ProtectedRoute element={SearchedBookInfoPage} />}
           />
           <Route
             path="/audiobook-player"
