@@ -257,16 +257,15 @@ export const fetchInProgressBooks = async () => {
   }
 };
 
-
 export const searchBooks = async (searchQuery) => {
   const urlEndPoint = `search`;
   console.log("Search Query:", searchQuery);
-  
+
   const params = { search_query: encodeURIComponent(searchQuery) };
   try {
     const response = await requestGetApiCall(urlEndPoint, params);
     console.log("API Response:", response); // Debugging
-    return response
+    return response;
   } catch (error) {
     console.error("Error in searchBooks:", error);
     return handleError(error, "searchBooks");

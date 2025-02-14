@@ -1,43 +1,84 @@
-.main-content{
+.main-content {
     display: flex;
     width: 100%;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
-.sidebar_container{
+
+.sidebar_container {
     width: 4.5%;
-    background-color: white;
+    background-color: var(--bg-primary);
 }
-.dashboard_container{
+
+.dashboard_container {
     width: 95.5%;
+    color: var(--text-primary);
+    background-color: var(--bg-primary) !important;
 }
-.header_container{
+
+.header_container {
     width: 100%;
+    color: var(--text-primary);
 }
-.dashboard_body{
+
+.dashboard_body {
     display: flex;
-    background: #FAFAFA;
+    background: var(--bg-primary);
     overflow: hidden;
+    color: var(--text-primary);
 }
-.dashboard_body .carousels_container{
+
+.dashboard_body .carousels_container {
     width: 72%;
+    color: var(--text-primary);
 }
-.dashboard_body .carousels_container .new_releases_carousel{
+
+.dashboard_body .carousels_container .new_releases_carousel {
     width: 100%;
     margin: auto;
+    color: var(--text-primary);
 }
-.dashboard_body .carousels_container .genre_carousel{
+
+.dashboard_body .carousels_container .genre_carousel {
     width: 100%;
     padding: 0vw 3vw 0vw;
+    color: var(--text-primary);
 }
-.inprogress_booksbar{
+
+.inprogress_booksbar {
     width: 28%;
+    color: var(--text-primary);
 }
-.loading-spinner{
+
+.loading-spinner {
     margin: 12vw 40vw 20vw;
     width: 8vw;
     height: 8vw;
 }
-.loading-spinner img{
+
+.loading-spinner img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    filter: var(--icon-filter);
+}
+
+/* Light theme */
+body.light {
+    --bg-primary: #fafafa !important;
+    --bg-secondary: #FAFAFA;
+    --text-primary: #45464e;
+    --text-secondary: #5e6366;
+    --border-color: #e5e5e5;
+    --icon-filter: none;
+}
+
+/* Dark theme */
+body.dark .dashboard_container{
+    --bg-primary: #121212 !important;
+    --bg-secondary: #2c2c2c;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --border-color: #444444;
+    --icon-filter: invert(1);
 }

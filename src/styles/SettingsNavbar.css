@@ -1,4 +1,4 @@
-.settings_nav_bar {
+/* .settings_nav_bar {
     display: flex;
     justify-content: flex-start;
     font-size: 1.0416vw;
@@ -25,4 +25,44 @@
     font-weight: 400;
     border-bottom: 0.208vw solid var(--Color, #A63E71);
   }
-  
+   */
+
+   .settings_nav_bar {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 1.0416vw;
+    width: 100%;
+}
+
+.settings_nav_link {
+    cursor: pointer;
+    color: var(--text-secondary, #A7A7A7);
+    text-align: center;
+    font-family: Inter;
+    font-size: 0.834vw;
+    font-weight: 400;
+    border-bottom: 0.1041vw solid transparent;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+.settings_nav_link.active {
+    color: var(--text-primary, #45464E);
+    text-align: center;
+    font-family: Inter;
+    font-size: 0.834vw;
+    font-weight: 400;
+    border-bottom: 0.208vw solid var(--accent-color, #A63E71);
+}
+
+/* Light and Dark theme variables */
+body.light {
+    --text-primary: #45464E;
+    --text-secondary: #A7A7A7;
+    --accent-color: #A63E71;
+}
+
+body.dark {
+    --text-primary: #FFFFFF;
+    --text-secondary: #CCCCCC;
+    --accent-color: #D675A3;
+}

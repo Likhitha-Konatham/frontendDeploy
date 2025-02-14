@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import "../styles/SignUp.css";
+import leftArrow from "../images/left_arrow.png";
+import rightArrow from "../images/right_arrow.png";
 import book_logo from "../images/vector_booklogo.svg";
 import fullname_logo from "../images/fullname_logo.svg";
 import message_logo from "../images/message_logo.svg";
-import password_eye from "../images/password_eye.svg";
+// import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
 import { sendOTP, validateOTP } from "../services/AllServices";
 import upload_icon from "../images/upload_icon.svg";
@@ -107,6 +110,19 @@ const SignUp = () => {
       setLoadingResendOTP(false);
     }
   };
+  const [canGoBack, setCanGoBack] = useState(false);
+
+  useEffect(() => {
+    setCanGoBack(window.history.length > 1); // Check if there is a previous page
+  }, []);
+
+  const goBack = () => {
+    if (canGoBack) window.history.back();
+  };
+
+  const goForward = () => {
+    window.history.forward();
+  };
 
   const handleOtpSubmit = async () => {
     setLoadingVerifyOTP(true);
@@ -130,10 +146,36 @@ const SignUp = () => {
 
   return (
     <div className="signup-page">
-      <header className="header">
+      {/* <header className="header">
         <a href="/" className="header-left-section">
           <img src={book_logo} alt="book logo" className="book-logo-icon" />
         </a>
+      </header> */}
+      <header className="header">
+        <div className="header-left-section">
+          <img src={book_logo} alt="book logo" className="book-logo-icon" />
+
+          {/* Left Arrow (Back) */}
+          <img
+            src={leftArrow}
+            alt="Left Arrow"
+            className={`left-arrow-icon ${!canGoBack ? "disabled" : ""}`}
+            onClick={goBack}
+            style={{
+              cursor: canGoBack ? "pointer" : "not-allowed",
+              opacity: canGoBack ? 1 : 0.5,
+            }}
+          />
+
+          {/* Right Arrow (Forward) */}
+          <img
+            src={rightArrow}
+            alt="Right Arrow"
+            className="right-arrow-icon"
+            onClick={goForward}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
       </header>
       <div className="signup-container">
         <div className="signup-form">
@@ -219,7 +261,7 @@ const SignUp = () => {
                         onChange={handleInputChange}
                         required
                       />
-                      <img
+                      {/* <img
                         loading="lazy"
                         src={password_eye}
                         alt={showPassword ? "Hide password" : "Show password"}
@@ -227,7 +269,22 @@ const SignUp = () => {
                         onClick={togglePasswordVisibility}
                         tabIndex="0"
                         role="button"
-                      />
+                      /> */}
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="visibilityIcon"
+                        aria-pressed={showPassword}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} className="icon" />
+                        ) : (
+                          <Eye size={20} className="icon" />
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -251,10 +308,7 @@ const SignUp = () => {
                 onChange={handleCheckboxChange}
                 required
               />
-              <label
-                htmlFor="agree_tc"
-                style={{ color: "black", marginLeft: "0.5vw" }}
-              >
+              <label className="terms-condition-label" htmlFor="agree_tc">
                 I agree to the terms and conditions
               </label>
             </div>

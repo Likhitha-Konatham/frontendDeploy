@@ -1,5 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+/* Theme variables */
+body.light {
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #ffffff;
+  --text-primary: #45464e;
+  --text-secondary: #5e6366;
+  --border-color: #e5e5e5;
+  --input-bg: rgba(239, 241, 249, 0.6);
+  --button-bg: #a63e71;
+  --button-text: #fff;
+  --error-color: red;
+  --link-color: #a63e71;
+  --popup-bg: #fff;
+  --popup-overlay: rgba(0, 0, 0, 0.3);
+  --close-button-bg: #fff;
+  --close-button-color: #333;
+  --close-button-border: #333;
+  --close-button-hover-bg: #a63e71;
+  --close-button-hover-color: #fff;
+}
+
+body.dark {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2c2c2c;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --border-color: #444444;
+  --input-bg: rgba(239, 241, 249, 0.2);
+  --button-bg: #a63e71;
+  --button-text: #fff;
+  --error-color: #ff6b6b;
+  --link-color: #ff9ecd;
+  --popup-bg: #2c2c2c;
+  --popup-overlay: rgba(0, 0, 0, 0.5);
+  --close-button-bg: #2c2c2c;
+  --close-button-color: #fff;
+  --close-button-border: #666;
+  --close-button-hover-bg: #a63e71;
+  --close-button-hover-color: #fff;
+}
+
 .signup-page {
   width: 100%;
   height: 100vh;
@@ -8,7 +49,7 @@
   padding: 0;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
+  background-color: var(--bg-primary);
   margin: 0;
   overflow: hidden;
 }
@@ -29,10 +70,11 @@
   height: 36vw;
   max-height: 150vh;
   padding: 2.604vw 2.084vw;
-  background-color: #ffffff;
+  background-color: var(--bg-secondary);
   border-radius: 0.937vw;
   box-shadow: 0 0.208vw 0.312vw rgba(0, 0, 0, 0.1);
 }
+
 html, body {
   height: 100%;
   margin: 0;
@@ -42,14 +84,24 @@ html, body {
 
 .left-arrow-icon,
 .right-arrow-icon {
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 2vw;
+    height: 2vw;
     margin: 0 0.5vw;
 }
 
+.left-arrow-icon :disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.right-arrow-icon :disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .book-logo-icon {
-    width: 2vw;
-    height: 2vw;
+    width: 3vw;
+    height: 3vw;
     margin: 0 0.5vw;
 }
 
@@ -58,15 +110,23 @@ html, body {
     flex-direction: column;
     align-items: center;
 }
-
+.visibilityIcon {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  body.dark  .visibilityIcon .icon {
+    filter: invert(0.5);
+  }
+  
 .booklogo-heading {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1.771vw;
     margin-bottom: 2vw;
-
-
 }
 
 .booklogo-img {
@@ -75,7 +135,7 @@ html, body {
 }
 
 .booklogo-heading-text .heading-text-wrapper {
-    color: #000;
+    color: var(--text-primary);
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-size: 1.546vw;
@@ -99,7 +159,7 @@ html, body {
     flex-direction: column;
     align-items: flex-end;
     font-size: 1.198vw;
-    color: #abafb1;
+    color: var(--text-secondary);
     justify-content: flex-start;
 }
 
@@ -115,12 +175,11 @@ html, body {
     width: 100%;
     flex-direction: column;
     justify-content: flex-start;
-    
 }
 
 .inputfield-container {
     border-radius: 0.609vw;
-    background-color: rgba(239, 241, 249, 0.6);
+    background-color: var(--input-bg);
     display: flex;
     min-height: 2.023vw;
     width: 85%;
@@ -129,7 +188,6 @@ html, body {
     padding: 0.625vw 1.198vw;
     margin: 0.521vw;
 }
-
 
 .inputfield-content {
     display: flex;
@@ -140,6 +198,7 @@ html, body {
     flex-wrap: wrap;
     height: 100%;
 }
+
 .inputfield-icon {
     aspect-ratio: 1;
     object-fit: contain;
@@ -154,12 +213,48 @@ html, body {
     border: none;
     background: transparent;
     font-size: 1.133vw;
-    color: black;
+    color: var(--text-primary);
 }
+
+.inputfield-inside {
+    min-width: 12.5vw;
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1.133vw;
+    color: var(--text-primary);
+}
+
+/* Autofill styles */
+.inputfield-inside:-webkit-autofill {
+    background-color: var(--input-background) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    transition: background-color 5000s ease-in-out 0s; /* Prevents the browser from overriding */
+}
+
+.terms-condition-label {
+    margin-left: 0.5vw;
+    color: var(--text-primary);
+}
+
+.inputfield-inside:focus {
+    border-color: var(--text-secondary);
+    /* box-shadow: 0 0 0.208vw rgba(169, 169, 169, 0.5); */
+}
+
+
+.passwordField:-webkit-autofill {
+    background-color: var(--input-background) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    transition: background-color 5000s ease-in-out 0s; /* Prevents the browser from overriding */
+}
+
 
 .passwordInputContainer {
     border-radius: 0.609vw;
-    background-color: rgba(239, 241, 249, 0.6);
+    background-color: var(--input-bg);
     display: flex;
     min-height: 1.823vw;
     width: 85%;
@@ -170,33 +265,33 @@ html, body {
     padding: 0.625vw 1.198vw;
 }
 
-/* Hide the default file input */
 .hidden-file-input {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 0.0521vw;
+    height: 0.0521vw;
     opacity: 0;
     z-index: -1;
-  }
-  
-  /* Style the label as a placeholder */
-  .custom-file-label {
+}
+
+.custom-file-label {
     flex-grow: 1;
     cursor: pointer;
-    color: #aaa;
-    font-size: 16px;
+    color: var(--text-secondary);
+    font-size: 1.008vw;
     background-color: transparent;
     border: none;
     outline: none;
     padding: 0.5em;
-  }
-  
-  /* Hover and focus styles */
-  .custom-file-label:hover,
-  .custom-file-label:focus {
-    color: #333;
-  }
-  
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+}
+
+.custom-file-label:hover,
+.custom-file-label:focus {
+    color: var(--text-primary);
+}
 
 .passwordInputContent {
     display: flex;
@@ -224,8 +319,12 @@ html, body {
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 1.033vw;
-    color: black;
+    font-size: 1.133vw;
+    color: var(--text-primary);
+}
+
+.passwordField::placeholder {
+    color: var(--text-secondary);
 }
 .visibilityIcon {
     aspect-ratio: 0.96;
@@ -238,28 +337,29 @@ html, body {
 }
 
 .signup-loginLink p {
-    color: black;
+    color: var(--text-primary);
     text-align: center;
     font-size: 0.9815vw;
 }
+
 .signup-loginLink p a {
     text-decoration: none;
+    color: var(--link-color);
 }
 
-
 .signUpButton {
-  align-self: center;
-  border-radius: 0.7vw;
-  background-color: #a63e71;
-  color: #fff;
-  text-align: center;
-  width: 10.375vw;
-  height: 3.046vw;
-  padding: 0.521vw 1.1983vw;
-  font: 400 1.146vw Inter, sans-serif;
-  border: none;
-  cursor: pointer;
-  margin-top: 1vw;
+    align-self: center;
+    border-radius: 0.7vw;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    text-align: center;
+    width: 10.375vw;
+    height: 3.046vw;
+    padding: 0.521vw 1.1983vw;
+    font: 400 1.146vw Inter, sans-serif;
+    border: none;
+    cursor: pointer;
+    margin-top: 1vw;
 }
 
 .visually-hidden {
@@ -275,12 +375,11 @@ html, body {
 }
 
 .otp-popup {
- 
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #fff;
+    background: var(--popup-bg);
     padding: 1.542vw;
     width: 26.832vw;
     max-width: 90%;
@@ -291,6 +390,7 @@ html, body {
 
 .otp-popup-content {
     text-align: center;
+    color: var(--text-primary);
 }
 
 .otp-popup-content p {
@@ -308,25 +408,22 @@ html, body {
     padding: 0.521vw;
     margin: 0.521vw 0;
     margin-bottom: 1vw;
-    border: 0.052vw solid #ccc;
+    border: 0.052vw solid var(--border-color);
     border-radius: 0.208vw;
     outline: none;
     transition: border-color 0.3s ease;
+    background-color: var(--input-bg);
+    color: var(--text-primary);
 }
 
 .otp-input:focus {
-    border-color: #a9a9a9;
+    border-color: var(--text-secondary);
     box-shadow: 0 0 0.208vw rgba(169, 169, 169, 0.5);
 }
 
-.otp-input:focus {
-    border: 0.052vw solid #ccc;
-    border-radius: 0.208vw;
-}
-
 .otp-submit-button {
-    background-color: #a63e71;
-    color: white;
+    background-color: var(--button-bg);
+    color: var(--button-text);
     border: none;
     padding: 0.521vw 1.042vw;
     border-radius: 0.417vw;
@@ -334,13 +431,13 @@ html, body {
 }
 
 .error-message {
-    color: red;
+    color: var(--error-color);
     font-size: 1.04vw;
     margin-top: 0.521vw;
 }
 
 .signup-error-email {
-    color: red;
+    color: var(--error-color);
     font-size: 0.94vw;
     margin-top: 0.521vw;
     margin-bottom: 0vw;
@@ -353,7 +450,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--popup-overlay);
     backdrop-filter: blur(0.312vw);
     -webkit-backdrop-filter: blur(0.312vw);
     z-index: 1000;
@@ -368,36 +465,36 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
-    border: 0.006vw solid #333;
+    background-color: var(--close-button-bg);
+    border: 0.006vw solid var(--close-button-border);
     border-radius: 50%;
     font-size: 0.885vw;
     font-weight: 20;
-    color: #333;
+    color: var(--close-button-color);
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
     z-index: 1010;
 }
 
 .close-popup-button:hover {
-    background-color: #a63e71;
-    color: #fff;
+    background-color: var(--close-button-hover-bg);
+    color: var(--close-button-hover-color);
     transform: scale(1.1);
 }
 
 .error-border {
-    border: 0.052vw solid red;
+    border: 0.052vw solid var(--error-color);
     border-radius: 0.609vw;
 }
 
 .inputfield-inside::placeholder {
-    color: var(--placeholder-color, #999);
+    color: var(--text-secondary);
 }
 
 .resend-otp-button {
     background-color: transparent;
-    color: #a63e71;
-    border: 0.052vw solid #a63e71;
+    color: var(--link-color);
+    border: 0.052vw solid var(--link-color);
     padding: 0.521vw 1.042vw;
     border-radius: 0.417vw;
     cursor: pointer;
@@ -406,8 +503,8 @@ html, body {
 }
 
 .resend-otp-button:hover {
-    background-color: #a63e71;
-    color: white;
+    background-color: var(--button-bg);
+    color: var(--button-text);
 }
 
 .otp-buttons {
@@ -418,10 +515,10 @@ html, body {
 }
 
 .Agree_tc {
-  margin-top: 1vw;
-  font-size: 0.9815vw;
-  color: white;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.1vw;
+    margin-top: 1vw;
+    font-size: 0.9815vw;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.1vw;
 }

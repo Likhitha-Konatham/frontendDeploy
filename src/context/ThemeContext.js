@@ -1,50 +1,32 @@
-// import React, { createContext, useState, useEffect } from "react";
-
-// export const ThemeContext = createContext();
-
-// export const ThemeProvider = ({ children }) => {
-//   const [isLightMode, setIsLightMode] = useState(
-//     JSON.parse(localStorage.getItem("isLightMode")) || true
-//   );
-
-//   useEffect(() => {
-//     // Add or remove the `dark-mode` class from the body
-//     document.body.className = isLightMode ? "light-mode" : "dark-mode";
-//     // Store the theme in localStorage
-//     localStorage.setItem("isLightMode", JSON.stringify(isLightMode));
-//     console.log("islightmode", isLightMode);
-//   }, [isLightMode]);
-
-//   const toggleTheme = () => {
-//     setIsLightMode((prevMode) => !prevMode);
-//   };
-
-//   return (
-//     <ThemeContext.Provider value={{ isLightMode, toggleTheme }}>
-//       {children}
-//     </ThemeContext.Provider>
-//   );
-// };
-
 import React, { createContext, useState, useEffect } from "react";
 
-export const ThemeContext = createContext();
+export const ThemeContext = createContext({
+  isLightMode: true,
+  toggleTheme: () => {},
+});
 
 export const ThemeProvider = ({ children }) => {
-  const [isLightMode, setIsLightMode] = useState(
-    JSON.parse(localStorage.getItem("isLightMode")) || true
-  );
+  // Initialize theme from localStorage, default to light mode
+  const [isLightMode, setIsLightMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme !== "dark"; // Default to light if not explicitly set to dark
+  });
 
+  // Toggle theme function
   const toggleTheme = () => {
     const newTheme = !isLightMode;
     setIsLightMode(newTheme);
-    localStorage.setItem("isLightMode", JSON.stringify(newTheme));
-    document.body.className = newTheme ? "light-mode" : "dark-mode"; // Update body class
+
+    // Save to localStorage
+    localStorage.setItem("theme", newTheme ? "light" : "dark");
+
+    // Apply theme to body
+    document.body.className = newTheme ? "light" : "dark";
   };
 
+  // Apply theme on initial load and when theme changes
   useEffect(() => {
-    // Set initial body class on mount
-    document.body.className = isLightMode ? "light-mode" : "dark-mode";
+    document.body.className = isLightMode ? "light" : "dark";
   }, [isLightMode]);
 
   return (

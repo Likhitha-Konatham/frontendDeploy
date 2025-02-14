@@ -1,11 +1,11 @@
 // src/pages/Settings.js
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import '../styles/Settings.css';
+import "../styles/Settings.css";
 import Sidebar from "../components/Sidebar.js";
 import Header from "../components/Header.js";
-import AccountSection from '../components/AccountSection.js';
-import SettingsSection from '../components/SettingsSection.js';
+import AccountSection from "../components/AccountSection.js";
+import SettingsSection from "../components/SettingsSection.js";
 import SettingsNavbar from "../components/SettingsNavbar.js";
 
 const Settings = () => {
@@ -14,7 +14,7 @@ const Settings = () => {
   const [selectedSection, setSelectedSection] = useState(
     location.state?.selectedSection || "settings"
   );
-  const [searchQuery, setSearchQuery] = useState(''); 
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const resetSearch = () => {
@@ -33,23 +33,44 @@ const Settings = () => {
       setSelectedSection("settings"); // Reset to settings section
       navigate("/settings"); // Navigate to settings page
     }
-  
+
     resetSearch(); // Reset search whenever a new section is selected
   };
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "Dashboard" };
+      return {
+        showSearch: true,
+        showUserProfile: true,
+        showArrows: false,
+        pageName: "Dashboard",
+      };
     } else if (activeItem === "bookmarks") {
-      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
+      return {
+        showSearch: true,
+        showUserProfile: true,
+        showArrows: true,
+        pageName: "",
+      };
     } else if (activeItem === "library") {
-      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "My Library" };
+      return {
+        showSearch: false,
+        showUserProfile: true,
+        showArrows: true,
+        pageName: "My Library",
+      };
     } else if (activeItem === "settings") {
-      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "" };
+      return {
+        showSearch: false,
+        showUserProfile: true,
+        showArrows: true,
+        pageName: "",
+      };
     }
   };
 
-  const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
+  const { showSearch, showUserProfile, showArrows, pageName } =
+    getHeaderVisibility();
 
   const handleSectionClick = (section) => {
     setSelectedSection(section);
@@ -71,7 +92,7 @@ const Settings = () => {
 
       <div className="settings_container">
         <div className="header_container">
-           <Header
+          <Header
             showSearch={showSearch}
             showUserProfile={showUserProfile}
             showArrows={showArrows}
@@ -81,18 +102,17 @@ const Settings = () => {
             onProfileClick={handleProfileClick} // Pass the function here
           />
         </div>
-        <div className="settings-nav-bar">
-             <SettingsNavbar
+        <div className="settings_body_wrapper">
+          <div className="settings_body">
+            <div className="settings-nav-bar">
+              <SettingsNavbar
                 selectedSection={selectedSection}
                 onSelectSection={handleSectionClick}
               />
-             
-        </div>
-        
-
-        <div className="settings_body">
-        {selectedSection === "account" && <AccountSection />}
-        {selectedSection === "settings" && <SettingsSection />}
+            </div>
+            {selectedSection === "account" && <AccountSection />}
+            {selectedSection === "settings" && <SettingsSection />}
+          </div>
         </div>
       </div>
     </main>

@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/SignIn.css";
+import { Eye, EyeOff } from "lucide-react";
+
 import book_logo from "../images/vector_booklogo.svg";
 import message_logo from "../images/message_logo.svg";
-import password_eye from "../images/password_eye.svg";
+// import password_eye from "../images/password_eye.svg";
+import leftArrow from "../images/left_arrow.png";
+import rightArrow from "../images/right_arrow.png";
 import lock_logo from "../images/lock_logo.svg";
 import { loginUser } from "../services/AllServices";
 
@@ -11,6 +15,22 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
+  const [canGoBack, setCanGoBack] = useState(false);
+
+  useEffect(() => {
+    setCanGoBack(window.history.length > 1);
+  }, []);
+
+  const goBack = () => {
+    if (canGoBack) {
+      window.history.back();
+    }
+  };
+
+  const goForward = () => {
+    window.history.forward();
+  };
 
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -58,10 +78,32 @@ const SignIn = () => {
   return (
     <main className="signin-page">
       <header className="header">
-        <a href="/" className="header-left-section">
+        <div className="header-left-section">
           <img src={book_logo} alt="book logo" className="book-logo-icon" />
-        </a>
+
+          {/* Left Arrow (Back) */}
+          <img
+            src={leftArrow}
+            alt="Left Arrow"
+            className={`left-arrow-icon ${!canGoBack ? "disabled" : ""}`}
+            onClick={goBack}
+            style={{
+              cursor: canGoBack ? "pointer" : "not-allowed",
+              opacity: canGoBack ? 1 : 0.5,
+            }}
+          />
+
+          {/* Right Arrow (Forward) */}
+          <img
+            src={rightArrow}
+            alt="Right Arrow"
+            className="right-arrow-icon"
+            onClick={goForward}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
       </header>
+
       <div className="signin-container">
         <div className="signin-form">
           <div className="booklogo-heading">
@@ -120,7 +162,7 @@ const SignIn = () => {
                         onChange={handleInputChange}
                         required
                       />
-                      <img
+                      {/* <img
                         loading="lazy"
                         src={password_eye}
                         alt={showPassword ? "Hide password" : "Show password"}
@@ -134,7 +176,22 @@ const SignIn = () => {
                         tabIndex="0"
                         role="button"
                         aria-pressed={showPassword}
-                      />
+                      /> */}
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="visibilityIcon"
+                        aria-pressed={showPassword}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} className="icon" />
+                        ) : (
+                          <Eye size={20} className="icon" />
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>

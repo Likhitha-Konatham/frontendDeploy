@@ -6,119 +6,148 @@
   margin-left: 22vw;
   margin-top: 0.5vw;
   position: relative;
+  background-color: var(--bg-primary);
 }
-/* Swiper Container */
+
+/* Rest of the CSS remains the same */
 .swiper-container {
     width: 100%;
     height: 16.5vw;
     position: relative;
 }
 
-/* Swiper Slide */
 .swiper-slide {
-    width: auto; /* Let Swiper auto-adjust slide width */
+    width: auto;
     height: 100%;
     display: flex;
     justify-content: center;
     overflow: hidden;
     cursor: grab;
     transition: transform 0.3s ease;
-  }
+}
   
-  .swiper-slide img {
-    width: 10vw; /* Increase the width here as needed */
+.swiper-slide img {
+    width: 10vw;
     height: 11.2vw;
     object-fit: cover;
     object-position: top;
-    transition: width 0.3s ease, height 0.3s ease; /* Smooth transitions */
-  }
+    transition: width 0.3s ease, height 0.3s ease;
+}
   
-  /* Centered Slide Effect */
-  .swiper-slide-active img {
-    width: 10.2vw; /* Make the active slide larger */
-    height: 13.3vw; /* Adjust active slide height */
-  }
+.swiper-slide-active img {
+    width: 10.2vw;
+    height: 13.3vw;
+}
   
-  .swiper-pagination {
+.swiper-pagination {
     position: absolute;
     width: 100%;
     text-align: center;
-  }
+}
   
-  .swiper-pagination .swiper-pagination-bullet {
-    filter: drop-shadow(0px 8px 24px rgba(250, 250, 250, 1));
+.swiper-pagination .swiper-pagination-bullet {
+    filter: drop-shadow(0px 8px 24px var(--pagination-shadow));
     margin: 0 0.5vw;
     width: 0.5vw; 
     height: 0.5vw; 
     border-radius: 50%;
-    background-color: #a63e71; /* Default color for non-active bullets */
+    background-color: var(--accent-color);
     transition: all 0.3s ease;
-    }
+}
   
-  .swiper-pagination .swiper-pagination-bullet-active {
-    background: var(--Color, #A63E71);
-  }
+.swiper-pagination .swiper-pagination-bullet-active {
+    background: var(--accent-color);
+}
 
-  .swiper-button-prev,
-  .swiper-button-next {
+.swiper-button-prev,
+.swiper-button-next {
     position: absolute;
     top: 35%;
-    width: 1.5vw !important; /* Set the desired width for the arrow container */
-    height: 3vw !important; /* Set the desired height for the arrow container */
+    width: 1.5vw !important;
+    height: 3vw !important;
     cursor: pointer;
-    z-index: 10; /* Ensure arrows are on top */
-  }
+    z-index: 10;
+}
   
-  .swiper-button-prev {
+.swiper-button-prev {
     left: -5vw;
-  }
+}
   
-  .swiper-button-next {
+.swiper-button-next {
     right: -5vw;
-  }
+}
   
-  /* Arrow Images */
-  .swiper-button-prev img,
-  .swiper-button-next img {
-    width: 100% !important; /* Image will match container size */
+.swiper-button-prev img,
+.swiper-button-next img {
+    width: 100% !important;
     height: 100% !important;
     object-fit: contain;
-  }
+    filter: var(--icon-filter);
+}
 
-
-  /* Skeleton Loader Styles */
 .carousel-skeleton-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 16.5vw; /* Match the swiper container height */
-  width: auto;
-  overflow: hidden;
-  cursor: grab;
-  transition: transform 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 16.5vw;
+    width: auto;
+    overflow: hidden;
+    cursor: grab;
+    transition: transform 0.3s ease;
 }
 
-/* Skeleton image for carousel */
 .carousel-skeleton-image {
-  width: 10vw; /* Match the default width of the image */
-  height: 11.2vw; /* Match the default height of the image */
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite linear;
-  border-radius: 0.3vw /* Round corners to match the image style */
+    width: 10vw;
+    height: 11.2vw;
+    background: linear-gradient(90deg, 
+        var(--skeleton-start) 25%, 
+        var(--skeleton-middle) 50%, 
+        var(--skeleton-end) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite linear;
+    border-radius: 0.3vw;
 }
 
-/* Active skeleton effect, similar to active image */
 .carousel-skeleton-item-active .carousel-skeleton-image {
-  width: 10.2vw; /* Increase the width for the active skeleton */
-  height: 13.3vw; /* Increase the height for the active skeleton */
+    width: 10.2vw;
+    height: 13.3vw;
 }
 
 @keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Light theme */
+body.light .new-rleases-carousel-container{
+    --bg-primary: #fafafa;
+    --bg-secondary: #F9F9F9;
+    --text-primary: #45464e;
+    --text-secondary: #5e6366;
+    --border-color: #e5e5e5;
+    --accent-color: #a63e71;
+    --pagination-shadow: rgba(250, 250, 250, 1);
+    --skeleton-start: #f0f0f0;
+    --skeleton-middle: #e0e0e0;
+    --skeleton-end: #f0f0f0;
+    --icon-filter: none;
+}
+
+/* Dark theme */
+body.dark .new-rleases-carousel-container {
+    --bg-primary: #121212;
+    --bg-secondary: #2c2c2c;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --border-color: #444444;
+    --accent-color: #a63e71;
+    --pagination-shadow: rgba(0, 0, 0, 0.3);
+    --skeleton-start: #2c2c2c;
+    --skeleton-middle: #3c3c3c;
+    --skeleton-end: #2c2c2c;
+    --icon-filter: invert(1);
 }

@@ -22,13 +22,14 @@
     "react-transition-group": "^4.4.5",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.1.14",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "lucide-react": "0.475.0"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start": "PORT=3001 react-scripts --max_old_space_size=8128 start"
   },
   "eslintConfig": {
     "extends": [

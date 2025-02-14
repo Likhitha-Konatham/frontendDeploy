@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Header.css";
-import { fetchProfile, searchBooks, fetchSearchHistory, fetchSearchCount } from "../services/AllServices";
+import {
+  fetchProfile,
+  searchBooks,
+  fetchSearchHistory,
+  fetchSearchCount,
+} from "../services/AllServices";
 import { getToken } from "../storage/Storage";
-import searchIcon from "../images/search_icon.png";
+// import searchIcon from "../images/search_icon.png";
 import userIcon from "../images/user_icon.png";
 import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
 import historyIcon from "../images/history_icon.png";
+import { Search } from "lucide-react";
 
-const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows, pageName, onProfileClick }) => {
+const Header = ({
+  showSearch,
+  showUserProfile,
+  onSearch,
+  searchQuery,
+  showArrows,
+  pageName,
+  onProfileClick,
+}) => {
   const [profile, setProfile] = useState();
   const [token, setTokenState] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -69,7 +83,9 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
       try {
         const response = await searchBooks(searchQuery);
         if (response) {
-          navigate("/searched-results", { state: { searchedbooks: response.data, searchedQuery: searchQuery } });
+          navigate("/searched-results", {
+            state: { searchedbooks: response.data, searchedQuery: searchQuery },
+          });
         }
       } catch (error) {
         console.error("Error searching books:", error);
@@ -86,34 +102,49 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
     try {
       const response = await searchBooks(tag);
       if (response) {
-        navigate("/searched-results", { state: { searchedbooks: response.data, searchedQuery: tag } });
+        navigate("/searched-results", {
+          state: { searchedbooks: response.data, searchedQuery: tag },
+        });
       }
     } catch (error) {
       console.error("Error searching books:", error);
       alert("Failed to fetch search results.");
     }
   };
-  
+
   const handleHistoryClick = async (query) => {
     try {
       const response = await searchBooks(query);
       if (response) {
-        navigate("/searched-results", { state: { searchedbooks: response.data, searchedQuery: query } });
+        navigate("/searched-results", {
+          state: { searchedbooks: response.data, searchedQuery: query },
+        });
       }
     } catch (error) {
       console.error("Error searching books:", error);
       alert("Failed to fetch search results.");
     }
   };
-  
 
   return (
     <>
       <header className="header">
         {showArrows && (
           <div className="header-left-section">
-            <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
-            <img src={rightArrow} alt="Right Arrow" className="right-arrow-icon" onClick={() => navigate(1)} style={{ cursor: "pointer" }} />
+            <img
+              src={leftArrow}
+              alt="Left Arrow"
+              className="left-arrow-icon"
+              onClick={() => navigate(-1)}
+              style={{ cursor: "pointer" }}
+            />
+            <img
+              src={rightArrow}
+              alt="Right Arrow"
+              className="right-arrow-icon"
+              onClick={() => navigate(1)}
+              style={{ cursor: "pointer" }}
+            />
           </div>
         )}
         <div className="active_screen_text">
@@ -130,25 +161,53 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
                 onChange={(e) => onSearch(e.target.value)}
                 onKeyPress={handleSearchKeyPress}
               />
-              <img src={searchIcon} alt="Search" className="search-icon" onClick={handleSearchClick} />
+              {/* <img
+                src={searchIcon}
+                alt="Search"
+                className="search-icon"
+                onClick={handleSearchClick}
+              /> */}
+
+              <div className="search-icon" onClick={handleSearchClick}>
+                <Search
+                  size={18}
+                  color="#C4569C"
+                  style={{ background: "transparent" }}
+                />
+              </div>
             </div>
+
             {showDropdown && (
               <div className="search-dropdown">
                 <div className="search-container">
-                  <div className="searchbyplaceholder">Search by book name, author, genre, etc.</div>
+                  <div className="searchbyplaceholder">
+                    Search by book name, author, genre, etc.
+                  </div>
                   <div className="tags-container">
                     {searchCounts.map((tag, index) => (
-                      <span key={index} className="tag" onClick={() => handleTagClick(tag)} >
+                      <span
+                        key={index}
+                        className="tag"
+                        onClick={() => handleTagClick(tag)}
+                      >
                         {tag}
                       </span>
                     ))}
                   </div>
                   <div className="recent-container">
                     <h3 className="recent-heading">Recent</h3>
-                   <ul className="recent-list">
+                    <ul className="recent-list">
                       {searchHistory.map((item, index) => (
-                        <li key={index} onClick={() => handleHistoryClick(item)}>
-                          <img src={historyIcon} className="history-icon" alt="history icon" /> {item}
+                        <li
+                          key={index}
+                          onClick={() => handleHistoryClick(item)}
+                        >
+                          <img
+                            src={historyIcon}
+                            className="history-icon"
+                            alt="history icon"
+                          />{" "}
+                          {item}
                         </li>
                       ))}
                     </ul>
@@ -163,7 +222,11 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
           {showUserProfile && (
             <>
               {!token ? (
-                <div className="header-user-name" onClick={() => setShowPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
+                <div
+                  className="header-user-name"
+                  onClick={() => setShowPopup((prev) => !prev)}
+                  style={{ cursor: "pointer" }}
+                >
                   Sign In / Account
                 </div>
               ) : (
@@ -171,7 +234,13 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
                   {profile?.firstname} {profile?.lastName}
                 </div>
               )}
-              <img src={userIcon} alt="User Icon" className="header-user-icon" style={{ cursor: token ? "pointer" : "default" }} onClick={token ? onProfileClick : null} />
+              <img
+                src={userIcon}
+                alt="User Icon"
+                className="header-user-icon"
+                style={{ cursor: token ? "pointer" : "default" }}
+                onClick={token ? onProfileClick : null}
+              />
             </>
           )}
         </div>
@@ -179,9 +248,20 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
           <div className="popup-container">
             <div className="popup-arrow"></div>
             <div className="popup-content">
-              <button className="signin-button" onClick={() => navigate("/signin")}>Sign In</button>
+              <button
+                className="signin-button"
+                onClick={() => navigate("/signin")}
+              >
+                Sign In
+              </button>
               <div className="new-customer">
-                New customer? <span className="start-here" onClick={() => navigate("/signup")}>Start here</span>
+                New customer?{" "}
+                <span
+                  className="start-here"
+                  onClick={() => navigate("/signup")}
+                >
+                  Start here
+                </span>
               </div>
             </div>
           </div>

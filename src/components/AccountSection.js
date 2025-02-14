@@ -93,13 +93,24 @@ const AccountSection = () => {
     }
   }, [profile.country]);
 
+  // const handleInputChange = (field, value) => {
+  //   setProfile((prev) => ({
+  //     ...prev,
+  //     [field]: value,
+  //   }));
+
+  //   // Check if the value is different from the original
+  //   setIsModified(
+  //     JSON.stringify(originalProfile[field]) !== JSON.stringify(value)
+  //   );
+  // };
   const handleInputChange = (field, value) => {
+    console.log("Field:", field, "Value:", value); // Debugging
     setProfile((prev) => ({
       ...prev,
       [field]: value,
     }));
 
-    // Check if the value is different from the original
     setIsModified(
       JSON.stringify(originalProfile[field]) !== JSON.stringify(value)
     );
@@ -182,11 +193,21 @@ const AccountSection = () => {
               handleInputChange("country", country.name)
             }
           /> */}
+          {/* <PhoneInput
+            value={profile.mobileNumber}
+            editable={true}
+            placeholder="Update Phone Number"
+            onChange={(e) => handleInputChange("mobileNumber", e.target.value)} // Pass only the value
+          /> */}
+
           <PhoneInput
             value={profile.mobileNumber}
             editable={true}
             placeholder="Update Phone Number"
             onChange={(newValue) => handleInputChange("mobileNumber", newValue)}
+            onCountryCodeChange={(newCode) =>
+              console.log("Selected country code:", newCode)
+            }
           />
 
           <InputField

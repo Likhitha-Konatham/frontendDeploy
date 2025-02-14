@@ -12,3 +12,29 @@ code {
     monospace;
 }
 
+
+ /* body {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.light {
+  background-color: #ffffff;
+  color: #333333;
+  
+
+  --bg-primary: #ffffff;
+  --text-primary: #333333;
+  --bg-secondary: #f4f4f4;
+  --text-secondary: #666666;
+}
+
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+  
+
+  --bg-primary: #121212;
+  --text-primary: #ffffff;
+  --bg-secondary: #1e1e1e;
+  --text-secondary: #cccccc;
+} */
