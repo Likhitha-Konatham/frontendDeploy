@@ -43,7 +43,7 @@ const SearchedBooksPage = () => {
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "" };
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {

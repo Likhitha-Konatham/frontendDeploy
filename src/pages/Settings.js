@@ -39,12 +39,7 @@ const Settings = () => {
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return {
-        showSearch: true,
-        showUserProfile: true,
-        showArrows: false,
-        pageName: "Dashboard",
-      };
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "Dashboard" };
     } else if (activeItem === "bookmarks") {
       return {
         showSearch: true,

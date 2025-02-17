@@ -28,7 +28,7 @@ const SearchedBookInfoPage = () => {
       const selectedIndex = books.findIndex((book) => book.bookID === bookId);
       setCurrentIndex(selectedIndex !== -1 ? selectedIndex : 0);
     }
-  }, [bookId, books]);
+  }, [bookId, books, selectedBook]);
   
   const currentBook = selectedBook || books[currentIndex] || {};
   
@@ -97,7 +97,7 @@ const SearchedBookInfoPage = () => {
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "" };
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {

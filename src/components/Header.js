@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef,useCallback   } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Header.css";
 import {
@@ -31,7 +31,21 @@ const Header = ({
   const [searchCounts, setSearchCounts] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const searchRef = useRef(null);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,35 +63,34 @@ const Header = ({
     fetchData();
   }, []);
 
+  const fetchSearchHistoryData = useCallback(async () => {
+    try {
+      const response = await fetchSearchHistory(token);
+      if (response?.status === "success") {
+        setSearchHistory(response.data.searchedData.reverse());
+      }
+    } catch (error) {
+      console.error("Error fetching search history:", error);
+    }
+  }, [token]);
+  
+  const fetchSearchCountData = useCallback(async () => {
+    try {
+      const response = await fetchSearchCount();
+      if (response?.status === "success") {
+        setSearchCounts(Object.keys(response.data).reverse());
+      }
+    } catch (error) {
+      console.error("Error fetching search count:", error);
+    }
+  }, []);
+
   useEffect(() => {
     if (token) {
       fetchSearchHistoryData();
       fetchSearchCountData();
     }
-  }, [token]);
-
-  const fetchSearchHistoryData = async () => {
-    try {
-      const response = await fetchSearchHistory(token);
-      if (response?.status === "success") {
-        setSearchHistory(response.data.searchedData);
-      }
-    } catch (error) {
-      console.error("Error fetching search history:", error);
-    }
-  };
-
-  const fetchSearchCountData = async () => {
-    try {
-      const response = await fetchSearchCount();
-      if (response?.status === "success") {
-        setSearchCounts(Object.keys(response.data));
-      }
-    } catch (error) {
-      console.error("Error fetching search count:", error);
-    }
-  };
-
+  }, [token, fetchSearchHistoryData, fetchSearchCountData]);
   const handleSearchClick = async () => {
     if (searchQuery.trim()) {
       try {
@@ -152,7 +165,7 @@ const Header = ({
         </div>
 
         {showSearch && (
-          <div className="search-bar-container">
+          <div className="search-bar-container" ref={searchRef}>
             <div className="search-bar" onClick={() => setShowDropdown(true)}>
               <input
                 type="text"
