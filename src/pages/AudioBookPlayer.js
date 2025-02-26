@@ -41,6 +41,9 @@ const AudioBookPlayer = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const dropdownRef = useRef(null); 
+  const highlightedItemRef = useRef(null); 
 
   // Initialize book data and start playing
   useEffect(() => {
@@ -199,38 +202,71 @@ const handleSectionClick = (index) => {
   }, 100);
 };
 
-const handleKeyDown = useCallback((event) => {
-  if (event.ctrlKey && event.key === "ArrowRight") {
-    // Ctrl + Right Arrow → Next Page
-    if (bookData.index < bookData.total_pages) {
+// Handle keydown events
+const handleKeyDown = useCallback(
+  (event) => {
+    if (event.ctrlKey && event.key === "ArrowDown") {
+      // Ctrl + Down Arrow → Open Dropdown
       event.preventDefault();
-      handleSkipPageForward();
-    }
-  } else if (event.ctrlKey && event.key === "ArrowLeft") {
-    // Ctrl + Left Arrow → Previous Page
-    if (bookData.index > 1) {
+      setIsDropdownOpen(true);
+      setHighlightedIndex(bookData.index - 1); // Highlight current page
+    }else if (event.ctrlKey && event.key === "ArrowUp") {
+      // Ctrl + Down Arrow → Open Dropdown
       event.preventDefault();
-      handleSkipPageBackward();
-    }
-  } else if (event.altKey && event.key === "ArrowRight") {
-    // Alt + Right Arrow → Next Section
-    if (currentSectionIndex < bookData?.sections?.length - 1) {
+      setIsDropdownOpen(false);
+     } else if (isDropdownOpen && event.key === "ArrowDown") {
+      // Down Arrow → Move Down in Dropdown
       event.preventDefault();
-      handleSkipSectionForward();
-    }
-  } else if (event.altKey && event.key === "ArrowLeft") {
-    // Alt + Left Arrow → Previous Section
-    if (currentSectionIndex > 0) {
+      setHighlightedIndex((prevIndex) =>
+        Math.min(prevIndex + 1, (bookData?.total_pages || 1) - 1)
+      );
+    } else if (isDropdownOpen && event.key === "ArrowUp") {
+      // Up Arrow → Move Up in Dropdown
       event.preventDefault();
-      handleSkipSectionBackward();
+      setHighlightedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    } else if (isDropdownOpen && event.key === "Enter") {
+      // Enter → Select Highlighted Page
+      event.preventDefault();
+      handlePageChange(highlightedIndex + 1);
+    } else if (event.ctrlKey && event.key === "ArrowRight") {
+      if (bookData.index < bookData.total_pages) {
+        event.preventDefault();
+        handleSkipPageForward();
+      }
+    } else if (event.ctrlKey && event.key === "ArrowLeft") {
+      if (bookData.index > 1) {
+        event.preventDefault();
+        handleSkipPageBackward();
+      }
+    } else if (event.altKey && event.key === "ArrowRight") {
+      if (currentSectionIndex < bookData?.sections?.length - 1) {
+        event.preventDefault();
+        handleSkipSectionForward();
+      }
+    } else if (event.altKey && event.key === "ArrowLeft") {
+      if (currentSectionIndex > 0) {
+        event.preventDefault();
+        handleSkipSectionBackward();
+      }
+    } else if (event.key === " ") {
+      event.preventDefault();
+      handlePlayPause();
     }
-  } else if (event.key === " ") {
-    // Space → Play/Pause
-    event.preventDefault();
-    handlePlayPause();
-  }
-}, [handlePlayPause, handleSkipPageForward, handleSkipPageBackward, handleSkipSectionForward, handleSkipSectionBackward, bookData, currentSectionIndex]);
+  },
+  [
+    handlePlayPause,
+    handleSkipPageForward,
+    handleSkipPageBackward,
+    handleSkipSectionForward,
+    handleSkipSectionBackward,
+    bookData,
+    currentSectionIndex,
+    isDropdownOpen,
+    highlightedIndex,
+  ]
+);
 
+// Add event listener for keydown
 useEffect(() => {
   window.addEventListener("keydown", handleKeyDown);
   return () => {
@@ -238,7 +274,15 @@ useEffect(() => {
   };
 }, [handleKeyDown]);
 
-
+// Scroll highlighted item into view
+useEffect(() => {
+  if (isDropdownOpen && highlightedIndex !== -1 && highlightedItemRef.current) {
+    highlightedItemRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }
+}, [highlightedIndex, isDropdownOpen]);
 
   if (!bookData) {
     return (
@@ -334,16 +378,29 @@ useEffect(() => {
               </div>
 
               <div className="chapterSection">
-                <div className="chapterDropdown" onClick={() => setIsDropdownOpen((prev) => !prev)}>
+                <div
+                  className="chapterDropdown"
+                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+                  tabIndex={0} // Make dropdown focusable
+                >
                   <span className="chapterNumber">Page {bookData?.index}</span>
                   <img src={downArrow} alt="Dropdown" className="icon" />
-                  
                   {isDropdownOpen && (
-                    <ul className="dropdown-menu">
+                    <ul className="dropdown-menu" ref={dropdownRef}>
                       {Array.from({ length: bookData?.total_pages || 0 }, (_, i) => {
                         const pageNumber = i + 1; // Convert to 1-based index
                         return (
-                          <li key={pageNumber} className={`dropdown-item ${bookData.index === pageNumber ? "selected" : ""}`}  onClick={(e) => { e.stopPropagation(); handlePageChange(pageNumber); }}>
+                          <li
+                            key={pageNumber}
+                            ref={highlightedIndex === i ? highlightedItemRef : null} // Set ref for highlighted item
+                            className={`dropdown-item ${
+                              bookData.index === pageNumber ? "selected" : ""
+                            } ${highlightedIndex === i ? "highlighted" : ""}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePageChange(pageNumber);
+                            }}
+                          >
                             Page {pageNumber}
                           </li>
                         );

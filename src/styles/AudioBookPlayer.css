@@ -109,7 +109,14 @@ body.dark .arrowSection .arrow img {
 .dropdown-menu::-webkit-scrollbar {
     display: none;
 }
-
+.dropdown-item.highlighted {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .dropdown-menu {
+    max-height: 200px; /* Adjust height */
+    overflow-y: auto; /* Enable scrolling */
+  }
 .dropdown-menu {
     -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
     scrollbar-width: none;  /* Hide scrollbar for Firefox */
