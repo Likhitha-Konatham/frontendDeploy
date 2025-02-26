@@ -130,8 +130,9 @@ export const fetchUserBookmarks = async () => {
 };
 
 export const deleteBookMarks = async (formData, callback) => {
-  const urlEndPoint = `DeleteBookMarks`;
+  const urlEndPoint = `DeleteBookMark`;
   const payload = { bookMarkID: formData.bookmarkId };
+  console.log(payload)
 
   try {
     const response = await requestPostApiCall(urlEndPoint, payload, callback);

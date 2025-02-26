@@ -138,7 +138,6 @@ body.dark {
   width: 86%;
   height: 10.5vw;
   margin: auto auto 1.5vw;
-  background: var(--bookmark-section-bg);
   border-radius: 0.5vw;
 }
 
@@ -201,6 +200,7 @@ body.dark {
 .del_img {
   width: 1.2vw;
   height: 1.2vw;
+  cursor: pointer;
 }
 
 .del_img img {
@@ -216,6 +216,7 @@ body.dark {
   font-weight: 500;
   margin-left: 0.5vw;
   color: var(--text-primary);
+  cursor: pointer;
 }
 
 .viewbookmarks__skeleton-loader {

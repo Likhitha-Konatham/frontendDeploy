@@ -80,16 +80,28 @@ const AudioBookPlayer = () => {
       setIsPlaying(true);
       setTimeout(() => audioRef.current?.play(), 100); // Ensure next audio plays
     } else {
-      // If this is the last section of the current page, fetch the next page
-      const newBookData = await fetchNextPageDetails(bookData.bookID, bookData.index, "next");
-      if (newBookData) {
-        setBookData(newBookData.data);
-        setCurrentSectionIndex(0); // Start from the first section of the new page
-        setIsPlaying(true);
-        setTimeout(() => audioRef.current?.play(), 100); // Ensure next audio plays
+      // If this is the last section of the current page
+      if (bookData.index < bookData.total_pages) {
+        // If there are more pages, fetch the next page
+        const newBookData = await fetchNextPageDetails(bookData.bookID, bookData.index, "next");
+        if (newBookData) {
+          setBookData(newBookData.data);
+          setCurrentSectionIndex(0); // Start from the first section of the new page
+          setIsPlaying(true);
+          setTimeout(() => audioRef.current?.play(), 100); // Ensure next audio plays
+        } else {
+          // If there's no next page, stop playing
+          setIsPlaying(false);
+        }
       } else {
-        // If there's no next page, stop playing
+        // If this is the last section of the last page, set progress to 100%
         setIsPlaying(false);
+        console.log("Reached the end of the book.");
+        // Force progress to 100%
+        setBookData((prevData) => ({
+          ...prevData,
+          index: bookData.total_pages, // Ensure index is set to the last page
+        }));
       }
     }
   };
@@ -108,8 +120,13 @@ const AudioBookPlayer = () => {
     }
   }, [isPlaying]);
 
-  const calculatePageProgress = ()=> {
+  const calculatePageProgress = () => {
     if (bookData) {
+      // If it's the last page and all sections are completed, return 100%
+      if (bookData.index === bookData.total_pages && currentSectionIndex === bookData.sections.length - 1) {
+        return 100;
+      }
+      // Otherwise, calculate progress based on the current page index
       return ((bookData.index - 1) / bookData.total_pages) * 100;
     }
     return 0;
@@ -131,13 +148,20 @@ const AudioBookPlayer = () => {
     }
   }, [currentSectionIndex]);
 
-  const handleSkipPageForward = useCallback(async () => {
-    const newBookData = await fetchNextPageDetails(bookData.bookID, bookData.index, "next");
-    if (newBookData) {
-      setBookData(newBookData.data);
-      setCurrentSectionIndex(0);
-      setIsPlaying(true);
-      setTimeout(() => audioRef.current?.play(), 100);
+const handleSkipPageForward = useCallback(async () => {
+    if (bookData.index < bookData.total_pages) {
+      // Fetch the next page if available
+      const newBookData = await fetchNextPageDetails(bookData.bookID, bookData.index, "next");
+      if (newBookData) {
+        setBookData(newBookData.data);
+        setCurrentSectionIndex(0); // Start from the first section of the new page
+        setIsPlaying(true);
+        setTimeout(() => audioRef.current?.play(), 100); // Ensure next audio plays
+      }
+    } else {
+      // If this is the last page, stop playing or handle end of book
+      setIsPlaying(false);
+      console.log("Reached the end of the book.");
     }
   }, [bookData]);
 

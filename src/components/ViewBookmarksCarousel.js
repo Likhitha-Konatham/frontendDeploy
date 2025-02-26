@@ -60,10 +60,11 @@ const ViewBookmarksCarousel = () => {
     }
   };
   const handleDelete = async (bookmarkId) => {
-    console.log(bookmarkId);
+    console.log(bookmarkId)
     try {
       await deleteBookMarks({ bookmarkId }, () => {
         setMarkedBooks((prevBooks) => prevBooks.filter(book => book._id !== bookmarkId));
+        window.location.reload();
       });
     } catch (error) {
       console.error("Error deleting bookmark:", error);
@@ -123,8 +124,9 @@ const ViewBookmarksCarousel = () => {
       {/* Dynamic content based on selected book */}
       {selectedSections.length > 0 ? (
         <div className="bookmarks_section_container">
+          
           {selectedSections.map((section, index) => (
-            <div key={index} className="section_box">
+            <div key={index} className="section_box" style={{ background: index % 2 === 0 ? "rgba(223, 200, 38, 0.52)" : "rgba(137, 187, 52, 0.52)" }}>
               <div className="play_container">
                 <div className="play_img">
                   <img src={playIcon} alt="play icon" />
@@ -136,7 +138,7 @@ const ViewBookmarksCarousel = () => {
               </div>
               <div className="section_content_container">
                 <p className="section_content">{section.text || "No content available"}</p>
-                <div className="section_delete" onClick={() => handleDelete(selectedBook._id)}>
+                <div className="section_delete" onClick={() => handleDelete(section.bookmarkID)}>
                   <div className="del_img">
                     <img src={delIcon} alt="delete" />
                   </div>
