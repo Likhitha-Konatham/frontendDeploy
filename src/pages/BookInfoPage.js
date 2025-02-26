@@ -9,7 +9,7 @@ import playIcon from '../images/playIcon.png';
 import readlaterIcon from '../images/readlater_icon.png';
 import tickReadLaterIcon from '../images/tick_readlater.png'; // New tick icon
 import loadingSpinner from "../images/loadingSpinner.gif";
-import { insertReadLater, deleteReadLater } from "../services/AllServices.js"; // Import delete API
+import { insertReadLater, deleteReadLater,fetchPageDetails  } from "../services/AllServices.js"; // Import delete API
 
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -46,6 +46,27 @@ const BookInfo = () => {
   
     fetchBookData();
   }, [genre, bookId, location.state]);
+
+  const handlePlayClick = async (event, bookID) => {
+    event.preventDefault(); // Prevent default link behavior
+    
+    if (!bookID) {
+      console.log('No bookID provided:', bookID);
+      return;
+    }
+  
+    console.log('Attempting to fetch details for bookID:', bookID);
+    try {
+      const response = await fetchPageDetails(bookID);
+      if (response) {
+        navigate("/audiobook-player", { state: { bookData: response } });
+      } else {
+        console.error("Invalid response structure:", response);
+      }
+    } catch (error) {
+      console.error("Error in handlePlayClick:", error);
+    }
+  };
   
   const toggleBookmark = async (bookID) => {
     const currentBook = sortedBooks[currentIndex];
@@ -166,7 +187,7 @@ const BookInfo = () => {
                 <div className="book_info">
                   <div className="bookinfo_title_play">
                     <div className="bookinfo_title">{currentBook.title}</div>
-                    <a href="/audiobook-player" className="bookinfo_play">
+                    <a href="/audiobook-player" className="bookinfo_play" onClick={(e) => handlePlayClick(e, currentBook._id)} >
                       <img src={playIcon} alt="play icon" />
                     </a>
                   </div>

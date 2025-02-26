@@ -22,7 +22,9 @@
     flex-direction: column;
     gap: 1.5vw;
 }
-
+.progessbar-book-list a{
+    text-decoration: none;
+}
 .progress-container {
     margin-top: 0.7vw;
     height: 6.2vw;
@@ -32,7 +34,10 @@
     display: flex;
     align-items: center;
 }
-
+.progress-container a{
+    text-decoration: none;
+    padding: 0.5vw;
+}
 .green-bg {
     background-color: var(--green-light-bg);
 }
@@ -74,6 +79,7 @@
     color: var(--text-primary);
     font-family: Inter;
     font-weight: 500;
+    width: 6vw;
 }
 
 .percentage-text {

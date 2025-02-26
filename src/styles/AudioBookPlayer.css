@@ -75,15 +75,63 @@ body.dark .arrowSection .arrow img {
 }
 
 .chapterSection .chapterDropdown {
-    width: 2.5vw;
-    height: 2.5vw;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5vw; /* Space between text and arrow */
+    cursor: pointer;
+    padding: 0.3vw 1vw; /* Ensure enough padding */
+    border: 0;
+    border-radius: 0.3vw;
 }
 
 .chapterDropdown img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    width: 1.5vw; /* Adjust arrow size */
+    height: 1.5vw;
 }
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%; /* Position below the dropdown */
+    left: 0;
+    width: 100%; 
+    height: 7vw;
+    overflow-y: auto;
+    background-color: white;
+    border: 0;
+    border-radius:0vw 0vw 0.3vw 0.3vw;
+    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0.5vw 0;
+    margin: 0;
+    z-index: 10;
+}
+.dropdown-menu::-webkit-scrollbar {
+    display: none;
+}
+
+.dropdown-menu {
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
+.dropdown-item {
+    padding: 0.5vw 1vw;
+    font-size: 1.5vw;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: center;
+}
+
+.dropdown-item.selected {
+    background-color: var(--background-secondary);
+    font-weight: 600;
+}
+
+.dropdown-item:hover {
+    background-color: var(--background-secondary);
+}
+
 body.dark .chapterDropdown img {
     filter: invert(1);
 }
@@ -94,51 +142,101 @@ body.dark .chapterDropdown img {
     align-items: center;
     justify-content: right;
     padding: 0.5vw 0.5vw 0vw;
-}
-
-.book_player_save_icon {
+    position: relative;
+  }
+  
+  .book_player_save_icon {
     width: 1.5vw;
     height: 1.5vw;
     margin-right: 1vw;
-}
-
-.book_player_save_icon img {
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .book_player_save_icon img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-}
-
+  }
+  
+  .tooltip {
+    position: absolute;
+    top: -2.29vw;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color:gray;
+    color: white;
+    padding: 0.5vw;
+    border-radius: 0.3vw;
+    font-size: 0.8vw;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  
+  .successMessage {
+    position: absolute;
+    top: -2vw;
+    left:70%;
+    transform: translateX(-50%);
+    background-color: gray;
+    color: white;
+    padding: 0.5vw;
+    border-radius: 0.3vw;
+    font-size: 1vw;
+    white-space: nowrap;
+    z-index: 1000;
+  }
 
 .book_context_box {
     background: var(--bg-color);
     width: 100%;
-    height: 28.5vw;
+    height: 25vw;
     overflow-y: auto;
     position: relative;
     border-radius: 0vw 0vw 1vw 1vw;
+    padding: 1vw 0vw 1vw;
 
 }
 
 .book_context {
     font-family: Inter;
-    padding: 1.5vw 2vw 2vw;
+    padding: 0vw 2vw 0vw;
     color: var(--text-grey);
     font-size: 2.08vw;
-    line-height: 3vw;
     font-weight: 500;
+    margin: 0.5vw;
 }
 
 .book_context .highlight {
     color: var(--text-primary);
 }
 
+.book_content_wrapper {
+    height: 100%;
+    overflow-y: auto;
+}
+.book_content_wrapper p{
+    cursor: pointer;
+}
+.book_content_wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.book_content_wrapper {
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
+    
+
 .fullscreen {
-    position: absolute;
+    position: fixed;
     bottom: 1.5vw;
     right: 1.5vw;
     width: 1.5vw;
     height: 1.5vw;
     cursor: pointer;
+    z-index: 10;
 }
 
 .fullscreen img {
@@ -149,6 +247,13 @@ body.dark .chapterDropdown img {
 
 body.dark .fullscreen img {
     filter: invert(1);
+}
+
+/* Update the fullscreen position relative to the book_context_box when in fullscreen mode */
+.book_context_box.fullscreen-active .fullscreen {
+    position: fixed;
+    bottom: 1.5vw;
+    right: 1.5vw;
 }
 
 .book-player-controls {
@@ -166,6 +271,10 @@ body.dark .fullscreen img {
     justify-content: center;
     align-items: center;
 }
+.control-icon.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
 .control-icon {
     width: 3.5vw;
@@ -334,7 +443,7 @@ body.dark .book-player-custom-slider-thumb {
     height: 100vh;
     z-index: 1000;
     background-color: var(--bg-primary);
-    padding: 10px;
+    padding: 0.5vw;
     overflow: hidden;
 }
 
@@ -344,9 +453,9 @@ body.dark .book-player-custom-slider-thumb {
 }
 
 .left-section.fullscreen-active .book_context_box {
-    height: 32vw;
+    height: 30vw;
     width: 96%;
-    margin: 2vw auto 0vw;
+    margin: 0vw auto 0vw;
     border-radius: 1vw;
 }
 

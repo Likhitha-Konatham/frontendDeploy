@@ -24,7 +24,15 @@ const BookGrids = ({ markedBooks, loading }) => {
         ) : ( // Render actual books after loading
           markedBooks.map((book, index) => (
             <div className="bookGrid__grid-item" key={book._id || index}>
-              <div onClick={() => handleBookClick(book._id)}>
+              <div 
+              className="bookGrid-img"
+              tabIndex={0}
+              onClick={() => handleBookClick(book._id)}  
+              onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleBookClick(e, book.id);
+              }
+            }}>
                 <img src={book.thumbnail} alt={`${book.title} Thumbnail`} />
               </div>
               <div className="bookGrid__details">

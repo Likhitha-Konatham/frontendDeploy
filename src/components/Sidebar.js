@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Sidebar.css";
 import audiobook_logo from "../images/audiobook_logo.png";
@@ -18,23 +18,24 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [token, setTokenState] = useState(null); // State to store the resolved token value
   const navigate = useNavigate();
+  const menuItemRefs = useRef([]);
 
   useEffect(() => {
     const fetchToken = async () => {
       try {
-      const storedToken = await getToken();
-      setTokenState(storedToken);
+        const storedToken = await getToken();
+        setTokenState(storedToken);
       } catch (error) {
         console.error("Failed to fetch name", error);
       }
     };
     fetchToken();
-  }, []); 
+  }, []);
 
   const handleLogout = async () => {
     // Clear the token and other user data from localStorage
     try {
-      await setToken(""); 
+      await setToken("");
       console.log("User logged out");
 
       // Navigate to the landing page after logout
@@ -67,6 +68,11 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
     }
   };
 
+  const handleKeyDown = (event, item) => {
+    if (event.key === "Enter") {
+      handleItemClick(item);
+    }
+  };
 
   return (
     <div className="sidebar">
@@ -79,13 +85,16 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
         </div>
         {menuItems
           .filter((item) => token || item.key === "dashboard") // Show only "Dashboard" if no token
-          .map((item) => (
+          .map((item, index) => (
             <div
               key={item.key}
+              ref={(el) => (menuItemRefs.current[index] = el)}
+              tabIndex={0}
               className={`sidebar-icon ${activeItem === item.key ? "active" : ""}`}
               onClick={() => handleItemClick(item)}
               onMouseEnter={() => setHoveredItem(item.key)}
               onMouseLeave={() => setHoveredItem(null)}
+              onKeyDown={(e) => handleKeyDown(e, item)}
             >
               <img
                 src={
@@ -102,11 +111,14 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
       {/* Bottom section with icons */}
       {token && ( // Render bottom menu only if token exists
         <div className="sidebar-bottom">
-          {bottomMenuItems.map((item) => (
+          {bottomMenuItems.map((item, index) => (
             <div
               key={item.key}
+              ref={(el) => (menuItemRefs.current[menuItems.length + index] = el)}
+              tabIndex={0}
               className={`sidebar-icon ${activeItem === item.key ? "active" : ""}`}
               onClick={() => handleItemClick(item)}
+              onKeyDown={(e) => handleKeyDown(e, item)}
             >
               <img src={item.icon} alt={`${item.label} Icon`} />
             </div>

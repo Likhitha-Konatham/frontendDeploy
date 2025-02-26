@@ -23,14 +23,22 @@
   height: 17vw;
   margin-bottom: 7vw;
 }
-
-.bookGrid__grid-item img {
+.bookGrid-img img{
+  border: none;
+  outline: none;
+}
+.bookGrid-img img {
   width: 100%;
   height: 17vw;
   border-radius: 1vw;
   object-fit: cover;
   box-shadow: 0px 4px 4px 0px var(--dropdown-shadow);
   cursor: pointer;
+  outline: none;
+}
+.bookGrid-img:focus {
+  border-radius: 1vw;
+  outline: 0.13vw solid black; 
 }
 
 .bookGrid__details {

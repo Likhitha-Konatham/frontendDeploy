@@ -4,7 +4,7 @@ import bigLeftArrow from "../images/bigLeftArrow.png";
 import bigRightArrow from "../images/bigRightArrow.png";
 import playIcon from "../images/playIcon.png";
 import delIcon from "../images/delIcon.png";
-import { fetchUserBookmarks } from "../services/AllServices.js";
+import { fetchUserBookmarks, deleteBookMarks } from "../services/AllServices.js";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
 const ViewBookmarksCarousel = () => {
@@ -19,7 +19,8 @@ const ViewBookmarksCarousel = () => {
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
-        const response = await fetchUserBookmarks(); // Fetch data from API
+        const response = await fetchUserBookmarks();
+        console.log('dnwdn',response);
         const books = response.data || [];
         setMarkedBooks(books);
 
@@ -58,9 +59,19 @@ const ViewBookmarksCarousel = () => {
       navigate(`/view-bookmarks?bookid=${selectedBook._id}`);
     }
   };
+  const handleDelete = async (bookmarkId) => {
+    console.log(bookmarkId);
+    try {
+      await deleteBookMarks({ bookmarkId }, () => {
+        setMarkedBooks((prevBooks) => prevBooks.filter(book => book._id !== bookmarkId));
+      });
+    } catch (error) {
+      console.error("Error deleting bookmark:", error);
+    }
+  };
 
   const selectedBook = markedBooks[selectedBookIdx];
-  const selectedSection = selectedBook?.sections[0]; // Display the first section as default
+  const selectedSections = selectedBook?.sections || [];
 
   return (
     <div className="viewbookmarks_carousel__wrap">
@@ -109,30 +120,36 @@ const ViewBookmarksCarousel = () => {
           </div>
         </button>
       </div>
-
       {/* Dynamic content based on selected book */}
-      <div className="bookmarks_section_container">
-        <div className="play_container">
-          <div className="play_img">
-            <img src={playIcon} alt="play icon" />
-          </div>
-        </div>
-        <div className="section_info_container">
-          <div className="section_bookname">{selectedBook?.title || "NA"}</div>
-          <div className="section_time">7:25 - 7:30</div>
-        </div>
-        <div className="section_content_container">
-          <p className="section_content">
-            {selectedSection?.text || "No content available"}
-          </p>
-          <div className="section_delete">
-            <div className="del_img">
-              <img src={delIcon} alt="delete" />
+      {selectedSections.length > 0 ? (
+        <div className="bookmarks_section_container">
+          {selectedSections.map((section, index) => (
+            <div key={index} className="section_box">
+              <div className="play_container">
+                <div className="play_img">
+                  <img src={playIcon} alt="play icon" />
+                </div>
+              </div>
+              <div className="section_info_container">
+                <div className="section_bookname">{selectedBook?.title || "NA"}</div>
+                <div className="section_time">7:25 - 7:30</div>
+              </div>
+              <div className="section_content_container">
+                <p className="section_content">{section.text || "No content available"}</p>
+                <div className="section_delete" onClick={() => handleDelete(selectedBook._id)}>
+                  <div className="del_img">
+                    <img src={delIcon} alt="delete" />
+                  </div>
+                  <div className="del_text">Delete</div>
+                </div>
+              </div>
             </div>
-            <div className="del_text">Delete</div>
-          </div>
+          ))}
         </div>
-      </div>
+      ) : (
+        <p>No sections available</p>
+      )}
+
     </div>
   );
 };

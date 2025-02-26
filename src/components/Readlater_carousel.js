@@ -45,7 +45,7 @@ const ReadlaterCarousel = () => {
   if (loading) {
     return (
       <div className="carousel__wrap">
-        <div className="carousel__skeleton-loader">
+        <div className="carousel__skeleton-loader-lib">
           {[...Array(7)].map((_, index) => (
             <div key={index} className="carousel__skeleton-item"></div>
           ))}
@@ -91,9 +91,8 @@ const ReadlaterCarousel = () => {
               {readLaterBooks?.map((book) => (
                 <div
                   key={book._id}
-                  onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })}
-                >
-                  <div className="carousel__hover-wrapper">
+                  onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })}>
+                  <div className="carousel__hover-wrapper" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") {   navigate(`/book-info/${book._id}`, { state: { books } }) }}}>
                     <img
                       src={book.thumbnail}
                       alt={book.title}

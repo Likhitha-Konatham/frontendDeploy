@@ -3,6 +3,7 @@
 /* Theme-aware carousel styles using CSS variables */
 .carousel__wrap {
   width: 96%;
+  margin-top: 4vw;
   margin-bottom: 2vw;
   background-color: var(--bg-primary);
 }
@@ -71,6 +72,7 @@
 .carousel__slide-item {
   flex-shrink: 0;
   margin: 0 0.4vw;
+  outline: none;
 }
 
 .carousel__item-link {
@@ -90,8 +92,15 @@
 
 .carousel__item-link img:hover + .hover_container {
   display: block;
+  height: auto;
 }
 
+/* Optional: Add keyboard navigation focus styles */
+.carousel__slide-item:focus {
+  border-radius: 1vw;
+  outline:0.15vw solid black;
+  outline-offset: 0.2vw
+}
 .carousel__skeleton-loader {
   display: flex;
 }

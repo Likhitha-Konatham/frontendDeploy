@@ -148,14 +148,18 @@ const Header = ({
               src={leftArrow}
               alt="Left Arrow"
               className="left-arrow-icon"
+              tabIndex={0}
               onClick={() => navigate(-1)}
+              onKeyDown={(e) => e.key === "Enter" && navigate(-1)}
               style={{ cursor: "pointer" }}
             />
             <img
               src={rightArrow}
               alt="Right Arrow"
               className="right-arrow-icon"
+              tabIndex={0}
               onClick={() => navigate(1)}
+              onKeyDown={(e) => e.key === "Enter" && navigate(1)}
               style={{ cursor: "pointer" }}
             />
           </div>
@@ -182,11 +186,7 @@ const Header = ({
               /> */}
 
               <div className="search-icon" onClick={handleSearchClick}>
-                <Search
-                  size={18}
-                  color="#C4569C"
-                  style={{ background: "transparent" }}
-                />
+                <Search size={18} color="#C4569C" style={{ background: "transparent" }} />
               </div>
             </div>
 
@@ -194,40 +194,50 @@ const Header = ({
               <div className="search-dropdown">
                 <div className="search-container">
                   <div className="searchbyplaceholder">
-                    Search by book name, author, genre, etc.
+                    {searchCounts.length === 0 && searchHistory.length === 0
+                      ? "Search by book name, author, genre, etc."
+                      : "Search by book name, author, genre, etc."}
                   </div>
-                  <div className="tags-container">
-                    {searchCounts.map((tag, index) => (
-                      <span
+
+                  {searchCounts.length > 0 && (
+                    <div className="tags-container">
+                      {searchCounts.map((tag, index) => (
+                        <span
                         key={index}
                         className="tag"
+                        tabIndex={0}
                         onClick={() => handleTagClick(tag)}
+                        onKeyDown={(e) => e.key === "Enter" && handleTagClick(tag)}
                       >
                         {tag}
                       </span>
-                    ))}
-                  </div>
-                  <div className="recent-container">
-                    <h3 className="recent-heading">Recent</h3>
-                    <ul className="recent-list">
-                      {searchHistory.map((item, index) => (
-                        <li
-                          key={index}
-                          onClick={() => handleHistoryClick(item)}
-                        >
-                          <img
-                            src={historyIcon}
-                            className="history-icon"
-                            alt="history icon"
-                          />{" "}
-                          {item}
-                        </li>
+                      
                       ))}
-                    </ul>
-                  </div>
+                    </div>
+                  )}
+
+                  {searchHistory.length > 0 && (
+                    <div className="recent-container">
+                      <h3 className="recent-heading">Recent</h3>
+                      <ul className="recent-list">
+                        {searchHistory.map((item, index) => (
+                          <li
+                          key={index}
+                          tabIndex={0}
+                          onClick={() => handleHistoryClick(item)}
+                          onKeyDown={(e) => e.key === "Enter" && handleHistoryClick(item)}
+                        >
+                          <img src={historyIcon} className="history-icon" alt="history icon" /> {item}
+                        </li>
+                        
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
+
           </div>
         )}
 
@@ -251,9 +261,12 @@ const Header = ({
                 src={userIcon}
                 alt="User Icon"
                 className="header-user-icon"
+                tabIndex={token ? 0 : -1}
                 style={{ cursor: token ? "pointer" : "default" }}
                 onClick={token ? onProfileClick : null}
+                onKeyDown={(e) => token && e.key === "Enter" && onProfileClick()}
               />
+
             </>
           )}
         </div>

@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Inprogress_carousel.css";
 import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import emptyStateIcon from "../images/emptyStateIcon.png"; // Add an appropriate empty state image/illustration
-import { fetchInProgressBooks } from "../services/AllServices.js";
+import { fetchUserLibraryBooks, fetchPageDetails } from "../services/AllServices.js";
 
 const InProgressCarousel = () => {
   const [inProgressBooks, setInProgressBooks] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Fetch books on mount
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await fetchInProgressBooks();
+        const response = await fetchUserLibraryBooks();
         if (response.status === "success") {
-          const colorClasses = ["green", "yellow", "orange"];
-          const lastThreeBooks = response.data.slice(-3).map((book, index) => ({
-            name: book.title,
-            thumbnail: book.thumbnail,
-            percentage: Math.floor(Math.random() * 100) + 1,
-            colorClass: colorClasses[index % colorClasses.length],
-          }));
-          setInProgressBooks(lastThreeBooks);
+          // Filter books that have status "inprogress"
+          const filteredBooks = response.data.filter(book => book.status === "inprogress" || book.status === "restarted");
+          setInProgressBooks(filteredBooks);
         }
       } catch (error) {
         console.error("Error fetching in-progress books:", error);
@@ -31,9 +28,10 @@ const InProgressCarousel = () => {
         setLoading(false);
       }
     };
-
+  
     fetchBooks();
   }, []);
+  
 
   const maxIndex = inProgressBooks.length - 5;
 
@@ -50,7 +48,7 @@ const InProgressCarousel = () => {
   if (loading) {
     return (
       <div className="carousel__wrap">
-        <div className="carousel__skeleton-loader">
+        <div className="carousel__skeleton-loader-lib">
           {[...Array(7)].map((_, index) => (
             <div key={index} className="carousel__skeleton-item"></div>
           ))}
@@ -58,6 +56,27 @@ const InProgressCarousel = () => {
       </div>
     );
   }
+
+  const handlePlayClick = async (event, bookID) => {
+    event.preventDefault(); // Prevent default link behavior
+    
+    if (!bookID) {
+      console.log('No bookID provided:', bookID);
+      return;
+    }
+  
+    console.log('Attempting to fetch details for bookID:', bookID);
+    try {
+      const response = await fetchPageDetails(bookID);
+      if (response) {
+        navigate("/audiobook-player", { state: { bookData: response } });
+      } else {
+        console.error("Invalid response structure:", response);
+      }
+    } catch (error) {
+      console.error("Error in handlePlayClick:", error);
+    }
+  };
 
   return (
     <div className="carousel__wrap">
@@ -92,10 +111,22 @@ const InProgressCarousel = () => {
               className="carousel__slide-list"
               style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}
             >
-              {inProgressBooks.map((item, index) => (
-                <a href="/audiobook-player" key={index} className="carousel__slide-item">
-                  <img src={item.thumbnail} alt={`carousel-item-${index}`} />
-                </a>
+              {inProgressBooks.map((book, index) => (
+                <div
+                  key={index}
+                  className="carousel__slide-item"
+                  tabIndex={0} // Make the item focusable
+                  onClick={(e) => handlePlayClick(e, book._id)} // Handle click
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handlePlayClick(e, book._id); // Handle "Enter" key
+                    }
+                  }}
+                  role="button" // Indicate that the div is interactive
+                  aria-label={`Play ${book.title}`} // Accessibility description
+                >
+                  <img src={book.thumbnail} alt={`carousel-item-${index}`} />
+                </div>
               ))}
             </div>
           </div>

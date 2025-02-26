@@ -42,13 +42,21 @@
   padding: 0.5208vw;
   cursor: pointer;
   margin-bottom: 2vw;
+  outline: none;
 }
 
 .sidebar-icon img {
   width: 1.7vw;
   height: 1.7vw;
 }
-
+/* Optional: Add keyboard navigation focus styles */
+.sidebar-icon:focus {
+  width: 1.7vw;
+  height: 1.7vw;
+  margin-left: 0.9vw;
+  outline:0.15vw solid black;
+  outline-offset: 0.2vw
+}
 .sidebar-icon.active {
   background: var(--button-bg);
   border-radius: 0.5vw;
@@ -63,6 +71,7 @@
   width: 2vw;
   margin: auto;
   margin-bottom: 2vw;
+  outline: none;
 }
 
 .sidebar-bottom .sidebar-icon.active {

@@ -8,7 +8,7 @@ import bigRightArrow from '../images/bigRightArrow.png';
 import playIcon from '../images/playIcon.png';
 import tickReadLaterIcon from '../images/tick_readlater.png';
 import readlaterIcon from '../images/readlater_icon.png';
-import { insertReadLater, deleteReadLater } from "../services/AllServices.js"; // Import delete API
+import { insertReadLater, deleteReadLater, fetchPageDetails } from "../services/AllServices.js"; // Import delete API
 const BookInfo = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,7 +35,27 @@ const BookInfo = () => {
   }, [bookId, books]);
 
   const currentBook = books[currentIndex] || {}; 
+
+  const handlePlayClick = async (event, bookID) => {
+    event.preventDefault(); // Prevent default link behavior
+    
+    if (!bookID) {
+      console.log('No bookID provided:', bookID);
+      return;
+    }
   
+    console.log('Attempting to fetch details for bookID:', bookID);
+    try {
+      const response = await fetchPageDetails(bookID);
+      if (response) {
+        navigate("/audiobook-player", { state: { bookData: response } });
+      } else {
+        console.error("Invalid response structure:", response);
+      }
+    } catch (error) {
+      console.error("Error in handlePlayClick:", error);
+    }
+  };
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => {
@@ -147,7 +167,7 @@ const BookInfo = () => {
               <div className="book_info">
                 <div className="bookinfo_title_play">
                   <div className="bookinfo_title">{currentBook.title}</div>
-                  <a href="/audiobook-player" className="bookinfo_play">
+                  <a href="/audiobook-player" className="bookinfo_play" onClick={(e) => handlePlayClick(e, currentBook._id)} >
                     <img src={playIcon} alt="play icon" />
                   </a>
                 </div>

@@ -103,6 +103,21 @@ export const fetchAllGenreBooks = async () => {
     return handleError(error, "fetchAllGenreBooks");
   }
 };
+export const insertBookmark = async (formData, callback) => {
+  const urlEndPoint = `insertbookMark`;
+  const payload = {
+    sectionID: formData.sectionID,
+    index: formData.index
+  };
+  console.log("insertBM",payload);
+
+  try {
+    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "insertBookMark");
+  }
+};
 
 export const fetchUserBookmarks = async () => {
   const urlEndPoint = `UserBookMarks`;
@@ -247,13 +262,13 @@ export const updatePlaySpeed = async (playbackSpeed) => {
   }
 };
 
-export const fetchInProgressBooks = async () => {
-  const urlEndPoint = `InprogressBook`;
+export const fetchUserLibraryBooks = async () => {
+  const urlEndPoint = `Userlibrarybooks`;
   try {
     const response = await requestGetApiCall(urlEndPoint);
     return response || null;
   } catch (error) {
-    return handleError(error, "fetchInProgressBooks");
+    return handleError(error, "fetchUserLibraryBooks");
   }
 };
 
@@ -288,5 +303,47 @@ export const fetchSearchCount = async () => {
     return response || null;
   } catch (error) {
     return handleError(error, "fetchSearchCount");
+  }
+};
+
+
+export const fetchPageDetails = async (bookID) => {
+  const urlEndPoint = `PageDetails`;
+  const params = {bookID: bookID }; // Ensure it's correctly formatted
+
+  try {
+    const response = await requestGetApiCall(urlEndPoint, params);
+    
+    if (response && response.status === "success" && response.data) {
+      return response.data;
+    } else {
+      console.error("Invalid response structure:", response);
+      return null;
+    }
+  } catch (error) {
+    return handleError(error, "fetchPageDetails");
+  }
+};
+
+
+export const fetchNextPageDetails = async (bookID, index, change) => {
+  const urlEndPoint = `NextPageDetails`;
+  const payload = { bookID, index, change };
+  try {
+    const response = await requestGetApiCall(urlEndPoint, payload);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchNextPageDetails");
+  }
+};
+
+export const fetchSectionDetails = async (bookID, pageID, index, change) => {
+  const urlEndPoint = `SectionDetails`;
+  const payload = { bookID, pageID, index, change };
+  try {
+    const response = await requestGetApiCall(urlEndPoint, payload);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchSectionDetails");
   }
 };

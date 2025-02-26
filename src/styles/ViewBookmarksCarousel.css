@@ -121,6 +121,19 @@ body.dark {
 }
 
 .bookmarks_section_container {
+  width: 100%;
+  height: 23vw;
+  overflow-y: auto;
+}
+.bookmarks_section_containerbkit-scrollbar {
+  display: none;
+}
+
+.bookmarks_section_container{
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+.section_box{
   display: flex;
   width: 86%;
   height: 10.5vw;

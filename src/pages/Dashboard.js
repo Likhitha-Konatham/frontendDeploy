@@ -6,7 +6,7 @@ import Header from "../components/Header.js";
 import Carousel from "../components/Carousel.js";
 import GenreCarousel from "../components/Genre_carousel.js";
 import InProgessBooksBar from "../components/InProgressBooksBar.js";
-import { fetchAllGenreBooks, fetchInProgressBooks } from "../services/AllServices.js";
+import { fetchAllGenreBooks, fetchUserLibraryBooks } from "../services/AllServices.js";
 
 const Dashboard = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -18,12 +18,14 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await fetchInProgressBooks();
+        const response = await fetchUserLibraryBooks();
+        console.log(response);
         if (response.status === "success") {
           const colorClasses = ["green", "yellow", "orange"];
           const lastThreeBooks = response.data.slice(-3).map((book, index) => ({
+            id: book._id,
             name: book.title,
-            percentage: Math.floor(Math.random() * 100) + 1,
+            percentage: Math.round(((book.index - 1) / book.page_count) * 100),
             colorClass: colorClasses[index % colorClasses.length],
           }));
           setInProgressBooks(lastThreeBooks);

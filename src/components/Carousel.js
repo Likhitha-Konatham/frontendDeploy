@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect, useRef} from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -17,6 +17,7 @@ const Carousel = () => {
   const [loading, setLoading] = useState(true); // Loading state
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
+  const swiperRef = useRef(null);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -104,7 +105,9 @@ const Carousel = () => {
             <SwiperSlide
               key={book._id}
               className="swiper-slide"
-              onClick={() => handleSlideClick(book._id)} // Token check on click
+              tabIndex="0"
+              onClick={() => handleSlideClick(book._id)}
+              onKeyDown={(e) => e.key === "Enter" && handleSlideClick(book._id)}
             >
               <img src={book.thumbnail} alt={book.title} />
             </SwiperSlide>
@@ -113,12 +116,24 @@ const Carousel = () => {
         <div className="swiper-pagination"></div>
       </Swiper>
 
-      <div className="swiper-button-prev">
+      <button
+        className="swiper-button-prev"
+        tabIndex="0"
+        onClick={() => swiperRef.current?.slidePrev()}
+        onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.slidePrev()}
+      >
         <img src={leftArrow} alt="Left Arrow" />
-      </div>
-      <div className="swiper-button-next">
+      </button>
+
+      <button
+        className="swiper-button-next"
+        tabIndex="0"
+        onClick={() => swiperRef.current?.slideNext()}
+        onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.slideNext()}
+      >
         <img src={rightArrow} alt="Right Arrow" />
-      </div>
+      </button>
+
     </div>
   );
 };

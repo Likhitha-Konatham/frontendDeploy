@@ -1,42 +1,230 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ReactSlider from "react-slider"; // Import react-slider
+import React, { useState, useEffect, useRef,useCallback  } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import ReactSlider from "react-slider";
 import "../styles/AudioBookPlayer.css";
 import Sidebar from "../components/Sidebar.js";
 import Header from "../components/Header.js";
+import { insertBookmark, fetchNextPageDetails } from "../services/AllServices.js";
 
-// Importing all images
-import arrowBack from "../images/arrow_back.png";
-import arrowNext from "../images/arrow_next.png";
+// import arrowBack from "../images/arrow_back.png";
+// import arrowNext from "../images/arrow_next.png";
 import fastForward from "../images/fast_forward.png";
 import fastBackward from "../images/fast_backward.png";
+import downArrow from "../images/down_arrow.png";
+import skipForward from "../images/skip_forward.png";
+import skipBackward from "../images/skip_backward.png";
 import playIcon from "../images/playIcon.png";
 import pauseIcon from "../images/pauseIcon.png";
 import saveIcon from "../images/saveIcon.png";
 import zoomIn from "../images/zoom_in.png";
 import zoomOut from "../images/zoom_out.png";
-import bookCover1 from "../images/bookcover1.png";
-import bookCover2 from "../images/bookcover2.png";
-import bookCover3 from "../images/bookcover3.png";
-import downArrow from "../images/down_arrow.png";
-import skipForward from "../images/skip_forward.png";
-import skipBackward from "../images/skip_backward.png";
 import fullScreen from "../images/fullScreen.png";
-import exitFullScreen from "../images/exit_fullscreen.png"
+import exitFullScreen from "../images/exit_fullscreen.png";
 import brightnessImg from "../images/brightness.png";
 
 const AudioBookPlayer = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState(1); // Playback speed
-  const [progress, setProgress] = useState(50); // Progress bar
-  const [brightness, setBrightness] = useState(100); // Brightness
-  const [zoomLevel, setZoomLevel] = useState(100); // Zoom level for text box
+  const location = useLocation();
+  const audioRef = useRef(null);
+  const textContainerRef = useRef(null);
+  const activeTextRef = useRef(null);
 
-  const [currentChapter, setCurrentChapter] = useState(0); // State to track current chapter
+  const [bookData, setBookData] = useState(null);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [speed, setSpeed] = useState(1);
+  const [brightness, setBrightness] = useState(100);
+  const [zoomLevel, setZoomLevel] = useState(100);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  // Initialize book data and start playing
+  useEffect(() => {
+    if (location.state?.bookData) {
+      setBookData(location.state.bookData);
+      setCurrentSectionIndex(0);
+      setTimeout(() => {
+        setIsPlaying(true);
+        if (audioRef.current) {
+          audioRef.current.play().catch((error) => console.warn("Playback failed:", error));
+        }
+      }, 2000); // 2-second delay before playing
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = speed;
+    }
+  }, [speed]);
+
+  // Handle text scrolling and highlighting
+  useEffect(() => {
+    if (textContainerRef.current) {
+      const currentElement = textContainerRef.current.querySelector('.highlighted');
+      if (currentElement) {
+        currentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [currentSectionIndex]);
+
+  // Section end handler
+  const handleSectionEnd = async () => {
+    if (currentSectionIndex < (bookData?.sections?.length || 0) - 1) {
+      // If there are more sections in the current page, move to the next section
+      setCurrentSectionIndex((prev) => prev + 1);
+      setIsPlaying(true);
+      setTimeout(() => audioRef.current?.play(), 100); // Ensure next audio plays
+    } else {
+      // If this is the last section of the current page, fetch the next page
+      const newBookData = await fetchNextPageDetails(bookData.bookID, bookData.index, "next");
+      if (newBookData) {
+        setBookData(newBookData.data);
+        setCurrentSectionIndex(0); // Start from the first section of the new page
+        setIsPlaying(true);
+        setTimeout(() => audioRef.current?.play(), 100); // Ensure next audio plays
+      } else {
+        // If there's no next page, stop playing
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  const handlePlayPause = useCallback(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch((error) => {
+          console.warn("Playback failed:", error);
+          setIsPlaying(false);
+        });
+      }
+      setIsPlaying(!isPlaying);
+    }
+  }, [isPlaying]);
+
+  const calculatePageProgress = ()=> {
+    if (bookData) {
+      return ((bookData.index - 1) / bookData.total_pages) * 100;
+    }
+    return 0;
+  };
+
+  const handleSkipSectionForward =useCallback(() => {
+    if (currentSectionIndex < bookData?.sections?.length - 1) {
+      setCurrentSectionIndex((prev) => prev + 1);
+      setIsPlaying(true);
+      setTimeout(() => audioRef.current?.play(), 100);
+    }
+  }, [currentSectionIndex, bookData]);
+  
+  const handleSkipSectionBackward =useCallback(() => {
+    if (currentSectionIndex > 0) {
+      setCurrentSectionIndex((prev) => prev - 1);
+      setIsPlaying(true);
+      setTimeout(() => audioRef.current?.play(), 100);
+    }
+  }, [currentSectionIndex]);
+
+  const handleSkipPageForward = useCallback(async () => {
+    const newBookData = await fetchNextPageDetails(bookData.bookID, bookData.index, "next");
+    if (newBookData) {
+      setBookData(newBookData.data);
+      setCurrentSectionIndex(0);
+      setIsPlaying(true);
+      setTimeout(() => audioRef.current?.play(), 100);
+    }
+  }, [bookData]);
+
+  const handleSkipPageBackward = useCallback(async () => {
+    if (!bookData || !bookData.bookID) {
+      console.error("bookData is undefined or missing bookID");
+      return;
+    }
+    const newBookData = await fetchNextPageDetails(bookData.bookID, bookData.index, "previous");
+    setBookData(newBookData.data);
+    setIsPlaying(true);
+    setTimeout(() => audioRef.current?.play(), 100);
+  }, [bookData]);
+  
+
+const handlePageChange = async (pageIndex) => {
+  const newBookData = await fetchNextPageDetails(bookData.bookID, pageIndex, "same");
+  if (newBookData) {
+    setBookData(newBookData.data);
+    setCurrentSectionIndex(0); // Reset section index on page change
+    setIsPlaying(true);
+    setTimeout(() => audioRef.current?.play(), 100); 
+    setIsDropdownOpen(false); // Close dropdown
+  }
+};
+
+const handleSectionClick = (index) => {
+  setCurrentSectionIndex(index); // Jump to the selected section
+  setIsPlaying(true);
+  
+  setTimeout(() => {
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
+  }, 100);
+};
+
+const handleKeyDown = useCallback((event) => {
+  if (event.ctrlKey && event.key === "ArrowRight") {
+    // Ctrl + Right Arrow → Next Page
+    if (bookData.index < bookData.total_pages) {
+      event.preventDefault();
+      handleSkipPageForward();
+    }
+  } else if (event.ctrlKey && event.key === "ArrowLeft") {
+    // Ctrl + Left Arrow → Previous Page
+    if (bookData.index > 1) {
+      event.preventDefault();
+      handleSkipPageBackward();
+    }
+  } else if (event.altKey && event.key === "ArrowRight") {
+    // Alt + Right Arrow → Next Section
+    if (currentSectionIndex < bookData?.sections?.length - 1) {
+      event.preventDefault();
+      handleSkipSectionForward();
+    }
+  } else if (event.altKey && event.key === "ArrowLeft") {
+    // Alt + Left Arrow → Previous Section
+    if (currentSectionIndex > 0) {
+      event.preventDefault();
+      handleSkipSectionBackward();
+    }
+  } else if (event.key === " ") {
+    // Space → Play/Pause
+    event.preventDefault();
+    handlePlayPause();
+  }
+}, [handlePlayPause, handleSkipPageForward, handleSkipPageBackward, handleSkipSectionForward, handleSkipSectionBackward, bookData, currentSectionIndex]);
+
+useEffect(() => {
+  window.addEventListener("keydown", handleKeyDown);
+  return () => {
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, [handleKeyDown]);
+
+
+
+  if (!bookData) {
+    return (
+      <div className="loading-container">
+        <p>Loading book data...</p>
+      </div>
+    );
+  }
+
+  const currentSection = bookData.sections[currentSectionIndex];
 
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
@@ -45,52 +233,43 @@ const AudioBookPlayer = () => {
       leftSection.classList.toggle('fullscreen-active', !isFullScreen);
     }
   };
-  
-
-  const chapters = [
-    {
-      title: "Data Science",
-      author: "Nir Kaldero",
-      cover: bookCover1,
-      context: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in diam arcu. Cras sit amet leo lorem. Fusce vel viverra urna, ac accumsan leo.",
-    },
-    {
-      title: "Machine Learning",
-      author: "Jane Doe",
-      cover: bookCover2,
-      context: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae nisl sit amet magna ullamcorper lobortis dictum vitae arcu. Nullam non accumsan diam.",
-    },
-    {
-      title: "Artificial Intelligence",
-      author: "John Smith",
-      cover: bookCover3,
-      context: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet leo lorem. Fusce vel viverra urna, ac accumsan leo. Duis non erat in urna cursus malesuada.",
-    },
-  ];
-
-  const handlePlayPause = () => setIsPlaying(!isPlaying);
 
   const handleBrightnessChange = (value) => setBrightness(value);
 
+  const handleSaveBookmark = async () => {
+    try {
+      const response = await insertBookmark({
+        sectionID: currentSection._id,
+        index: currentSection.index,
+      });
+      if (response.status ==="success") {
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 1000); // Hide message after 1 second
+        console.log("Bookmark saved successfully!");
+      } else {
+        console.error("Failed to save bookmark:", response.message);
+      }
+    } catch (error) {
+      console.error("Error saving bookmark:", error);
+    }
+  };
+
   const resetSearch = () => {
-    setSearchQuery(""); // Reset the search query
+    setSearchQuery("");
   };
 
   const handleActiveItemChange = (item) => {
-    setActiveItem(item); // Update active item
+    setActiveItem(item);
     if (item === "dashboard") {
-      navigate("/dashboard"); // Navigate to feedback page
+      navigate("/dashboard");
     } else if (item === "bookmarks") {
-      navigate("/bookmarks"); // Navigate to home page
+      navigate("/bookmarks");
+    } else if (item === "library") {
+      navigate("/library");
+    } else if (item === "settings") {
+      navigate("/settings");
     }
-    else if (item === "library") {
-      navigate("/library"); // Navigate to home page
-    }
-    else if (item === "settings") {
-      navigate("/settings"); // Navigate to home page
-    }
-
-    resetSearch(); // Reset search whenever a new section is selected
+    resetSearch();
   };
 
   const getHeaderVisibility = () => {
@@ -107,19 +286,6 @@ const AudioBookPlayer = () => {
 
   const { showSearch, showUserProfile, showArrows, pageName } = getHeaderVisibility();
 
-  // Handle Skip Forward and Skip Backward
-  const handleSkipForward = () => {
-    if (currentChapter < chapters.length - 1) {
-      setCurrentChapter(currentChapter + 1);
-    }
-  };
-
-  const handleSkipBackward = () => {
-    if (currentChapter > 0) {
-      setCurrentChapter(currentChapter - 1);
-    }
-  };
-
   const handleProfileClick = () => {
     navigate("/settings", { state: { selectedSection: "account" } });
   };
@@ -127,169 +293,137 @@ const AudioBookPlayer = () => {
   return (
     <main className="main-content">
       <div className="sidebar_container">
-        <Sidebar
-          activeItem={activeItem}
-          setActiveItem={handleActiveItemChange}
-          resetSearch={resetSearch}
-        />
+        <Sidebar activeItem={activeItem} setActiveItem={handleActiveItemChange} resetSearch={resetSearch}/>
       </div>
 
       <div className="audio_player_container">
         <div className="header_container">
-          <Header
-            showSearch={showSearch}
-            showUserProfile={showUserProfile}
-            showArrows={showArrows} 
-            pageName={pageName} 
-            searchQuery={searchQuery}
-            onSearch={(query) => setSearchQuery(query)}
-            onProfileClick={handleProfileClick} 
-          />
+          <Header showSearch={showSearch} showUserProfile={showUserProfile} showArrows={showArrows} pageName={pageName} searchQuery={searchQuery} onSearch={(query) => setSearchQuery(query)} onProfileClick={handleProfileClick}/>
         </div>
 
         <div className="audio-book-player">
-          {/* Left Section: 70% */}
           <div className="left-section">
-            {/* Header */}
             <div className="header">
               <div className="arrowSection">
-                <div className="arrow"><img src={arrowBack} alt="Back" className="icon" /></div>
-                <div className="arrow"><img src={arrowNext} alt="next" className="icon" /></div>
+                {/* <div className="arrow"><img src={arrowBack} alt="Back" className="icon" /></div>
+                <div className="arrow"><img src={arrowNext} alt="next" className="icon" /></div> */}
               </div>
 
               <div className="chapterSection">
-                <div className="chapterNumber">Chapter {currentChapter + 1}</div>
-                <div className="chapterDropdown"><img src={downArrow} alt="Dropdown" className="icon" /></div>
+                <div className="chapterDropdown" onClick={() => setIsDropdownOpen((prev) => !prev)}>
+                  <span className="chapterNumber">Page {bookData?.index}</span>
+                  <img src={downArrow} alt="Dropdown" className="icon" />
+                  
+                  {isDropdownOpen && (
+                    <ul className="dropdown-menu">
+                      {Array.from({ length: bookData?.total_pages || 0 }, (_, i) => {
+                        const pageNumber = i + 1; // Convert to 1-based index
+                        return (
+                          <li key={pageNumber} className={`dropdown-item ${bookData.index === pageNumber ? "selected" : ""}`}  onClick={(e) => { e.stopPropagation(); handlePageChange(pageNumber); }}>
+                            Page {pageNumber}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
               </div>
+
               <div className="saveSection">
-                <div className="book_player_save_icon">
-                  <img src={saveIcon} alt="Bookmark"/>
+                <div className="book_player_save_icon" onClick={handleSaveBookmark} onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+                  <img src={saveIcon} alt="Bookmark" />
+                  {showTooltip && <div className="tooltip">Save to Bookmarks</div>}
                 </div>
+                {showSuccessMessage && <div className="successMessage">Section added to bookmarks!</div>}
               </div>
             </div>
 
-            {/* Lyrics Box */}
-            <div
-                className={`book_context_box ${isFullScreen ? 'fullscreen-active' : ''}`}
-                style={{
-                  zoom: `${zoomLevel}%`,
-                  filter: `brightness(${brightness}%)`,
-                }}
-              >
-                <p className="book_context">
-                  {chapters[currentChapter].context}
-                  <span className="highlight"> Duis non erat in urna cursus malesuada sed sed mauris.</span>
-                </p>
-                <div className="fullscreen" onClick={toggleFullScreen}>
-                  <img
-                    src={isFullScreen ? exitFullScreen : fullScreen}
-                    alt={isFullScreen ? "Exit Full Screen" : "Full Screen"}
-                  />
-                </div>
-              </div>
+            <div className={`book_context_box ${isFullScreen ? 'fullscreen-active' : ''}`} ref={textContainerRef} style={{filter: `brightness(${brightness}%)`,}} >
+            <div className="book_content_wrapper">
+              {bookData?.sections.map((section, index) => (
+                <p key={index} className={`book_context ${index === currentSectionIndex ? "highlighted" : ""}`} ref={index === currentSectionIndex ? activeTextRef : null}  onClick={() => handleSectionClick(index)} style={{ fontSize: `${zoomLevel * 0.02}vw`, color: index === currentSectionIndex ? 'var(--text-primary)' : 'var(--text-grey)' }} >{section.text}</p>
+              ))}
+            </div>
+                    
+            <div className="fullscreen" onClick={toggleFullScreen}>
+              <img src={isFullScreen ? exitFullScreen : fullScreen} alt={isFullScreen ? "Exit Full Screen" : "Full Screen"}/>
+            </div>
+            </div>
 
+            <audio ref={audioRef} src={bookData?.sections[currentSectionIndex]?.audio} onEnded={handleSectionEnd} onPlay={() => setIsPlaying(true)} startsonPause={() => setIsPlaying(false)} autoPlay/>
 
-            {/* Playback Controls */}
             <div className="book-player-controls">
-                <div className="control-section skip-backward" onClick={handleSkipBackward}>
-                    <img src={skipBackward} alt="Skip Backward" className="control-icon" />
-                </div>
-                <div className="control-section fast-backward" >
-                    <img src={fastBackward} alt="Fast Backward" className="control-icon" />
-                </div>
-                <div className="control-section play-pause">
-                    <img
-                    src={isPlaying ? pauseIcon : playIcon}
-                    alt="Play/Pause"
-                    className="control-icon"
-                    onClick={handlePlayPause}
-                    />
-                </div>
-                <div className="control-section fast-forward">
-                    <img src={fastForward} alt="Fast Forward" className="control-icon" />
-                </div>
-                <div className="control-section skip-forward" onClick={handleSkipForward}>
-                    <img src={skipForward} alt="Skip Forward" className="control-icon" />
-                </div>
-                <div className="control-section speed-select-container">
-                    <select
-                    className="speed-select"
-                    value={speed}
-                    onChange={(e) => setSpeed(Number(e.target.value))}
-                    >
-                    <option value={0.5}>0.5x</option>
-                    <option value={1}>1x</option>
-                    <option value={1.5}>1.5x</option>
-                    <option value={2}>2x</option>
-                    </select>
+              {/* Skip Page Backward */}
+              <div className="control-section skip-backward" onClick={bookData.index > 1 ? handleSkipPageBackward : null}>
+                <img src={skipBackward} alt="Skip Backward" className={`control-icon ${bookData.index === 1 ? "disabled" : ""}`} />
+              </div>
+              {/* Skip Section Backward */}
+              <div className="control-section fast-backward" onClick={currentSectionIndex > 0 ? handleSkipSectionBackward : null}>
+                <img src={fastBackward} alt="Fast Backward" className={`control-icon ${currentSectionIndex === 0 ? "disabled" : ""}`} />
+              </div>
+              {/* Play/Pause */}
+              <div className="control-section play-pause">
+                <img src={isPlaying ? pauseIcon : playIcon} alt="Play/Pause" className="control-icon" onClick={handlePlayPause} />
+              </div>
+              {/* Skip Section Forward */}
+              <div className="control-section fast-forward" onClick={currentSectionIndex < bookData?.sections?.length - 1 ? handleSkipSectionForward : null}>
+                <img src={fastForward} alt="Fast Forward" className={`control-icon ${currentSectionIndex === bookData?.sections?.length - 1 ? "disabled" : ""}`} />
+              </div>
+              {/* Skip Page Forward */}
+              <div className="control-section skip-forward" onClick={bookData.index < bookData.total_pages ? handleSkipPageForward : null}>
+                <img src={skipForward} alt="Skip Forward" className={`control-icon ${bookData.index === bookData.total_pages ? "disabled" : ""}`} />
+              </div>
+              <div className="control-section speed-select-container">
+                <select className="speed-select" value={speed} onChange={(e) => setSpeed(Number(e.target.value))}>
+                  <option value={0.5}>0.5x</option>
+                  <option value={1}>1x</option>
+                  <option value={1.5}>1.5x</option>
+                  <option value={2}>2x</option>
+                </select>
+              </div>
+            </div>
+
+
+            <div className="book-player-progress-bar">
+              <input type="range" min="0" max="100" value={calculatePageProgress()} readOnly/>
+              <span className="progress-percent">{Math.round(calculatePageProgress())}%</span>
+            </div>
+            <div className="section_out_of"> Page {bookData.index} of {bookData.total_pages}</div>
+          </div>
+
+          <div className="right-section">
+            {/* Book Info */}
+            <div className="book-player-info">
+              <div className="book-player-cover"><img src={bookData.BookDetails.thumbnail} alt="Book Cover" /></div>
+                <div className="book-player-details">
+                    <h3>{bookData.BookDetails.title}</h3>
+                    <h4>{bookData.BookDetails.author_list?.join(", ")}</h4>
                 </div>
             </div>
 
-            {/* Progress Bar */}
-
-           <div className="book-player-progress-bar">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={progress}
-                onChange={(e) => setProgress(Number(e.target.value))}
-              />
-              <span className="progress-percent">{progress}%</span>
-            </div>
-            <div className="section_out_of">60 of 100</div>
-        </div>
-      {/* Right Section: 30% */}
-      <div className="right-section">
-        {/* Book Info */}
-        <div className="book-player-info">
-           <div className="book-player-cover"><img src={chapters[currentChapter].cover} alt="Book Cover" /></div>
-            <div className="book-player-details">
-                <h3>{chapters[currentChapter].title}</h3>
-                <h4>{chapters[currentChapter].author}</h4>
-            </div>
-        </div>
-
-        {/* Brightness and Zoom Controls */}
-        <div className="book-player-settings">
-          <div className="book-player-slider-container">
-            <div className="small-img">
-                <img src={brightnessImg} alt="brightness decrease" />
-            </div>
-            <ReactSlider
-              className="book-player-custom-slider"
-              thumbClassName="book-player-custom-slider-thumb"
-              trackClassName="book-player-custom-slider-track"
-              value={brightness}
-              onChange={handleBrightnessChange}
-              min={50}
-              max={150}
-            />
-             <div className="big-img">
-                <img src={brightnessImg} alt="brightness increase" />
+            {/* Brightness and Zoom Controls */}
+            <div className="book-player-settings">
+              <div className="book-player-slider-container">
+                <div className="small-img">
+                    <img src={brightnessImg} alt="brightness decrease" />
+                </div>
+                <ReactSlider className="book-player-custom-slider" thumbClassName="book-player-custom-slider-thumb" trackClassName="book-player-custom-slider-track" value={brightness} onChange={handleBrightnessChange} min={80} max={120}/>
+                <div className="big-img">
+                    <img src={brightnessImg} alt="brightness increase" />
+                </div>
+              </div>
+              
+              <div className="book-player-slider-container">
+                <div className="small-img">
+                    <img src={zoomOut} alt="Zoom Icon" />
+                </div>
+                    <ReactSlider className="book-player-custom-slider" thumbClassName="book-player-custom-slider-thumb" trackClassName="book-player-custom-slider-track" value={zoomLevel} min={80} max={120} onChange={(value) => setZoomLevel(value)} />
+                <div className="big-img">
+                  <img src={zoomIn} alt="Zoom Icon" />
+                </div>
+                </div>
             </div>
           </div>
-          
-          <div className="book-player-slider-container">
-            <div className="small-img">
-                <img src={zoomOut} alt="Zoom Icon" />
-            </div>
-                <ReactSlider
-                className="book-player-custom-slider"
-                thumbClassName="book-player-custom-slider-thumb"
-                trackClassName="book-player-custom-slider-track"
-                value={zoomLevel}
-                min={80}
-                max={120}
-                onChange={(value) => setZoomLevel(value)}
-                />
-            <div className="big-img">
-              <img src={zoomIn} alt="Zoom Icon" />
-            </div>
-            </div>
-        </div>
-      </div>
-
         </div>
       </div>
     </main>
