@@ -67,7 +67,7 @@ body.dark {
   align-items: center;
   justify-content: center;
   width: 24.832vw;
-  height: 36vw;
+  height: auto;
   max-height: 150vh;
   padding: 2.604vw 2.084vw;
   background-color: var(--bg-secondary);
@@ -434,6 +434,7 @@ html, body {
     color: var(--error-color);
     font-size: 1.04vw;
     margin-top: 0.521vw;
+    text-align: center;
 }
 
 .signup-error-email {
@@ -442,6 +443,7 @@ html, body {
     margin-top: 0.521vw;
     margin-bottom: 0vw;
     padding-bottom: 0vw;
+    text-align: center;
 }
 
 .popup-overlay {

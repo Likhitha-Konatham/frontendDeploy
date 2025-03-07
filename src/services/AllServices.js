@@ -16,15 +16,42 @@ const handleError = (error, operation) => {
 
 export const registerUser = async (formData, callback) => {
   const urlEndPoint = `register`;
-  const payload = {
-    firstname: formData.firstName,
-    email: formData.email,
-    password: formData.password,
-    genre: formData.genre,
-  };
 
   try {
-    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+    // Create a new FormData object
+    const formDataToSend = new FormData();
+
+    // If formData is already a FormData object, use it directly
+    if (formData instanceof FormData) {
+      return await requestPostApiCall(urlEndPoint, formData, callback);
+    }
+
+    // Otherwise, build a new FormData object
+    // Use firstname (not firstName) to match what's expected by the API
+    formDataToSend.append("firstname", formData.firstname);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
+
+    // Handle genre - can be a JSON string or an array
+    if (typeof formData.genre === "string") {
+      // If it's already a string, use it directly
+      formDataToSend.append("genre", formData.genre);
+    } else if (Array.isArray(formData.genre)) {
+      // If it's an array, stringify it
+      formDataToSend.append("genre", JSON.stringify(formData.genre));
+    }
+
+    // Add the file if it exists
+    if (formData.file) {
+      formDataToSend.append("profile_picture", formData.file);
+    }
+
+    // Use the API call function for form-data
+    const response = await requestPostApiCall(
+      urlEndPoint,
+      formDataToSend,
+      callback
+    );
     return response || null;
   } catch (error) {
     return handleError(error, "registerUser");
@@ -107,9 +134,9 @@ export const insertBookmark = async (formData, callback) => {
   const urlEndPoint = `insertbookMark`;
   const payload = {
     sectionID: formData.sectionID,
-    index: formData.index
+    index: formData.index,
   };
-  console.log("insertBM",payload);
+  console.log("insertBM", payload);
 
   try {
     const response = await requestPostApiCall(urlEndPoint, payload, callback);
@@ -132,7 +159,7 @@ export const fetchUserBookmarks = async () => {
 export const deleteBookMarks = async (formData, callback) => {
   const urlEndPoint = `DeleteBookMark`;
   const payload = { bookMarkID: formData.bookmarkId };
-  console.log(payload)
+  console.log(payload);
 
   try {
     const response = await requestPostApiCall(urlEndPoint, payload, callback);
@@ -307,14 +334,13 @@ export const fetchSearchCount = async () => {
   }
 };
 
-
 export const fetchPageDetails = async (bookID) => {
   const urlEndPoint = `PageDetails`;
-  const params = {bookID: bookID }; // Ensure it's correctly formatted
+  const params = { bookID: bookID }; // Ensure it's correctly formatted
 
   try {
     const response = await requestGetApiCall(urlEndPoint, params);
-    
+
     if (response && response.status === "success" && response.data) {
       return response.data;
     } else {
@@ -325,7 +351,6 @@ export const fetchPageDetails = async (bookID) => {
     return handleError(error, "fetchPageDetails");
   }
 };
-
 
 export const fetchNextPageDetails = async (bookID, index, change) => {
   const urlEndPoint = `NextPageDetails`;
