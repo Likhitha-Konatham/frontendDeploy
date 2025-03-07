@@ -4,7 +4,8 @@ import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import { useNavigate } from "react-router-dom";
 import { fetchAllGenreBooks } from "../services/AllServices.js";
-import { getToken } from '../storage/Storage'; // Import the token utility
+import { getToken } from '../storage/Storage'; 
+import { speakText } from './utils/speechUtils'; // Import the speakText utility
 
 const GenreCarousel = ({ heading, genre_carousel_images }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -61,6 +62,18 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
     }
   };
 
+  const handleFocusOnGenre = () => {
+    speakText(`${heading} Genre`);
+  };
+
+  const handleFocusOnBook = (bookTitle) => {
+    speakText(`${bookTitle}`);
+  };
+
+  const handleFocusOnArrow = (direction) => {
+    speakText(`Move ${direction} through the genre carousel`);
+  };
+
   if (!Array.isArray(genre_carousel_images) || genre_carousel_images.length === 0) {
     return null;
   }
@@ -73,7 +86,8 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
           onClick={prevSlide}
           onKeyDown={(e) => handleKeyPress(e, prevSlide)}
           disabled={genre_carousel_images.length <= 5}
-          tabIndex={0} // Make button focusable
+          tabIndex={0}
+          onFocus={() => handleFocusOnArrow("backward")} // Speech on focus
         >
           <div className="carousel__btn--prev">
             <img src={bigLeftArrow} alt="Previous" className="carousel__btn-arrow" />
@@ -81,7 +95,13 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
         </button>
 
         <div className="carousel__container">
-          <div className="genre_heading">{heading}</div>
+          <div
+            className="genre_heading"
+            onFocus={handleFocusOnGenre} // Trigger speech for genre heading
+            tabIndex={0}
+          >
+            {heading}
+          </div>
 
           <div
             className="carousel__slide-list"
@@ -95,8 +115,13 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
               </div>
             ) : (
               genre_carousel_images.map((item, index) => (
-                <div key={index} className="carousel__slide-item"tabIndex={0} 
-                onKeyDown={(e) => handleKeyPress(e, () => handleItemClick(item.id))}>
+                <div
+                  key={index}
+                  className="carousel__slide-item"
+                  tabIndex={0}
+                  onKeyDown={(e) => handleKeyPress(e, () => handleItemClick(item.id))}
+                  onFocus={() => handleFocusOnBook(item.title)} // Trigger speech on book focus
+                >
                   <div
                     role="button"
                     onClick={() => handleItemClick(item.id)}
@@ -125,7 +150,8 @@ const GenreCarousel = ({ heading, genre_carousel_images }) => {
           onClick={nextSlide}
           onKeyDown={(e) => handleKeyPress(e, nextSlide)}
           disabled={genre_carousel_images.length <= 5}
-          tabIndex={0} // Make button focusable
+          tabIndex={0}
+          onFocus={() => handleFocusOnArrow("forward")} // Speech on focus
         >
           <div className="carousel__btn--next">
             <img src={bigRightArrow} alt="Next" className="carousel__btn-arrow" />

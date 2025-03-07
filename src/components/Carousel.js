@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react'; 
+import React, { useState, useEffect, useRef } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -6,15 +6,16 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { fetchAllBooks } from '../services/AllServices';
-import { getToken } from '../storage/Storage'; // Import the token utility
+import { getToken } from '../storage/Storage'; 
 import '../styles/Carousel.css';
 
 import leftArrow from '../images/new_release_carousel_leftarrow.png'; 
 import rightArrow from '../images/new_release_carousel_rightarrow.png'; 
+import { speakText } from './utils/speechUtils'; // Import the speakText utility
 
 const Carousel = () => {
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true); 
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
   const swiperRef = useRef(null);
@@ -33,10 +34,10 @@ const Carousel = () => {
           .sort((a, b) => new Date(b.created) - new Date(a.created))
           .slice(0, 6);
         setBooks(sortedBooks);
-        setLoading(false); // Set loading to false when data is fetched
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching books:", error);
-        setLoading(false); // Set loading to false on error
+        setLoading(false);
       }
     };
     getBooks();
@@ -48,6 +49,15 @@ const Carousel = () => {
     } else {
       navigate(`/book-info/${bookId}`, { state: { books } });
     }
+  };
+
+  // Handle focus events for speaking text
+  const handleFocusOnSlide = (bookTitle) => {
+    speakText(`${bookTitle}`);
+  };
+
+  const handleFocusOnArrow = (direction) => {
+    speakText(`Move ${direction} through the carousel`);
   };
 
   return (
@@ -94,7 +104,6 @@ const Carousel = () => {
         }}
       >
         {loading ? (
-          // Skeleton loader while books are loading
           [...Array(6)].map((_, index) => (
             <SwiperSlide key={index} className="swiper-slide carousel-skeleton-item">
               <div className="carousel-skeleton-image"></div>
@@ -108,6 +117,7 @@ const Carousel = () => {
               tabIndex="0"
               onClick={() => handleSlideClick(book._id)}
               onKeyDown={(e) => e.key === "Enter" && handleSlideClick(book._id)}
+              onFocus={() => handleFocusOnSlide(book.title)} // Trigger speech on focus
             >
               <img src={book.thumbnail} alt={book.title} />
             </SwiperSlide>
@@ -121,6 +131,7 @@ const Carousel = () => {
         tabIndex="0"
         onClick={() => swiperRef.current?.slidePrev()}
         onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.slidePrev()}
+        onFocus={() => handleFocusOnArrow("backward")} // Speech on focus
       >
         <img src={leftArrow} alt="Left Arrow" />
       </button>
@@ -130,10 +141,10 @@ const Carousel = () => {
         tabIndex="0"
         onClick={() => swiperRef.current?.slideNext()}
         onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.slideNext()}
+        onFocus={() => handleFocusOnArrow("forward")} // Speech on focus
       >
         <img src={rightArrow} alt="Right Arrow" />
       </button>
-
     </div>
   );
 };

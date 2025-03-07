@@ -2,11 +2,12 @@ import React from 'react';
 import '../styles/InProgessBooksBar.css';
 import { useNavigate } from "react-router-dom";
 import { fetchPageDetails } from "../services/AllServices.js";
+import { speakText } from './utils/speechUtils'; // Import the speakText utility
 
 const InProgessBooksBar = ({ inProgressBooks }) => {
   const navigate = useNavigate();
 
-  const handlePlayClick = async (event, bookID) => {
+  const handlePlayClick = async (event, bookID, bookName) => {
     event.preventDefault(); // Prevent default link behavior
 
     if (!bookID) {
@@ -19,6 +20,8 @@ const InProgessBooksBar = ({ inProgressBooks }) => {
       const response = await fetchPageDetails(bookID);
       console.log(response);
       if (response) {
+        // Announce that the user is continuing the book
+        
         navigate("/audiobook-player", { state: { bookData: response } });
       } else {
         console.error("Invalid response structure:", response);
@@ -28,9 +31,24 @@ const InProgessBooksBar = ({ inProgressBooks }) => {
     }
   };
 
+  // Handle focus and keyboard navigation
+  const handleFocusOnBook = (bookName, percentage) => {
+    speakText(`${bookName}, Progress: ${percentage}%`);
+  };
+
+  const handleFocusOnContinueReading = () => {
+    speakText("Continue reading books section.");
+  };
+
   return (
     <div className="progressbar_container">
-      <h3 className="progressbook_title">Continue Reading</h3>
+      <h3
+        className="progressbook_title"
+        onFocus={handleFocusOnContinueReading} // Trigger speech when focusing on the title
+        tabIndex={0}
+      >
+        Continue Reading
+      </h3>
       <div className="progessbar-book-list">
         {inProgressBooks.map((book, index) => (
           <a
@@ -38,12 +56,13 @@ const InProgessBooksBar = ({ inProgressBooks }) => {
             key={index}
             className={`progress-container ${book.colorClass}-bg`}
             tabIndex={0} // Allow keyboard focus
-            onClick={(e) => handlePlayClick(e, book.id)}
+            onClick={(e) => handlePlayClick(e, book.id, book.name)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handlePlayClick(e, book.id);
+                handlePlayClick(e, book.id, book.name);
               }
             }}
+            onFocus={() => handleFocusOnBook(book.name, book.percentage)} // Trigger speech on focus
           >
             <div
               className={`progress-bar ${book.colorClass}`}

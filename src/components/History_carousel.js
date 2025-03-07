@@ -4,6 +4,7 @@ import "../styles/History_carousel.css";
 import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import { fetchUserLibraryBooks } from "../services/AllServices.js";
+import { speakText } from './utils/speechUtils.js';
 
 const HistoryCarousel = () => {
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -33,6 +34,9 @@ const HistoryCarousel = () => {
 
     fetchBooks();
   }, []);
+
+  
+ 
 
   const maxIndex = historyBooks.length > 5 ? historyBooks.length - 5 : 0;
   const prevSlide = () => {
@@ -65,7 +69,10 @@ const HistoryCarousel = () => {
         </button>
 
         <div className="carousel__container">
-          <div className="genre_heading">History Books</div>
+          <div className="genre_heading"
+          tabIndex={0} 
+                    onFocus={() => speakText(`History section. You have ${historyBooks.length} books in history.`)}
+          >History Books</div>
           {loading ? (
             <p>Loading...</p>
           ) : historyBooks.length === 0 ? (
@@ -73,7 +80,7 @@ const HistoryCarousel = () => {
           ) : (
             <div className="carousel__slide-list" style={{ transform: `translateX(-${currentIdx * (10.3 + 2)}vw)` }}>
               {historyBooks.map((book, index) => (
-                <div key={book._id} className="carousel__slide-item" onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })} tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") {   navigate(`/book-info/${book._id}`, { state: { books } }) }}}>
+                <div key={book._id} className="carousel__slide-item" onClick={() => navigate(`/book-info/${book._id}`, { state: { books } })} tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") { navigate(`/book-info/${book._id}`, { state: { books } }) }}} onFocus={() => speakText(book.title)}>
                   <img src={book.thumbnail} alt={book.title} />
                 </div>
               ))}

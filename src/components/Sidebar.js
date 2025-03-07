@@ -13,6 +13,7 @@ import dashboard_active from "../images/dashboard_active.png";
 import library_active from "../images/library_active.png";
 import settings_active from "../images/settings_active.png";
 import { getToken, setToken } from "../storage/Storage"; // Import your storage functions
+import { speakText } from "./utils/speechUtils"; // Import the speech utility
 
 const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
@@ -73,14 +74,18 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
       handleItemClick(item);
     }
   };
-
+  const handleImageFocus = (event) => {
+    const altText = event.target.alt; // Get the alt text of the image
+    speakText(altText);  // Speak the alt text aloud
+  };
   return (
     <div className="sidebar">
       {/* Top section with icons */}
       <div className="sidebar-top">
         <div className="logo-container">
           <a href="/dashboard">
-            <img src={audiobook_logo} alt="Audio book Logo" className="logo" />
+            <img src={audiobook_logo} alt="Welcome to Audio book" className="logo" tabIndex={0}
+              onFocus={handleImageFocus} />
           </a>
         </div>
         {menuItems
@@ -94,6 +99,7 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
               onClick={() => handleItemClick(item)}
               onMouseEnter={() => setHoveredItem(item.key)}
               onMouseLeave={() => setHoveredItem(null)}
+              onFocus={() => speakText(item.label)} // Trigger speech when focused
               onKeyDown={(e) => handleKeyDown(e, item)}
             >
               <img
@@ -118,6 +124,7 @@ const Sidebar = ({ activeItem, setActiveItem, resetSearch }) => {
               tabIndex={0}
               className={`sidebar-icon ${activeItem === item.key ? "active" : ""}`}
               onClick={() => handleItemClick(item)}
+              onFocus={() => speakText(item.label)} // Trigger speech when focused
               onKeyDown={(e) => handleKeyDown(e, item)}
             >
               <img src={item.icon} alt={`${item.label} Icon`} />

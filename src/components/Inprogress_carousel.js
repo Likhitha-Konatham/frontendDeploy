@@ -5,6 +5,7 @@ import bigLeftArrow from '../images/bigLeftArrow.png';
 import bigRightArrow from '../images/bigRightArrow.png';
 import emptyStateIcon from "../images/emptyStateIcon.png"; // Add an appropriate empty state image/illustration
 import { fetchUserLibraryBooks, fetchPageDetails } from "../services/AllServices.js";
+import { speakText } from './utils/speechUtils.js';
 
 const InProgressCarousel = () => {
   const [inProgressBooks, setInProgressBooks] = useState([]);
@@ -32,7 +33,7 @@ const InProgressCarousel = () => {
     fetchBooks();
   }, []);
   
-
+  
   const maxIndex = inProgressBooks.length - 5;
 
   // Handle previous slide
@@ -82,7 +83,9 @@ const InProgressCarousel = () => {
     <div className="carousel__wrap">
       {inProgressBooks.length === 0 ? (
         <div className="empty-state-container">
-          <div className="genre_heading">In Progress</div>
+          <div className="genre_heading" 
+          tabIndex={0} 
+          onFocus={() => speakText(`In Progress section. You have ${inProgressBooks.length} books in progress.`)}>In Progress</div>
           <div className="empty-state">
            <div className="emptyStateIconAndHeading">
             <div className="emptyStateIcon" ><img src={emptyStateIcon} alt="No books" /></div>
@@ -122,6 +125,7 @@ const InProgressCarousel = () => {
                       handlePlayClick(e, book._id); // Handle "Enter" key
                     }
                   }}
+                  onFocus={() => speakText(book.title)}
                   role="button" // Indicate that the div is interactive
                   aria-label={`Play ${book.title}`} // Accessibility description
                 >
