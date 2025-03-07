@@ -3,8 +3,8 @@
   background-color: var(--toggle-bg, white);
   border-radius: 0.521vw;
   padding: 0.260vw;
-  height: 1.302vw;
-  width: 15.625vw;
+  height: 1.502vw;
+  width: 15.825vw;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 0.104vw 0.260vw var(--toggle-shadow, rgba(0, 0, 0, 0.1));
@@ -15,10 +15,10 @@
   text-align: center;
   padding: 0;
   border: none;
-  height: 1.302vw;
+  height: 1.402vw;
   border-radius: 0.521vw;
   justify-content: center;
-  font-size: 0.729vw;
+  font-size: 0.929vw;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
   background-color: transparent;

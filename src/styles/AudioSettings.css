@@ -24,7 +24,7 @@
 
 /* Label */
 .audio-settings-label {
-  font-size: 0.729vw;
+  font-size: 0.929vw;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -38,7 +38,7 @@
 .audio-select {
   width: 100%;
   padding: 0.521vw;
-  font-size: 0.729vw;
+  font-size: 0.929vw;
   border: 0.052vw solid var(--border-color, #ddd);
   border-radius: 0.417vw;
   background-color: var(--input-bg, #f5f6fa);
