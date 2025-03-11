@@ -7,7 +7,6 @@ import rightArrow from "../images/right_arrow.png";
 import book_logo from "../images/vector_booklogo.svg";
 import fullname_logo from "../images/fullname_logo.svg";
 import message_logo from "../images/message_logo.svg";
-// import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
 import { sendOTP, validateOTP } from "../services/AllServices";
 import upload_icon from "../images/upload_icon.svg";
@@ -44,6 +43,7 @@ const SignUp = () => {
     email: "",
     password: "",
     genre: [],
+    profile_picutre: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -53,6 +53,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [loadingResendOTP, setLoadingResendOTP] = useState(false);
   const [loadingVerifyOTP, setLoadingVerifyOTP] = useState(false);
+  // const [filePreview, setFilePreview] = useState(null);
 
   const navigate = useNavigate();
 
@@ -63,6 +64,17 @@ const SignUp = () => {
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({ ...formData, udidFile: file });
+
+      // Create a preview URL for the image
+      // const previewUrl = URL.createObjectURL(file);
+      // setFilePreview(previewUrl);
+    }
   };
 
   const handleOtpChange = (e) => {
@@ -146,11 +158,6 @@ const SignUp = () => {
 
   return (
     <div className="signup-page">
-      {/* <header className="header">
-        <a href="/" className="header-left-section">
-          <img src={book_logo} alt="book logo" className="book-logo-icon" />
-        </a>
-      </header> */}
       <header className="header">
         <div className="header-left-section">
           <img src={book_logo} alt="book logo" className="book-logo-icon" />
@@ -201,6 +208,7 @@ const SignUp = () => {
                   value={formData.firstName}
                   onChange={handleInputChange}
                 />
+
                 <div className="inputfield-wrapper">
                   <div className="inputfield-container">
                     <div className="inputfield-content">
@@ -213,27 +221,68 @@ const SignUp = () => {
                       <label
                         htmlFor="udidUpload"
                         className="custom-file-label"
-                        aria-label="UDID Upload"
+                        aria-label="Profile Image Upload"
                       >
                         {formData.udidFile
                           ? formData.udidFile.name
-                          : "UDID Upload"}
+                          : "Upload UDID"}
                       </label>
                       <input
                         type="file"
                         id="udidUpload"
                         className="hidden-file-input"
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            udidFile: e.target.files[0],
-                          })
-                        }
-                        aria-hidden="true"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        // Remove aria-hidden attribute
                       />
                     </div>
                   </div>
                 </div>
+                {/* <div className="inputfield-wrapper">
+                  <div className="inputfield-container">
+                    <div className="inputfield-content">
+                      <img
+                        loading="lazy"
+                        src={upload_icon}
+                        alt=""
+                        className="inputfield-icon"
+                      />
+                      <label
+                        htmlFor="udidUpload"
+                        className="custom-file-label"
+                        aria-label="Profile Image Upload"
+                      >
+                        {formData.udidFile
+                          ? formData.udidFile.name
+                          : "Upload Profile Image"}
+                      </label>
+                      <input
+                        type="file"
+                        id="udidUpload"
+                        className="hidden-file-input"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </div>
+                </div> */}
+
+                {/* {filePreview && (
+                  <div className="file-preview">
+                    <img
+                      src={filePreview}
+                      alt="Profile preview"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        borderRadius: "50%",
+                        marginTop: "10px",
+                      }}
+                    />
+                  </div>
+                )} */}
 
                 <InputField
                   icon={message_logo}
@@ -261,15 +310,6 @@ const SignUp = () => {
                         onChange={handleInputChange}
                         required
                       />
-                      {/* <img
-                        loading="lazy"
-                        src={password_eye}
-                        alt={showPassword ? "Hide password" : "Show password"}
-                        className="visibilityIcon"
-                        onClick={togglePasswordVisibility}
-                        tabIndex="0"
-                        role="button"
-                      /> */}
                       <button
                         type="button"
                         onClick={togglePasswordVisibility}

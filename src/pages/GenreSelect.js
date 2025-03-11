@@ -27,6 +27,8 @@ const GenreSelection = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { formData } = location.state || {};
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!formData) {
@@ -46,104 +48,75 @@ const GenreSelection = () => {
   };
 
   const handleNext = async () => {
-    // Ensure formData exists before accessing its properties
+    if (!formData?.email || !formData?.password || !formData?.firstName) {
+      console.warn("Required form data is missing or incomplete.");
+      alert("Required form data is missing or incomplete.");
+      navigate("/signup");
+      return;
+    }
 
-    const selectedOptionsLabel = selectedOptions
+    if (selectedOptions.length === 0) {
+      setError("Please select at least one genre");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    // Get the labels of selected options
+    const selectedGenres = selectedOptions
       .map((id) => {
         const option = options.find((opt) => opt.id === id);
         return option ? option.label : null;
       })
-      .filter((label) => label !== null); // Filter out any null values for safety
-
-    const updatedFormData = { ...formData, genre: selectedOptionsLabel };
+      .filter((label) => label !== null);
 
     try {
-      const result = await registerUser(updatedFormData);
+      const formDataToSend = {
+        // Use firstname instead of firstName to match the registerUser function
+        firstname: formData.firstName,
+        email: formData.email,
+        password: formData.password,
+        genre: JSON.stringify(selectedGenres), // Stringify here to match what's expected
+      };
 
-      // Check if the result exists and has the expected structure
-      if (!result || typeof result !== "object" || !result.status) {
-        console.error("Unexpected response from registerUser:", result);
-        return;
+      // Append file only if it exists
+      if (formData.udidFile) {
+        formDataToSend.file = formData.udidFile;
       }
 
-      // Handle success case
-      if (result.status === "success") {
+      console.log("formdata", formDataToSend);
+      const result = await registerUser(formDataToSend);
+
+      if (result?.status === "success") {
         console.log("Registration successful:", result.message);
-        console.log("User Data:", result.data);
+
+        // Save user data
         localStorage.setItem("access_token", result.data.access_token);
-        navigate("/dashboard"); // Navigate to the desired route
+        localStorage.setItem("user_email", result.data.email);
+        localStorage.setItem("username", result.data.username);
+        if (result.data.profile_picture_url) {
+          localStorage.setItem(
+            "profile_picture",
+            result.data.profile_picture_url
+          );
+        }
+
+        navigate("/dashboard");
       } else {
-        // Handle failure case
-        console.error(result.message || "Error during registration.");
+        setError(result?.message || "Error during registration");
+        console.error("Registration failed:", result?.message);
       }
     } catch (error) {
-      console.error("Error occurred:", error);
-    }
-
-    if (!formData.email || !formData.password || !formData.firstName) {
-      console.warn(
-        "Required form data is missing or incomplete. Redirecting to home page."
+      console.error("Error during registration:", error);
+      setError(
+        error.response?.data?.message || "An error occurred during registration"
       );
-      alert("Required form data is missing or incomplete.");
-      //navigate("/dashboard"); // Redirect to the home page or another fallback route
-      return;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // return (
-  //   <div className="main-content">
-  //     <div className="sidebar_container">
-  //       <Sidebar />
-  //     </div>
-  //     <div className="genre-selection-container">
-  //       <div className="header_container">
-  //         <Header
-  //           showSearch={false}
-  //           showUserProfile={false}
-  //           showArrows={true}
-  //         />
-  //       </div>
-  //       <div className="genre-content">
-  //         <h1>What would you like to read?</h1>
-  //         <p>Choose your favourites</p>
-  //         <div className="genre-card-container">
-  //           {options.map((option) => (
-  //             <div
-  //               key={option.id}
-  //               className={`genre-card ${
-  //                 selectedOptions.includes(option.id) ? "genre-selected" : ""
-  //               }`}
-  //               style={{ backgroundColor: option.color }}
-  //               onClick={() => handleSelect(option.id)}
-  //             >
-  //               <div className="genre-checkbox">
-  //                 <img
-  //                   src={
-  //                     selectedOptions.includes(option.id)
-  //                       ? checkboxFilled
-  //                       : checkboxEmpty
-  //                   }
-  //                   alt="checkbox"
-  //                 />
-  //               </div>
-  //               <div className="genre-icon">
-  //                 <img src={option.icon} alt={option.label} />
-  //               </div>
-  //               <p>{option.label}</p>
-  //             </div>
-  //           ))}
-  //         </div>
-  //         <button
-  //           type="button"
-  //           onClick={handleNext}
-  //           className="genre-signUpButton"
-  //         >
-  //           Next
-  //         </button>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
   return (
     <div className="genre-select-wrapper">
       <div className="main-content">
@@ -161,6 +134,11 @@ const GenreSelection = () => {
           <div className="genre-content">
             <h1>What would you like to read?</h1>
             <p>Choose your favourites</p>
+            {error && (
+              <p className="error-message" style={{ color: "red" }}>
+                {error}
+              </p>
+            )}
             <div className="genre-card-container">
               {options.map((option) => (
                 <div
@@ -192,8 +170,9 @@ const GenreSelection = () => {
               type="button"
               onClick={handleNext}
               className="genre-signUpButton"
+              disabled={isLoading}
             >
-              Next
+              {isLoading ? "Processing..." : "Next"}
             </button>
           </div>
         </div>

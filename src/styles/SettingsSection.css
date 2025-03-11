@@ -14,7 +14,7 @@
 
 .settings-heading {
   color: var(--text-primary);
-  font: 500 1.042vw Poppins, sans-serif;
+  font: 500 1.342vw Poppins, sans-serif;
   margin-bottom: 3.178vw;
 }
 
@@ -29,7 +29,7 @@
 .settings-form-group label {
   display: block;
   color: var(--text-secondary);
-  font: 400 0.625vw Inter, sans-serif;
+  font: 400 0.925vw Inter, sans-serif;
   margin-bottom: 0.834vw;
 }
 
@@ -44,7 +44,7 @@
 
 .settings-audio-settings {
   color: var(--text-primary);
-  font: 500 1.042vw Poppins, sans-serif;
+  font: 500 1.342vw Poppins, sans-serif;
   margin-top: 4.168vw;
 }
 
@@ -88,8 +88,8 @@
   right: 0;
   top: 50%;
   transform: translate(50%, -50%);
-  width: 1.096vw;
-  height: 1.096vw;
+  width: 1.196vw;
+  height: 1.196vw;
   border-radius: 50%;
   background-color: var(--slider-knob-bg, #fff);
   box-shadow: 0 0 0.156vw rgba(0, 0, 0, 0.12);
@@ -126,7 +126,7 @@
   width: 13.963vw;
   max-width: 100%;
   color: var(--text-primary);
-  font: 500 1.042vw Poppins, sans-serif;
+  font: 500 1.342vw Poppins, sans-serif;
 }
 
 .notif-settingsGroup {
@@ -145,7 +145,7 @@
 
 .notif-settingLabel {
   color: var(--text-secondary);
-  font: 400 0.781vw Inter, sans-serif;
+  font: 400 0.981vw Inter, sans-serif;
 }
 
 .notif-toggle {
@@ -164,7 +164,7 @@
   background-color: var(--notif-knob-bg, #fff);
   box-shadow: 0 0 0 0.052vw rgba(0, 0, 0, 0.04);
   width: 100%;
-  height: 1.407vw;
+  height: 1.507vw;
 }
 
 @media (max-width: 991px) {
