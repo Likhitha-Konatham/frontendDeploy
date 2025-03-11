@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Header.css";
 import { fetchProfile, searchBooks, fetchSearchHistory, fetchSearchCount } from "../services/AllServices";
 import { getToken } from "../storage/Storage";
-import { Search } from "lucide-react";
 import { speakText } from "./utils/speechUtils"; // Import the speech function
 import userIcon from "../images/user_icon.png";
 import leftArrow from "../images/left_arrow.png";
 import rightArrow from "../images/right_arrow.png";
+import searchIcon from "../images/search_icon.png";
 import historyIcon from "../images/history_icon.png";
 
 const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows, pageName, onProfileClick }) => {
@@ -167,7 +167,7 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
               onFocus={handleSearchFocus} // Speak when focused
             />
             <div className="search-icon" onClick={handleSearchClick}>
-              <Search size={18} color="#C4569C" style={{ background: "transparent" }} />
+              <img src={searchIcon} alt="search icon" /> 
             </div>
           </div>
 
