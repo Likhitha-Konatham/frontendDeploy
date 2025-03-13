@@ -72,6 +72,12 @@
     cursor: pointer;
     z-index: 10;
 }
+
+.swiper-button-prev.disabled,
+.swiper-button-next.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
   
 .swiper-button-prev {
     left: -5vw;

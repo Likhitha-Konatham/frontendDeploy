@@ -43,6 +43,33 @@ const Carousel = () => {
     getBooks();
   }, []);
 
+  useEffect(() => {
+    const updateNavigationArrows = () => {
+      if (swiperRef.current) {
+        const swiper = swiperRef.current.swiper;
+        const prevButton = document.querySelector('.swiper-button-prev');
+        const nextButton = document.querySelector('.swiper-button-next');
+  
+        if (swiper.isBeginning) {
+          prevButton.classList.add('disabled');
+        } else {
+          prevButton.classList.remove('disabled');
+        }
+  
+        if (swiper.isEnd) {
+          nextButton.classList.add('disabled');
+        } else {
+          nextButton.classList.remove('disabled');
+        }
+      }
+    };
+  
+    if (swiperRef.current) {
+      swiperRef.current.swiper.on('slideChange', updateNavigationArrows);
+      updateNavigationArrows();
+    }
+  }, [swiperRef]);
+
   const handleSlideClick = (bookId) => {
     if (!token) {
       navigate('/signin');
@@ -63,6 +90,7 @@ const Carousel = () => {
   return (
     <div className="new-rleases-carousel-container">
       <Swiper
+        ref={swiperRef}
         effect={'coverflow'}
         grabCursor={true}
         centeredSlides={true}
@@ -114,7 +142,7 @@ const Carousel = () => {
             <SwiperSlide
               key={book._id}
               className="swiper-slide"
-              tabIndex="0"
+              tabIndex={swiperRef.current?.swiper.activeIndex === books.indexOf(book) ? "0" : "-1"}
               onClick={() => handleSlideClick(book._id)}
               onKeyDown={(e) => e.key === "Enter" && handleSlideClick(book._id)}
               onFocus={() => handleFocusOnSlide(book.title)} // Trigger speech on focus
@@ -129,8 +157,8 @@ const Carousel = () => {
       <button
         className="swiper-button-prev"
         tabIndex="0"
-        onClick={() => swiperRef.current?.slidePrev()}
-        onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.slidePrev()}
+        onClick={() => swiperRef.current?.swiper.slidePrev()}
+        onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.swiper.slidePrev()}
         onFocus={() => handleFocusOnArrow("backward")} // Speech on focus
       >
         <img src={leftArrow} alt="Left Arrow" />
@@ -139,8 +167,8 @@ const Carousel = () => {
       <button
         className="swiper-button-next"
         tabIndex="0"
-        onClick={() => swiperRef.current?.slideNext()}
-        onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.slideNext()}
+        onClick={() => swiperRef.current?.swiper.slideNext()}
+        onKeyDown={(e) => e.key === "Enter" && swiperRef.current?.swiper.slideNext()}
         onFocus={() => handleFocusOnArrow("forward")} // Speech on focus
       >
         <img src={rightArrow} alt="Right Arrow" />

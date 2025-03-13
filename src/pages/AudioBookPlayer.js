@@ -65,6 +65,14 @@ const AudioBookPlayer = () => {
         }
       }, 2000); // 2-second delay before playing
     }
+
+    // Stop other page audio/speech when navigating to this page
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      window.speechSynthesis.cancel(); // Stop any ongoing speech
+    };
   }, [location.state]);
 
   useEffect(() => {
@@ -461,12 +469,12 @@ const AudioBookPlayer = () => {
   return (
     <main className="main-content">
       <div className="sidebar_container">
-        <Sidebar activeItem={activeItem} setActiveItem={handleActiveItemChange} resetSearch={resetSearch}/>
+        <Sidebar activeItem={activeItem} setActiveItem={handleActiveItemChange} resetSearch={resetSearch} disableSpeech={isPlaying} />
       </div>
 
       <div className="audio_player_container">
         <div className="header_container">
-          <Header showSearch={showSearch} showUserProfile={showUserProfile} showArrows={showArrows} pageName={pageName} searchQuery={searchQuery} onSearch={(query) => setSearchQuery(query)} onProfileClick={handleProfileClick}/>
+          <Header showSearch={showSearch} showUserProfile={showUserProfile} showArrows={showArrows} pageName={pageName} searchQuery={searchQuery} onSearch={(query) => setSearchQuery(query)} onProfileClick={handleProfileClick} disableSpeech={isPlaying} />
         </div>
 
         <div className="audio-book-player">

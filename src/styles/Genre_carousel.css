@@ -39,7 +39,11 @@
   width: 4.5vw;
   height: 4.5vw;
 }
-
+.carousel__btn--prev.disabled,
+.carousel__btn--next.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
 .carousel__btn--prev img, 
 .carousel__btn--next img {
   width: 100%;

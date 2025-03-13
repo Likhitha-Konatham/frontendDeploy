@@ -10,7 +10,7 @@ import rightArrow from "../images/right_arrow.png";
 import searchIcon from "../images/search_icon.png";
 import historyIcon from "../images/history_icon.png";
 
-const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows, pageName, onProfileClick }) => {
+const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows, pageName, onProfileClick, disableSpeech }) => {
   const [profile, setProfile] = useState();
   const [token, setTokenState] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -67,12 +67,16 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
   }, [token]);
 
   const handleArrowFocus = (direction) => {
-    const directionText = direction === "left" ? "Go back" : "Go forward";
-    speakText(directionText);
+    if (!disableSpeech) {
+      const directionText = direction === "left" ? "Go back" : "Go forward";
+      speakText(directionText);
+    }
   };
 
   const handleSearchFocus = () => {
-    speakText("Search field");
+    if (!disableSpeech) {
+      speakText("Search field");
+    }
   };
 
   const handleSearchClick = async () => {
@@ -228,7 +232,7 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
                 onClick={() => setShowPopup((prev) => !prev)}
                 style={{ cursor: "pointer" }}
                 tabIndex={0} // Add focusable for tab
-                onFocus={() => speakText("Sign In or Create Account")} // Speech when focused
+                onFocus={() => !disableSpeech && speakText("Sign In or Create Account")} // Speech when focused
               >
                 Sign In / Account
               </div>
@@ -248,7 +252,7 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
               tabIndex={token ? 0 : -1}
               style={{ cursor: token ? "pointer" : "default" }}
               onClick={token ? onProfileClick : null}
-              onFocus={() => speakText("My Account")}
+              onFocus={() => !disableSpeech && speakText("My Account")}
               onKeyDown={(e) => token && e.key === "Enter" && onProfileClick()}
             />
           </>
@@ -263,7 +267,7 @@ const Header = ({ showSearch, showUserProfile, onSearch, searchQuery, showArrows
               className="signin-button"
               onClick={() => navigate("/signin")}
               tabIndex={0} // Add focusable for tab
-              onFocus={() => speakText("Sign In")}
+              onFocus={() => !disableSpeech && speakText("Sign In")}
             >
               Sign In
             </button>

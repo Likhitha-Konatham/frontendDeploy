@@ -39,3 +39,16 @@ export const speakText = (text) => {
     speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
   }
 };
+
+export const updateSpeechRate = (rate) => {
+  if (currentUtterance) {
+    currentUtterance.rate = rate;
+  }
+};
+
+export const stopSpeech = () => {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+};
