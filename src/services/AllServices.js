@@ -301,14 +301,23 @@ export const fetchUserLibraryBooks = async () => {
 };
 
 export const searchBooks = async (searchQuery) => {
-  const urlEndPoint = `search`;
+  const urlEndPoint = "https://audiobook-be-qa.iiithcanvas.com/search";
   console.log("Search Query:", searchQuery);
 
-  const params = { search_query: encodeURIComponent(searchQuery) };
+  const params = new URLSearchParams({ search_query: searchQuery });
+
   try {
-    const response = await requestGetApiCall(urlEndPoint, params);
-    console.log("API Response:", response); // Debugging
-    return response;
+    const response = await fetch(`${urlEndPoint}?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json; charset=UTF-8",
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+    });
+
+    const data = await response.json();
+    console.log("API Response:", data); // Debugging
+    return data;
   } catch (error) {
     console.error("Error in searchBooks:", error);
     return handleError(error, "searchBooks");
