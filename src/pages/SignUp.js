@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import "../styles/SignUp.css";
+import leftArrow from "../images/left_arrow.png";
+import rightArrow from "../images/right_arrow.png";
 import book_logo from "../images/vector_booklogo.svg";
 import fullname_logo from "../images/fullname_logo.svg";
 import message_logo from "../images/message_logo.svg";
-import password_eye from "../images/password_eye.svg";
 import lock_logo from "../images/lock_logo.svg";
-import leftArrow from "../images/left_arrow.png";
-import rightArrow from "../images/right_arrow.png";
 import { sendOTP, validateOTP } from "../services/AllServices";
 import upload_icon from "../images/upload_icon.svg";
+
 const InputField = ({ icon, placeholder, type, id, value, onChange }) => (
   <div className="inputfield-wrapper">
     <div className="inputfield-container">
@@ -42,6 +43,7 @@ const SignUp = () => {
     email: "",
     password: "",
     genre: [],
+    profile_picutre: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -51,6 +53,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [loadingResendOTP, setLoadingResendOTP] = useState(false);
   const [loadingVerifyOTP, setLoadingVerifyOTP] = useState(false);
+  // const [filePreview, setFilePreview] = useState(null);
 
   const navigate = useNavigate();
 
@@ -61,6 +64,17 @@ const SignUp = () => {
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({ ...formData, udidFile: file });
+
+      // Create a preview URL for the image
+      // const previewUrl = URL.createObjectURL(file);
+      // setFilePreview(previewUrl);
+    }
   };
 
   const handleOtpChange = (e) => {
@@ -108,6 +122,19 @@ const SignUp = () => {
       setLoadingResendOTP(false);
     }
   };
+  const [canGoBack, setCanGoBack] = useState(false);
+
+  useEffect(() => {
+    setCanGoBack(window.history.length > 1); // Check if there is a previous page
+  }, []);
+
+  const goBack = () => {
+    if (canGoBack) window.history.back();
+  };
+
+  const goForward = () => {
+    window.history.forward();
+  };
 
   const handleOtpSubmit = async () => {
     setLoadingVerifyOTP(true);
@@ -134,11 +161,26 @@ const SignUp = () => {
       <header className="header">
         <div className="header-left-section">
           <img src={book_logo} alt="book logo" className="book-logo-icon" />
-          <img src={leftArrow} alt="Left Arrow" className="left-arrow-icon" />
+
+          {/* Left Arrow (Back) */}
+          <img
+            src={leftArrow}
+            alt="Left Arrow"
+            className={`left-arrow-icon ${!canGoBack ? "disabled" : ""}`}
+            onClick={goBack}
+            style={{
+              cursor: canGoBack ? "pointer" : "not-allowed",
+              opacity: canGoBack ? 1 : 0.5,
+            }}
+          />
+
+          {/* Right Arrow (Forward) */}
           <img
             src={rightArrow}
             alt="Right Arrow"
             className="right-arrow-icon"
+            onClick={goForward}
+            style={{ cursor: "pointer" }}
           />
         </div>
       </header>
@@ -151,7 +193,7 @@ const SignUp = () => {
               src={book_logo}
             />
             <div className="booklogo-heading-text">
-              <div className="heading-text-wrapper">Let's get Started</div>
+              <div className="heading-text-wrapper">Sign up</div>
             </div>
           </div>
 
@@ -166,6 +208,7 @@ const SignUp = () => {
                   value={formData.firstName}
                   onChange={handleInputChange}
                 />
+
                 <div className="inputfield-wrapper">
                   <div className="inputfield-container">
                     <div className="inputfield-content">
@@ -178,27 +221,68 @@ const SignUp = () => {
                       <label
                         htmlFor="udidUpload"
                         className="custom-file-label"
-                        aria-label="UDID Upload"
+                        aria-label="Profile Image Upload"
                       >
                         {formData.udidFile
                           ? formData.udidFile.name
-                          : "UDID Upload"}
+                          : "Upload UDID"}
                       </label>
                       <input
                         type="file"
                         id="udidUpload"
                         className="hidden-file-input"
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            udidFile: e.target.files[0],
-                          })
-                        }
-                        aria-hidden="true"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        // Remove aria-hidden attribute
                       />
                     </div>
                   </div>
                 </div>
+                {/* <div className="inputfield-wrapper">
+                  <div className="inputfield-container">
+                    <div className="inputfield-content">
+                      <img
+                        loading="lazy"
+                        src={upload_icon}
+                        alt=""
+                        className="inputfield-icon"
+                      />
+                      <label
+                        htmlFor="udidUpload"
+                        className="custom-file-label"
+                        aria-label="Profile Image Upload"
+                      >
+                        {formData.udidFile
+                          ? formData.udidFile.name
+                          : "Upload Profile Image"}
+                      </label>
+                      <input
+                        type="file"
+                        id="udidUpload"
+                        className="hidden-file-input"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </div>
+                </div> */}
+
+                {/* {filePreview && (
+                  <div className="file-preview">
+                    <img
+                      src={filePreview}
+                      alt="Profile preview"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        borderRadius: "50%",
+                        marginTop: "10px",
+                      }}
+                    />
+                  </div>
+                )} */}
 
                 <InputField
                   icon={message_logo}
@@ -226,15 +310,21 @@ const SignUp = () => {
                         onChange={handleInputChange}
                         required
                       />
-                      <img
-                        loading="lazy"
-                        src={password_eye}
-                        alt={showPassword ? "Hide password" : "Show password"}
-                        className="visibilityIcon"
+                      <button
+                        type="button"
                         onClick={togglePasswordVisibility}
-                        tabIndex="0"
-                        role="button"
-                      />
+                        className="visibilityIcon"
+                        aria-pressed={showPassword}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} className="icon" />
+                        ) : (
+                          <Eye size={20} className="icon" />
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -258,10 +348,7 @@ const SignUp = () => {
                 onChange={handleCheckboxChange}
                 required
               />
-              <label
-                htmlFor="agree_tc"
-                style={{ color: "black", marginLeft: "0.5vw" }}
-              >
+              <label className="terms-condition-label" htmlFor="agree_tc">
                 I agree to the terms and conditions
               </label>
             </div>

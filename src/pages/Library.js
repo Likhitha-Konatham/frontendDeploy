@@ -7,54 +7,10 @@ import ReadlaterCarousel from "../components/Readlater_carousel.js";
 import InprogressCarousel from "../components/Inprogress_carousel.js";
 import HistoryCarousel from "../components/History_carousel.js";
 
-// Import local book cover images
-import bookcover1 from "../images/bookcover1.png";
-import bookcover2 from "../images/bookcover2.png";
-import bookcover3 from "../images/bookcover3.png";
-import bookcover4 from "../images/bookcover4.png";
-import bookcover5 from "../images/bookcover5.png";
-
 const Library = () => {
   const [activeItem, setActiveItem] = useState("library");
   const [searchQuery, setSearchQuery] = useState(''); 
   const navigate = useNavigate();
-  
-  const inprogressCarousel = [
-    {
-      heading: "In Progress",
-      images: [
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        { image: bookcover1 },
-        { image: bookcover2 },
-        { image: bookcover3 },
-        { image: bookcover4 },
-        { image: bookcover5 },
-        // Add more images as needed
-      ]
-    }
-  ];
-  const historyCarousel = [
-    {
-        heading: "My History",
-        images: [
-            { image: bookcover1 },
-            { image: bookcover2 },
-            { image: bookcover3 },
-            { image: bookcover4 },
-            { image: bookcover5 },
-            { image: bookcover1 },
-            { image: bookcover2 },
-            { image: bookcover3 },
-            { image: bookcover4 },
-            { image: bookcover5 },
-            // Add more images as needed
-          ]
-      },
-  ];
 
   const resetSearch = () => {
     setSearchQuery(""); // Reset the search query
@@ -83,7 +39,7 @@ const Library = () => {
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {
-      return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "My Library" };
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "My Library" };
     } else if (activeItem === "settings") {
       return { showSearch: false, showUserProfile: true, showArrows: true, pageName: "Account" };
     }
@@ -122,22 +78,12 @@ const Library = () => {
               <div className="readlater_carousel">
                 <ReadlaterCarousel />
               </div>
-             {inprogressCarousel.map((carousel, index) => (
-              <div className="inprogress_carousel" key={index}>
-                <InprogressCarousel 
-                  heading={carousel.heading} 
-                  inprogress_carousel_images={carousel.images}
-                />
+              <div className="inprogress_carousel">
+                <InprogressCarousel  />
               </div>
-            ))}
-             {historyCarousel.map((carousel, index) => (
-              <div className="history_carousel" key={index}>
-                <HistoryCarousel 
-                  heading={carousel.heading} 
-                  history_carousel_images={carousel.images}
-                />
+              <div className="history_carousel">
+                <HistoryCarousel/>
               </div>
-            ))}
           </div>
         </div>
       </div> 

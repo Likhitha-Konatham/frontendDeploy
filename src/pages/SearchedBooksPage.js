@@ -13,10 +13,11 @@ const SearchedBooksPage = () => {
   const books = location.state?.searchedbooks || [];
   const searchedQuery =location.state?.searchedQuery ||[];
 
-  const handleBookClick = (itemId) => {
-    navigate(`/book-info/${searchedQuery}/${itemId}`);
+  const handleBookClick = (bookId) => {
+    const selectedBook = books.find(book => book.bookID === bookId);
+    navigate(`/searched-books/${bookId}`, { state: { selectedBook, books } });
   };
-
+  
 
   const handleProfileClick = () => {
     navigate("/settings", { state: { selectedSection: "account" } });
@@ -42,7 +43,7 @@ const SearchedBooksPage = () => {
 
   const getHeaderVisibility = () => {
     if (activeItem === "dashboard" || activeItem === "") {
-      return { showSearch: true, showUserProfile: true, showArrows: false, pageName: "" };
+      return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "bookmarks") {
       return { showSearch: true, showUserProfile: true, showArrows: true, pageName: "" };
     } else if (activeItem === "library") {
@@ -87,7 +88,7 @@ const SearchedBooksPage = () => {
                   ) : (
                     books.map((book, index) => (
                       <div className="bookGrid__grid-item" key={index}>
-                        <div onClick={() => handleBookClick(book.id)}>
+                        <div onClick={() => handleBookClick(book.bookID)}>
                           <img
                             src={book.thumbnail}
                             alt={`${book.title} Thumbnail`}

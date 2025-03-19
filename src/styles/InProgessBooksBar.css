@@ -1,31 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-
 .progressbar_container {
     width: 20vw;
     height: 30vw;
-    background-color: white;
+    background-color: var(--bg-primary);
     padding: 1vw;
     border-radius: 1.5vw;
     margin-top: 11.5vw;
-  }
-  
-  .progressbook_title {
-    color: var(--Black-60, #45464E);
+}
+
+.progressbook_title {
+    color: var(--text-primary);
     font-family: Inter;
     font-size: 1.2vw;
     font-weight: 500;
     margin: 0;
-  }
-  
-  .progessbar-book-list {
+}
+
+.progessbar-book-list {
     display: flex;
     flex-direction: column;
     gap: 1.5vw;
-  }
-  
-  /* Base styling for the container and bar */
-  .progress-container {
+}
+.progessbar-book-list a{
+    text-decoration: none;
+}
+.progress-container {
     margin-top: 0.7vw;
     height: 6.2vw;
     border-radius: 1vw;
@@ -33,59 +33,83 @@
     position: relative;
     display: flex;
     align-items: center;
-  }
-  
-  /* Light background for remaining part */
-  .green-bg {
-    background-color: #E0ECC8;;
-  }
-  
-  .yellow-bg {
-    background-color: #ECE5C8;
-  }
-  
-  .orange-bg {
-    background-color: #ECDDC8;
-  }
-  
-  /* Darker color for completed portion */
-  .progress-bar {
+}
+.progress-container a{
+    text-decoration: none;
+    padding: 0.5vw;
+}
+.green-bg {
+    background-color: var(--green-light-bg);
+}
+
+.yellow-bg {
+    background-color: var(--yellow-light-bg);
+}
+
+.orange-bg {
+    background-color: var(--orange-light-bg);
+}
+
+.progress-bar {
     height: 100%;
     display: flex;
     align-items: center;
-    border-radius:0vw 1.2vw 1.2vw 0vw;
+    border-radius: 0vw 1.2vw 1.2vw 0vw;
     padding-left: 0.7vw;
-    padding-top: 2.7vw;
-    color: white;
-  }
-  
-  .green {
-    background: var(--Color-3, #89BB34);
+    color: var(--progress-text);
 }
-  
-  .yellow {
-    background: var(--Color-4, #DFC826);
-  }
-  
-  .orange {
-    background: #E29336;
+
+.green {
+    background: var(--green-progress);
 }
-  
-  /* Text styling */
-  .text-container {
+
+.yellow {
+    background: var(--yellow-progress);
+}
+
+.orange {
+    background: var(--orange-progress);
+}
+
+.text-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: var(--Black-60, #45464E);
+    color: var(--text-primary);
     font-family: Inter;
     font-weight: 500;
-  }
-  
-  .percentage-text {
+    width: 6vw;
+}
+
+.percentage-text {
     font-size: 1.2vw;
-  }
-  
-  .book-name {
+}
+
+.book-name {
     font-size: 0.9vw;
-  }
-  
+}
+
+/* Theme Variables */
+body.light {
+    --bg-primary: #ffffff;
+    --text-primary: #45464E;
+    --progress-text: #ffffff;
+    --green-light-bg: #E0ECC8;
+    --yellow-light-bg: #ECE5C8;
+    --orange-light-bg: #ECDDC8;
+    --green-progress: #89BB34;
+    --yellow-progress: #DFC826;
+    --orange-progress: #E29336;
+}
+
+body.dark {
+    --bg-primary: #2c2c2c;
+    --text-primary: #ffffff;
+    --progress-text: #ffffff;
+    --green-light-bg: #1a2712;
+    --yellow-light-bg: #2a2912;
+    --orange-light-bg: #2a1f12;
+    --green-progress: #89BB34;
+    --yellow-progress: #DFC826;
+    --orange-progress: #E29336;
+}

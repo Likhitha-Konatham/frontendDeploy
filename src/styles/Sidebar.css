@@ -1,19 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 .sidebar {
-  width: 4.5vw; /* 60px * 0.052084 */
-  height: 100vh; /* 88vh is unaffected */
+  width: 4.5vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background-color: var(--bg-primary);
 }
+
 .logo-container {
-  background-color: #fff;
+  background-color: var(--bg-primary);
   display: flex;
   align-items: center;
   padding: 0.3vw 0.8vw 2vw;
 }
-.logo-container a{
+
+.logo-container a {
   text-decoration: none;
   display: flex;
 }
@@ -28,6 +31,10 @@
   flex-direction: column;
 }
 
+.sidebar-bottom {
+  background-color: var(--bg-primary);
+}
+
 .sidebar-icon {
   display: flex;
   justify-content: center;
@@ -35,15 +42,23 @@
   padding: 0.5208vw;
   cursor: pointer;
   margin-bottom: 2vw;
+  outline: none;
 }
 
 .sidebar-icon img {
-  width: 1.7vw; 
-  height: 1.7vw; 
+  width: 1.7vw;
+  height: 1.7vw;
 }
-
+/* Optional: Add keyboard navigation focus styles */
+.sidebar-icon:focus {
+  width: 1.7vw;
+  height: 1.7vw;
+  margin-left: 0.9vw;
+  outline:0.15vw solid black;
+  outline-offset: 0.2vw
+}
 .sidebar-icon.active {
-  background: var(--Color, #A63E71);
+  background: var(--button-bg);
   border-radius: 0.5vw;
   width: 1.8vw;
   margin: auto;
@@ -51,58 +66,61 @@
 }
 
 .sidebar-icon:hover {
-  background-color:var(--Color, #A63E71);
+  background-color: var(--button-bg);
   border-radius: 0.5vw;
   width: 2vw;
   margin: auto;
   margin-bottom: 2vw;
+  outline: none;
 }
+
 .sidebar-bottom .sidebar-icon.active {
-  background: #E5E5E5;
+  background: var(--border-color);
 }
 
 .sidebar-bottom .sidebar-icon:hover {
-  background-color:#E5E5E5;
+  background-color: var(--border-color);
 }
-
 
 .user-section {
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin: 10px 0;
+  margin: 0.521vw 0;
+  color: var(--text-primary);
 }
 
 .user-icon {
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
+  width: 2.084vw;
+  height: 2.084vw;
+  margin-right: 0.521vw;
 }
 
 .user-name {
-  font-size: 14px;
+  font-size: 0.729vw;
   font-weight: bold;
+  color: var(--text-primary);
 }
 
 .popup {
   position: relative;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px;
-  width: 200px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-primary);
+  border: 0.521vw solid var(--border-color);
+  border-radius: 0.521vw;
+  padding: 0.521vw;
+  width: 10.417vw;
+  box-shadow: 0vw 0.208vw 0.313vw var(--dropdown-shadow);
 }
 
 .popup-arrow {
   position: absolute;
-  top: -10px;
-  left: 20px;
+  top: -0.521vw;
+  left: 1.042vw;
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid #fff;
+  border-left: 0.521vw solid transparent;
+  border-right: 0.521vw solid transparent;
+  border-bottom: 0.521vw solid var(--bg-primary);
 }
 
 .popup-content {
@@ -112,17 +130,54 @@
 .popup-button {
   display: block;
   width: 100%;
-  padding: 10px;
-  background-color: #0073e6;
-  color: #fff;
+  padding: 0.521vw;
+  background-color: var(--button-bg);
+  color: var(--button-text);
   border: none;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  border-radius: 0.260vw;
+  margin-bottom: 0.521vw;
   cursor: pointer;
 }
 
 .popup-link {
-  color: #0073e6;
+  color: var(--button-bg);
   cursor: pointer;
   font-weight: bold;
+}
+
+/* Light and Dark theme specific variables */
+body.light .sidebar {
+  --bg-primary: #ffffff !important;
+  --text-primary: #45464e;
+  --text-secondary: #5e6366;
+  --border-color: #e5e5e5;
+  --border-color-focus: #abafb1;
+  --input-bg: rgba(239, 241, 249, 0.6);
+  --dropdown-bg: white;
+  --dropdown-shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg: #f0f0f0;
+  --button-bg: #a63e71;
+  --button-text: #fff;
+  --scrollbar-thumb: #ccc;
+  --scrollbar-thumb-hover: #aaa;
+}
+
+body.dark .sidebar {
+  --bg-primary: #1e1e1e !important;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --border-color: #444444;
+  --border-color-focus: #666666;
+  --input-bg: #2c2c2c;
+  --dropdown-bg: #333;
+  --dropdown-shadow: rgba(0, 0, 0, 0.3);
+  --hover-bg: #444;
+  --button-bg: #c4579c;
+  --button-text: #ffffff;
+  --scrollbar-thumb: #555;
+  --scrollbar-thumb-hover: #777;
+}
+
+body.dark .sidebar-icon img {
+  filter: invert(1);
 }

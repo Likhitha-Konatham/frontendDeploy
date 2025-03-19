@@ -5,7 +5,7 @@
 }
 
 .bookGrid__heading {
-  color: var(--Black-60, #45464E);
+  color: var(--text-primary);
   font-family: 'Inter';
   font-weight: 500;
   font-size: 1.2vw;
@@ -16,7 +16,6 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.4vw;
-
 }
 
 .bookGrid__grid-item {
@@ -24,63 +23,106 @@
   height: 17vw;
   margin-bottom: 7vw;
 }
+.bookGrid-img img{
+  border: none;
+  outline: none;
+}
+.bookGrid-img img {
+  width: 100%;
+  height: 17vw;
+  border-radius: 1vw;
+  object-fit: cover;
+  box-shadow: 0px 4px 4px 0px var(--dropdown-shadow);
+  cursor: pointer;
+  outline: none;
+}
+.bookGrid-img:focus {
+  border-radius: 1vw;
+  outline: 0.13vw solid black; 
+}
 
-.bookGrid__grid-item img {
-    width: 100%;
-    height: 17vw;
-    border-radius: 1vw;
-    object-fit: cover;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
+.bookGrid__details {
+  margin: 0.3vw 0.2vw;
+  font-family: Inter;
+}
+
+.bookGrid__name {
+  font-size: 1.1vw;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.bookGrid__author {
+  font-size: 1vw;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.bookGrid__bookmarks {
+  font-size: 0.9vw;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-top: 0.6vw;
+}
+
+.carousel__skeleton-loader {
+  display: flex;
+}
+
+.carousel__skeleton-item {
+  flex-shrink: 0;
+  width: 10.4vw;
+  height: 17vw;
+  margin: 0 0.4vw;
+  border-radius: 1vw;
+  box-shadow: 0px 4px 4px 0px var(--dropdown-shadow);
+  background: linear-gradient(90deg, 
+    var(--input-bg) 25%, 
+    var(--border-color) 50%, 
+    var(--input-bg) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite linear;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
   }
-  
-  .bookGrid__details {
-    margin:0.3vw 0.2vw;
-    font-family: Inter;
+  100% {
+    background-position: -200% 0;
   }
-  
-  .bookGrid__name {
-    font-size: 1.1vw;
-    font-weight: 700;
-    color: #333;
-    color: var(--Black-60, #45464E);
-  }
-  
-  .bookGrid__author {
-    font-size: 1vw;
-    color: #666;
-    color: var(--Black-60, #45464E);
-    font-weight: 500;
-  }
-  
-  .bookGrid__bookmarks {
-    font-size: 0.9vw;
-    color: #45464E;
-    color: var(--Black-60, #45464E);
-    font-weight: 500;
-    margin-top: 0.6vw;
-  }
-  .carousel__skeleton-loader {
-    display: flex;
-  }
-  
-  .carousel__skeleton-item {
-    flex-shrink: 0;
-    width: 10.4vw;
-    height: 17vw;
-    margin: 0 0.4vw;
-    border-radius: 1vw;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite linear;
-  }
-  
-  @keyframes loading {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
-  }
+}
+
+/* Light and Dark theme specific variables */
+body.light {
+  --bg-primary: #ffffff;
+  --text-primary: #45464e;
+  --text-secondary: #5e6366;
+  --border-color: #e5e5e5;
+  --border-color-focus: #abafb1;
+  --input-bg: rgba(239, 241, 249, 0.6);
+  --dropdown-bg: white;
+  --dropdown-shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg: #f0f0f0;
+  --button-bg: #a63e71;
+  --button-text: #fff;
+  --scrollbar-thumb: #ccc;
+  --scrollbar-thumb-hover: #aaa;
+}
+
+body.dark {
+  --bg-primary: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --border-color: #444444;
+  --border-color-focus: #666666;
+  --input-bg: #2c2c2c;
+  --dropdown-bg: #333;
+  --dropdown-shadow: rgba(0, 0, 0, 0.3);
+  --hover-bg: #444;
+  --button-bg: #c4579c;
+  --button-text: #ffffff;
+  --scrollbar-thumb: #555;
+  --scrollbar-thumb-hover: #777;
+}

@@ -16,15 +16,42 @@ const handleError = (error, operation) => {
 
 export const registerUser = async (formData, callback) => {
   const urlEndPoint = `register`;
-  const payload = {
-    firstname: formData.firstName,
-    email: formData.email,
-    password: formData.password,
-    genre: formData.genre,
-  };
 
   try {
-    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+    // Create a new FormData object
+    const formDataToSend = new FormData();
+
+    // If formData is already a FormData object, use it directly
+    if (formData instanceof FormData) {
+      return await requestPostApiCall(urlEndPoint, formData, callback);
+    }
+
+    // Otherwise, build a new FormData object
+    // Use firstname (not firstName) to match what's expected by the API
+    formDataToSend.append("firstname", formData.firstname);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
+
+    // Handle genre - can be a JSON string or an array
+    if (typeof formData.genre === "string") {
+      // If it's already a string, use it directly
+      formDataToSend.append("genre", formData.genre);
+    } else if (Array.isArray(formData.genre)) {
+      // If it's an array, stringify it
+      formDataToSend.append("genre", JSON.stringify(formData.genre));
+    }
+
+    // Add the file if it exists
+    if (formData.file) {
+      formDataToSend.append("profile_picture", formData.file);
+    }
+
+    // Use the API call function for form-data
+    const response = await requestPostApiCall(
+      urlEndPoint,
+      formDataToSend,
+      callback
+    );
     return response || null;
   } catch (error) {
     return handleError(error, "registerUser");
@@ -103,6 +130,21 @@ export const fetchAllGenreBooks = async () => {
     return handleError(error, "fetchAllGenreBooks");
   }
 };
+export const insertBookmark = async (formData, callback) => {
+  const urlEndPoint = `insertbookMark`;
+  const payload = {
+    sectionID: formData.sectionID,
+    index: formData.index,
+  };
+  console.log("insertBM", payload);
+
+  try {
+    const response = await requestPostApiCall(urlEndPoint, payload, callback);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "insertBookMark");
+  }
+};
 
 export const fetchUserBookmarks = async () => {
   const urlEndPoint = `UserBookMarks`;
@@ -115,8 +157,9 @@ export const fetchUserBookmarks = async () => {
 };
 
 export const deleteBookMarks = async (formData, callback) => {
-  const urlEndPoint = `DeleteBookMarks`;
+  const urlEndPoint = `DeleteBookMark`;
   const payload = { bookMarkID: formData.bookmarkId };
+  console.log(payload);
 
   try {
     const response = await requestPostApiCall(urlEndPoint, payload, callback);
@@ -247,28 +290,95 @@ export const updatePlaySpeed = async (playbackSpeed) => {
   }
 };
 
-export const fetchInProgressBooks = async () => {
-  const urlEndPoint = `InprogressBook`;
+export const fetchUserLibraryBooks = async () => {
+  const urlEndPoint = `Userlibrarybooks`;
   try {
     const response = await requestGetApiCall(urlEndPoint);
     return response || null;
   } catch (error) {
-    return handleError(error, "fetchInProgressBooks");
+    return handleError(error, "fetchUserLibraryBooks");
   }
 };
 
-
 export const searchBooks = async (searchQuery) => {
-  const urlEndPoint = `search`;
+  const urlEndPoint = "https://audiobook-be-qa.iiithcanvas.com/search";
   console.log("Search Query:", searchQuery);
-  
-  const params = { search_query: encodeURIComponent(searchQuery) };
+
+  const params = new URLSearchParams({ search_query: searchQuery });
+
   try {
-    const response = await requestGetApiCall(urlEndPoint, params);
-    console.log("API Response:", response); // Debugging
-    return response
+    const response = await fetch(`${urlEndPoint}?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json; charset=UTF-8",
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+    });
+
+    const data = await response.json();
+    console.log("API Response:", data); // Debugging
+    return data;
   } catch (error) {
     console.error("Error in searchBooks:", error);
     return handleError(error, "searchBooks");
+  }
+};
+export const fetchSearchHistory = async () => {
+  const urlEndPoint = `search_history`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchSearchHistory");
+  }
+};
+
+export const fetchSearchCount = async () => {
+  const urlEndPoint = `search_count`;
+  try {
+    const response = await requestGetApiCall(urlEndPoint);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchSearchCount");
+  }
+};
+
+export const fetchPageDetails = async (bookID) => {
+  const urlEndPoint = `PageDetails`;
+  const params = { bookID: bookID }; // Ensure it's correctly formatted
+
+  try {
+    const response = await requestGetApiCall(urlEndPoint, params);
+
+    if (response && response.status === "success" && response.data) {
+      return response.data;
+    } else {
+      console.error("Invalid response structure:", response);
+      return null;
+    }
+  } catch (error) {
+    return handleError(error, "fetchPageDetails");
+  }
+};
+
+export const fetchNextPageDetails = async (bookID, index, change) => {
+  const urlEndPoint = `NextPageDetails`;
+  const payload = { bookID, index, change };
+  try {
+    const response = await requestGetApiCall(urlEndPoint, payload);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchNextPageDetails");
+  }
+};
+
+export const fetchSectionDetails = async (bookID, pageID, index, change) => {
+  const urlEndPoint = `SectionDetails`;
+  const payload = { bookID, pageID, index, change };
+  try {
+    const response = await requestGetApiCall(urlEndPoint, payload);
+    return response || null;
+  } catch (error) {
+    return handleError(error, "fetchSectionDetails");
   }
 };

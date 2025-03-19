@@ -1,40 +1,58 @@
 .toggle-container {
-    display: flex;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    padding: 5px;
-    height: 25px;
-    width: 300px;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .toggle-button {
-    flex: 1;
-    text-align: center;
-    padding: 0px 0;
-    border: none;
-    height: 25px;
-    border-radius: 10px;
-    justify-content: center;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    background-color: transparent;
-    color: #555;
-  }
-  
-  .toggle-button.active {
-    background-color: white;
-    color: black;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .toggle-button:not(.active):hover {
-    background-color: #e0e0e0;
-  }
-  
+  display: flex;
+  background-color: var(--toggle-bg, white);
+  border-radius: 0.521vw;
+  padding: 0.260vw;
+  height: 1.502vw;
+  width: 15.825vw;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0.104vw 0.260vw var(--toggle-shadow, rgba(0, 0, 0, 0.1));
+}
 
-  
+.toggle-button {
+  flex: 1;
+  text-align: center;
+  padding: 0;
+  border: none;
+  height: 1.402vw;
+  border-radius: 0.521vw;
+  justify-content: center;
+  font-size: 0.929vw;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: transparent;
+  color: var(--toggle-text, #555);
+}
+
+.toggle-button.active {
+  background-color: var(--toggle-active-bg, white);
+  color: var(--toggle-active-text, black);
+  font-weight: bold;
+  box-shadow: 0 0.104vw 0.260vw var(--toggle-active-shadow, rgba(0, 0, 0, 0.2));
+}
+
+.toggle-button:not(.active):hover {
+  background-color: var(--toggle-hover-bg, #e0e0e0);
+}
+
+/* Light and Dark theme variables */
+body.light {
+  --toggle-bg: white;
+  --toggle-shadow: rgba(0, 0, 0, 0.1);
+  --toggle-text: #555;
+  --toggle-active-bg: white;
+  --toggle-active-text: black;
+  --toggle-active-shadow: rgba(0, 0, 0, 0.2);
+  --toggle-hover-bg: #e0e0e0;
+}
+
+body.dark {
+  --toggle-bg: #2c2c2c;
+  --toggle-shadow: rgba(255, 255, 255, 0.1);
+  --toggle-text: #ccc;
+  --toggle-active-bg: #444;
+  --toggle-active-text: white;
+  --toggle-active-shadow: rgba(255, 255, 255, 0.2);
+  --toggle-hover-bg: #555;
+}

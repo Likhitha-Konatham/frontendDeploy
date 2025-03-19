@@ -1,6 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-.signup-page {
+body.light {
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #abafb1;
+    --input-bg: rgba(239, 241, 249, 0.6);
+    --button-bg: #a63e71;
+    --button-text: #ffffff;
+    --error-text: #ff0000;
+}
+
+body.dark {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2a2a2a;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --input-bg: #2c2c2c;
+    --button-bg: #4a90e2;
+    --button-text: #ffffff;
+    --error-text: #ff6b6b;
+}
+
+.signin-page {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -8,42 +30,37 @@
     padding: 0;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5;
+    background-color: var(--bg-primary);
     margin: 0;
     overflow: hidden;
 }
 
-.signup-page header {
+.signin-page header {
     position: absolute;
     top: 0vw;
     left: 0vw;
 }
+.inputfield-inside:-webkit-autofill {
+    background-color: var(--input-background) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    transition: background-color 5000s ease-in-out 0s; /* Prevents the browser from overriding */
+}
 
-.signup-container {
-    margin-top: 0.521vw;
+
+.signin-container {
+    margin-top: 3vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 20.832vw;
+    width: 24.832vw;
     height: auto;
     max-height: 90vh;
     padding: 2.604vw 2.084vw;
-    background-color: #ffffff;
+    background-color: var(--bg-secondary);
     border-radius: 0.938vw;
     box-shadow: 0 0.208vw 0.312vw rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 768px) {
-    .signup-page {
-        padding: 1.042vw;
-    }
-
-    .signup-container {
-        width: 90%;
-        max-width: 20.832vw;
-        padding: 1.562vw 1.042vw;
-    }
 }
 
 html, body {
@@ -55,46 +72,55 @@ html, body {
 
 .left-arrow-icon,
 .right-arrow-icon {
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 2vw;
+    height: 2vw;
     margin: 0 0.5vw;
+}
+
+.left-arrow-icon :disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.right-arrow-icon :disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .book-logo-icon {
-    width: 2.5vw;
-    height: 2.5vw;
+    width: 3vw;
+    height: 3vw;
     margin: 0 0.5vw;
 }
 
-.signup-form {
+.signin-form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .booklogo-heading {
-    
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1.772vw;
-    margin-bottom: 2.605vw;
+    margin-bottom: 2vw;
 }
 
 .booklogo-img {
-    width: 3.65vw;
-    height: 3.65vw;
+    width: 4.046vw;
+    height: 4.0646vw;
 }
 
 .booklogo-heading-text .heading-text-wrapper {
-    color: #000;
+    color: var(--text-primary);
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-size: 1.146vw;
     font-weight: 500;
 }
 
-.signup-form {
+.signin-form {
     display: flex;
     max-width: 100%;
     width: 28.5568vw;
@@ -105,23 +131,28 @@ html, body {
     justify-content: flex-start;
 }
 
-@media (max-width: 991px) {
-    .signup-form {
-        margin-top: 2.084vw;
-    }
-}
-
-.signup-form-group {
+.signin-form-group {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: flex-end;
     font-size: 1.1983vw;
-    color: #abafb1;
+    color: var(--text-secondary);
     justify-content: flex-start;
 }
 
-.signup-input-fields {
+.visibilityIcon {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  body.dark  .visibilityIcon .icon {
+    filter: invert(0.5);
+  }
+
+.signin-input-fields {
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -137,7 +168,7 @@ html, body {
 
 .inputfield-container {
     border-radius: 0.609vw;
-    background-color: rgba(239, 241, 249, 0.6);
+    background-color: var(--input-bg);
     display: flex;
     min-height: 1.8235vw;
     width: 85%;
@@ -145,13 +176,6 @@ html, body {
     justify-content: center;
     padding: 0.625vw 1.1983vw;
     margin: 0.521vw;
-}
-
-@media (max-width: 991px) {
-    .inputfield-container {
-        max-width: 100%;
-        padding: 0 1.042vw;
-    }
 }
 
 .inputfield-content {
@@ -162,12 +186,8 @@ html, body {
     flex: 1;
     flex-wrap: wrap;
     height: 100%;
-}
-
-@media (max-width: 991px) {
-    .inputfield-content {
-        max-width: 100%;
-    }
+    border: 0;
+    outline: 0;
 }
 
 .inputfield-icon {
@@ -181,26 +201,17 @@ html, body {
 .inputfield-inside {
     min-width: 12.5vw;
     flex: 1;
-    border: none;
+    border: 0;
+    outline: 0;
     background: transparent;
-    font-size: 0.833vw;
-    color: black;
-}
-
-.inputfield-inside:focus {
-    outline: 0.104vw solid #abafb1;
-    border-radius: 0.452vw;
-}
-
-@media (max-width: 991px) {
-    .inputfield-inside {
-        max-width: 100%;
-    }
+    font-size: 1.133vw;
+    
+    color: var(--text-primary);
 }
 
 .passwordInputContainer {
     border-radius: 0.609vw;
-    background-color: rgba(239, 241, 249, 0.6);
+    background-color: var(--input-bg);
     display: flex;
     min-height: 1.8235vw;
     width: 85%;
@@ -209,13 +220,6 @@ html, body {
     flex-direction: column;
     justify-content: center;
     padding: 0.625vw 1.1983vw;
-}
-
-@media (max-width: 991px) {
-    .passwordInputContainer {
-        max-width: 100%;
-        padding: 0 1.042vw;
-    }
 }
 
 .passwordInputContent {
@@ -227,12 +231,6 @@ html, body {
     flex: 1;
     flex-wrap: wrap;
     height: 100%;
-}
-
-@media (max-width: 991px) {
-    .passwordInputContent {
-        max-width: 100%;
-    }
 }
 
 .passwordIcon {
@@ -250,13 +248,14 @@ html, body {
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 0.833vw;
-    color: black;
+    font-size: 1.133vw;
+
+    color: var(--text-primary);
 }
 
 .passwordField:focus {
-    outline: 0.104vw solid #abafb1;
-    border-radius: 0.452vw;
+    outline: 0;
+    border: none;
 }
 
 .visibilityIcon {
@@ -269,20 +268,26 @@ html, body {
     cursor: pointer;
 }
 
-.signin-loginLink {
-    color: black;
+.signin-loginLink p {
+    color: var(--text-primary);
     text-align: center;
     font-size: 0.9815vw;
+    margin-bottom: 0.7vw;
+    text-decoration: none;
 }
 
-.signin-signUpButton {
+.signin-loginLink p a {
+    text-decoration: none;
+}
+
+.signin-signinButton {
     align-self: center;
-    border-radius: 0.938vw;
-    background-color: #a63e71;
-    color: #fff;
+    border-radius: 0.7vw;
+    background-color: var(--button-bg);
+    color: var(--button-text);
     text-align: center;
-    width: 11.375vw;
-    height: 4.046vw;
+    width: 10.375vw;
+    height: 3.046vw;
     padding: 0.521vw 1.1983vw;
     font: 400 1.146vw Inter, sans-serif;
     border: none;
@@ -290,19 +295,15 @@ html, body {
     margin-top: 1vw;
 }
 
-@media (max-width: 991px) {
-    .signin-loginLink {
-        margin-top: 2.084vw;
-    }
-    .signin-signUpButton {
-        padding: 0.521vw;
-    }
-}
-
-.forgot-password-div {
-    color: black;
+.forgot-password-div p {
+    color: var(--text-primary);
     text-align: center;
     font-size: 0.9815vw;
+    margin: 0 0 0.5vw;
+}
+
+.forgot-password-div p a {
+    text-decoration: none;
 }
 
 .visually-hidden {
@@ -318,15 +319,14 @@ html, body {
 }
 
 .signin-error-message {
-    color: #ff0000;
+    color: var(--error-text);
     font-size: 0.84vw;
     margin-top: 1.08vw;
-    /* margin-bottom: 1.08vw; */
     text-align: center;
     width: 100%;
     text-transform: uppercase;
 }
 
-.signup-loginLink {
+.signin-loginLink {
     margin-top: 1.08vw;
 }

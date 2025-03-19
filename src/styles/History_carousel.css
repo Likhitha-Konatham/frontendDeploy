@@ -3,11 +3,14 @@
 .carousel__wrap {
   width: 96%;
   margin-bottom: 2vw;
+  background-color: var(--bg-primary);
 }
 
-.carousel__inner{
+.carousel__inner {
   display: flex;
+
 }
+
 .carousel__btn {
   width: 7.5%;
   margin-top: 10vw;
@@ -17,16 +20,19 @@
   transform: translateY(-50%);
   justify-content: center;
 }
-.carousel__btn--prev{
+
+.carousel__btn--prev {
   display: flex;
   justify-content: right;
   float: right;
 }
-.carousel__btn--next{
+
+.carousel__btn--next {
   display: flex;
   justify-content: left;
   float: left;
 }
+
 .carousel__btn--prev, .carousel__btn--next {
   width: 4.5vw;
   height: 4.5vw;
@@ -36,27 +42,28 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  filter: var(--icon-filter);
 }
 
-
-.genre_heading{
-  color: var(--Black-60, #45464E);
+.genre_heading {
+  color: var(--text-primary);
   font-family: Inter;
   font-size: 1vw;
   margin-left: 0.6vw;
   font-weight: 500;
   margin-bottom: 0.5vw;
 }
+
 .carousel__container {
   width: 92.5%;
   height: 19vw;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .carousel__slide-list {
   display: flex;
   transition: transform 0.5s ease;
-  width: calc(10.3vw * 10); 
+  width: calc(10.3vw * 10);
 }
 
 .carousel__slide-item {
@@ -66,12 +73,25 @@
   margin: 0 0.4vw;
 }
 
-
 .carousel__slide-item img {
   width: 100%;
   height: 100%;
   border-radius: 1vw;
   object-fit: cover;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  
+  box-shadow: var(--carousel-shadow);
+}
+
+/* Light and Dark theme specific variables */
+body.light .carousel__wrap {
+  --bg-primary: #fafafa;
+  --text-primary: #45464E;
+  --carousel-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  --icon-filter: none;
+}
+
+body.dark .carousel__wrap{
+  --bg-primary: #121212;
+  --text-primary: #ffffff;
+  --carousel-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.5);
+  --icon-filter: invert(1);
 }
