@@ -8,19 +8,26 @@ export const speakText = (text) => {
   }
 
   currentUtterance = new SpeechSynthesisUtterance(text);
-  currentUtterance.lang = 'en-IN'; // Set language to Indian English
+  currentUtterance.lang = "en-IN"; // Set language to Indian English
 
   const setVoiceAndSpeak = () => {
     const voices = speechSynthesis.getVoices();
-    
+
     // Find a female Indian English voice
-    let indianFemaleVoice = voices.find(voice => 
-      voice.lang === 'en-IN' && (voice.name.includes('Female') || voice.name.includes('Heera') || voice.name.includes('Meera') || voice.name.includes('Aisha'))
+    let indianFemaleVoice = voices.find(
+      (voice) =>
+        voice.lang === "en-IN" &&
+        (voice.name.includes("Female") ||
+          voice.name.includes("Heera") ||
+          voice.name.includes("Meera") ||
+          voice.name.includes("Aisha"))
     );
 
     // If no exact Indian female voice, fallback to best available
     if (!indianFemaleVoice) {
-      indianFemaleVoice = voices.find(voice => voice.lang.includes('en') && voice.name.includes('Female'));
+      indianFemaleVoice = voices.find(
+        (voice) => voice.lang.includes("en") && voice.name.includes("Female")
+      );
     }
 
     if (indianFemaleVoice) {
