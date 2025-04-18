@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        EC2_HOST = "ubuntu@3.92.195.39" 
+        EC2_HOST = "ubuntu@3.92.195.39"
     }
 
     stages {
@@ -10,7 +10,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/Likhitha-Konatham/frontendDeploy'
             }
-        }
+        }
 
         stage('Test SSH to EC2') {
             steps {
