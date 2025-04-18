@@ -27,6 +27,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Check Docker Version') {
+            steps {
+                sshagent(['ec2-ssh']) {
+                    sh "ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker --version'"
+                }
+            }
+        }
     }
 }
 
