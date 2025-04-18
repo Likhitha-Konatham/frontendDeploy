@@ -12,6 +12,12 @@ pipeline {
             }
         }
 
+        stage('Check Files') {
+            steps {
+                sh 'ls -la'
+            }
+        }
+
         stage('Test SSH to EC2') {
             steps {
                 sshagent(['ec2-ssh']) {
