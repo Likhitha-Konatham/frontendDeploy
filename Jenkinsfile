@@ -1,10 +1,18 @@
 pipeline {
     agent any
+
+    environment {
+        EC2_HOST = "ubuntu@3.92.195.39" 
+    }
+
     stages {
-        stage("Git Checkout") {
+        stage('Test SSH to EC2') {
             steps {
-                git branch: 'main', url: 'https://github.com/Likhitha-Konatham/frontendDeploy'
+                sshagent(['ec2-ssh']) { 
+                    sh "ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'hostname && uptime'"
+                }
             }
         }
     }
 }
+
