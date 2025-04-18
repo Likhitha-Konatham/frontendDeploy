@@ -41,6 +41,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Build Docker Image') {
+            steps {
+                sshagent(['ec2-ssh']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'cd /var/lib/jenkins/workspace/web && docker build -t frontend-app .'
+                    """
+                }
+            }
+        }
     }
 }
 
