@@ -19,6 +19,14 @@ pipeline {
                 }
             }
         }
+
+         stage('Check EC2 Server Version') {
+            steps {
+                sshagent(['ec2-ssh']) {  
+                    sh "ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'cat /etc/os-release'"
+                }
+            }
+        }
     }
 }
 
