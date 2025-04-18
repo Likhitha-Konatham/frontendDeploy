@@ -14,7 +14,7 @@ pipeline {
 
         stage('Test SSH to EC2') {
             steps {
-                sshagent(['ec2-ssh']) { 
+                sshagent(['ec2-ssh']) {
                     sh "ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'hostname'"
                 }
             }
