@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        EC2_HOST = "ubuntu@3.92.195.39"
+        EC2_HOST = "ubuntu@18.212.199.119"
     }
 
     stages {
@@ -38,16 +38,6 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh']) {
                     sh "ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker --version'"
-                }
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sshagent(['ec2-ssh']) {
-                    sh """
-                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'cd /var/lib/jenkins/workspace/web && docker build -t frontend-app .'
-                    """
                 }
             }
         }
