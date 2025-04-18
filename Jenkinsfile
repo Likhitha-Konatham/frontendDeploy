@@ -6,6 +6,12 @@ pipeline {
     }
 
     stages {
+        stage("Git Checkout") {
+            steps {
+                git branch: 'main', url: 'https://github.com/Likhitha-Konatham/frontendDeploy'
+            }
+        }
+
         stage('Test SSH to EC2') {
             steps {
                 sshagent(['ec2-ssh']) { 
