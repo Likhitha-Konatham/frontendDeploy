@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         EC2_HOST = "ubuntu@18.212.199.119"
+        DOCKER_IMAGE_NAME = "frontend-app"
+        DOCKER_TAG = "latest"
     }
 
     stages {
@@ -38,6 +40,17 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh']) {
                     sh "ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker --version'"
+                }
+            }
+        }
+
+        stage("Build Docker Image") {
+            steps {
+                sshagent(['ec2-ssh']) {
+                    sh '''
+                        cd /var/lib/jenkins/workspace/demo
+                        docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+                    '''
                 }
             }
         }
