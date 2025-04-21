@@ -66,10 +66,10 @@ pipeline {
         }
 
         post {
-        always {
-            echo 'Pipeline completed'
+            always {
+                echo 'Pipeline completed'
+            }
         }
-    }
     }
 }
 
