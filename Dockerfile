@@ -10,6 +10,7 @@ COPY . .
 
 RUN npm run build
 
+EXPOSE 7004
+
 CMD ["npm", "start"]
 
-EXPOSE 7004
