@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        EC2_HOST = "ubuntu@18.212.199.119"
+        EC2_HOST = "ubuntu@100.26.98.183"
         DOCKER_IMAGE_NAME = "frontend-app"
         DOCKER_TAG = "latest"
     }
@@ -54,6 +54,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Docker Container') {
+            steps {
+                sshagent(['ec2-ssh']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker run -d -p 80:7004 --name frontend-app frontend-app'
+                    """
+                }
+            }
+        }
+
+        post {
+        always {
+            echo 'Pipeline completed'
+        }
+    }
     }
 }
 
