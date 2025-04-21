@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        EC2_HOST = "ubuntu@54.152.237.30"
+        EC2_HOST = "ubuntu@34.192.76.51"
         DOCKER_IMAGE_NAME = "frontend-app"
         DOCKER_TAG = "latest"
         REMOTE_APP_DIR = "/home/ubuntu/frontend-app"
