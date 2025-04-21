@@ -2,13 +2,14 @@ pipeline {
     agent any
 
     environment {
-        EC2_HOST = "ubuntu@100.26.98.183"
+        EC2_HOST = "ubuntu@54.152.237.30"
         DOCKER_IMAGE_NAME = "frontend-app"
         DOCKER_TAG = "latest"
+        REMOTE_APP_DIR = "/home/ubuntu/frontend-app"
     }
 
     stages {
-        stage("Git Checkout") {
+        stage('Git Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/Likhitha-Konatham/frontendDeploy.git'
             }
@@ -44,12 +45,22 @@ pipeline {
             }
         }
 
+        stage('Copy Files to EC2') {
+            steps {
+                sshagent(['ec2-ssh']) {
+                    sh "scp -o StrictHostKeyChecking=no -r . ${EC2_HOST}:${REMOTE_APP_DIR}"
+                }
+            }
+        }
+
         stage("Build Docker Image") {
             steps {
                 sshagent(['ec2-ssh']) {
                     sh '''
-                        cd /var/lib/jenkins/workspace/demo
-                        docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+                       ssh -o StrictHostKeyChecking=no ${EC2_HOST} '
+                            cd ${REMOTE_APP_DIR} &&
+                            docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+                        '
                     '''
                 }
             }
@@ -59,7 +70,7 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker run -d -p 80:7004 --name frontend-app frontend-app'
+                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker run -d -p 80:7004 --name ${DOCKER_IMAGE_NAME} ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}'
                     """
                 }
             }
