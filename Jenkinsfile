@@ -48,7 +48,10 @@ pipeline {
         stage('Copy Files to EC2') {
             steps {
                 sshagent(['ec2-ssh']) {
-                    sh "scp -o StrictHostKeyChecking=no -r . ${EC2_HOST}:${REMOTE_APP_DIR}"
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'mkdir -p ${REMOTE_APP_DIR}'
+                        rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude='.git' ./ ${EC2_HOST}:${REMOTE_APP_DIR}
+                    """
                 }
             }
         }
