@@ -56,12 +56,12 @@ pipeline {
         stage("Build Docker Image") {
             steps {
                 sshagent(['ec2-ssh']) {
-                    sh '''
+                    sh """
                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} '
                             cd ${REMOTE_APP_DIR} &&
                             docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
                         '
-                    '''
+                    """
                 }
             }
         }
