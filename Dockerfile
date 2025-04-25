@@ -10,7 +10,7 @@ COPY . /frontend-app
 
 RUN npm run build
 
-EXPOSE 7005
+EXPOSE 7004
 
 CMD ["npm", "start"]
 
