@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        EC2_HOST = "ubuntu@54.91.142.218"
+        EC2_HOST = "ubuntu@54.89.129.41"
         DOCKER_IMAGE_NAME = "frontend-app"
         DOCKER_TAG = "latest"
         REMOTE_APP_DIR = "/home/ubuntu/frontend-app"
@@ -73,7 +73,7 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker run -d -p 80:7004 --name ${DOCKER_IMAGE_NAME} ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}'
+                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} 'docker run -d -p 8080:7004 --name ${DOCKER_IMAGE_NAME} ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}'
                     """
                 }
             }
