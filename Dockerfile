@@ -10,7 +10,15 @@ COPY . /frontend-app
 
 RUN npm run build
 
-EXPOSE 7004
+FROM nginx:alpine
 
-CMD ["npm", "start"]
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose port 80 for HTTP
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
+
+
 
