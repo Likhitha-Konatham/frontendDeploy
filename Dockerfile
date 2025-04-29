@@ -16,11 +16,11 @@ COPY . .
 # Build the React app
 RUN npm run build
 
-# Expose the port that your app will run on (default for React is 3000, but you're mapping it to 7004)
+# Expose the port that your app will run on
 EXPOSE 7004
 
 # Serve the React app using a simple HTTP server
-# You can use a lightweight HTTP server like serve to serve the build directory
+# It is lightweight HTTP server and is perfect for serving static sites
 RUN npm install -g serve
 
 # Set the CMD to run the app using 'serve'
