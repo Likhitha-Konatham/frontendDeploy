@@ -1,47 +1,26 @@
-name: Deploy to EC2
+name: OIDC
 
 on:
   push:
-    branches:
-      - main
+    branches: 
+     - main
+
+permissions:
+  id-token: write
+  contents: read    
 
 jobs:
-  deploy:
+  oidc-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout Source
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Configure AWS Credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
-          node-version: '18'
+          aws-region: ap-south-1
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
 
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Disable CI strict mode
-        run: echo "CI=false" >> $GITHUB_ENV
-      
-      - name: Build React App
-        run: npm run build
-
-      - name: Prepare SSH Key
-        run: |
-          echo "${{ secrets.SERVER_SSH_KEY }}" > test.pem
-          chmod 600 test.pem
-
-      - name: Ensure Target Directory on EC2
-        run: |
-          ssh -i test.pem -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "mkdir -p ${{ secrets.TARGET_DIR }}"
-
-      - name: Copy Entire Repository to EC2
-        run: |
-          rsync -az --exclude '.git' -e "ssh -i test.pem -o StrictHostKeyChecking=no" \
-            ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.TARGET_DIR }}
-
-      - name: Clean Up
-        run: rm -f test.pem
-
+      - name: Test AWS Credentials
+        run: aws sts get-caller-identity
